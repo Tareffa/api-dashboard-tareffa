@@ -1,11 +1,7 @@
 package br.com.ottimizza.dashboard.models.users;
 
-import br.com.ottimizza.dashboard.models.Company;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -61,10 +56,4 @@ public class User implements Serializable {
     @Setter
     @Column(name = "is_active")
     private Boolean isActive;
-
-    @Getter
-    @Setter
-    @Transient
-    private Set<Company> companies;
-
 }

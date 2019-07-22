@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.com.ottimizza</groupId>
-	<artifactId>api-bussolaweb</artifactId>
+	<artifactId>api-servicoprogramado</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>api-bussolaweb</name>
+	<name>api-servicoprogramado</name>
 	<description>api-bussolaweb</description>
 
 	<parent>
@@ -172,7 +172,7 @@
 			<version>3.1</version>
 		</dependency>
 
-		<!-- GraphQL -->
+		<!-- GraphQL 
 		<dependency>
 			<groupId>com.graphql-java</groupId>
 			<artifactId>graphql-spring-boot-starter</artifactId>
@@ -192,7 +192,7 @@
 			<groupId>io.leangen.graphql</groupId>
 			<artifactId>spqr</artifactId>
 			<version>0.9.1</version>
-		</dependency>
+		</dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jdbc -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
