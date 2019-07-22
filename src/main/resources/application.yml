@@ -14,11 +14,11 @@ sentry-config:
     sentry-dsn: ${SENTRY_DSN}
     
 db:
-    host: ${DB_HOST:ec2-50-17-246-114.compute-1.amazonaws.com}
+    host: ${DB_HOST:ec2-54-243-253-24.compute-1.amazonaws.com}
     port: ${DB_PORT:5432}
-    database: ${DB_DATABASE:d3pp1n4rqrm3u7}
-    username: ${DB_USERNAME:lpamqrdgmipnwt}
-    password: ${DB_PASSWORD:55111e923002cec7c45ce9e121b43f872d6594c169072a14127383b70d43ddfc}
+    database: ${DB_DATABASE:db3hmvsfad1ru0}
+    username: ${DB_USERNAME:oflbkrmqrgjcii}
+    password: ${DB_PASSWORD:075a46e7517919940993e7ab7c74fb7aa92a910a7b6c419b7b60231d08e7cbdc}
     
 spring: 
     datasource:
