@@ -27,7 +27,7 @@ public class ServicoProgramadoController {
             throws Exception {
 
         // Get Authorized User by Username.
-        User authorized = userService.findByUsername(principal.getName());
+        //User authorized = userService.findByUsername(principal.getName());
         ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
 
         return ResponseEntity.ok(servicoProgramadoService.count(filtro));
