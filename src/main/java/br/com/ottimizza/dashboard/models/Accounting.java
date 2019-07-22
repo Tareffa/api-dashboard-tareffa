@@ -15,12 +15,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ot_contabilidades")
+@Table(name = "accountings")
 @NoArgsConstructor @AllArgsConstructor
 public class Accounting implements Serializable {
 
     @Id 
-    @Getter @Setter //
+    @Getter @Setter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private BigInteger id;
