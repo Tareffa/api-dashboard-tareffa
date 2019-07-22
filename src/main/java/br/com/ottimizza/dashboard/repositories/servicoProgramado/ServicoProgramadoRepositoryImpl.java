@@ -19,7 +19,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro) {
-        return new JPAQuery<ServicoProgramado>(em).from(servicoProgramado).fetchCount();
+        return new JPAQuery(em).from(servicoProgramado).fetchCount();
     }
     
 }
