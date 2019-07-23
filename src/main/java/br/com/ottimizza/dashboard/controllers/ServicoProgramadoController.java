@@ -8,6 +8,8 @@ import java.security.Principal;
 import javax.inject.Inject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,9 +23,9 @@ public class ServicoProgramadoController {
     @Inject
     UserService userService;
 
-    @GetMapping("contar")
+    @PostMapping("contar")
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<Long> findCompanyByID(Principal principal, ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<Long> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
         // Get Authorized User by Username.
