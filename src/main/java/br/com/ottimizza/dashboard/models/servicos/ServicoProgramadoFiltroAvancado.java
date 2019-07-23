@@ -48,6 +48,15 @@ public class ServicoProgramadoFiltroAvancado implements Serializable {
     @Getter
     @Setter
     private Short status;
+    
+    @Getter
+    @Setter
+    private Short situacao;
+    
+    @Getter
+    @Setter
+    private Short prazo;
+    
     @Getter
     @Setter
     private Short tipoBaixa;
