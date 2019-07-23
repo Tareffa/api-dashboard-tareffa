@@ -23,12 +23,12 @@ public class ServicoProgramadoController {
 
     @GetMapping("contar")
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<Long> findCompanyByID(Principal principal)
+    public ResponseEntity<Long> findCompanyByID(Principal principal, ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
         // Get Authorized User by Username.
         //User authorized = userService.findByUsername(principal.getName());
-        ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
+        //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
 
         return ResponseEntity.ok(servicoProgramadoService.count(filtro));
     }
