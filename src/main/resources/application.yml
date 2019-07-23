@@ -13,18 +13,11 @@ oauth2-config:
 sentry-config:
     sentry-dsn: ${SENTRY_DSN}
     
-db:
-    host: ${DB_HOST:ec2-54-243-253-24.compute-1.amazonaws.com}
-    port: ${DB_PORT:5432}
-    database: ${DB_DATABASE:db3hmvsfad1ru0}
-    username: ${DB_USERNAME:oflbkrmqrgjcii}
-    password: ${DB_PASSWORD:075a46e7517919940993e7ab7c74fb7aa92a910a7b6c419b7b60231d08e7cbdc}
-    
 spring: 
     datasource:
-        url: jdbc:postgresql://${db.host}:${db.port}/${db.database}?useSSL=true&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
-        username: ${db.username}
-        password: ${db.password}
+        url: jdbc:postgresql://ec2-54-243-253-24.compute-1.amazonaws.com:5432/db3hmvsfad1ru0?useSSL=true&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+        username: oflbkrmqrgjcii
+        password: 075a46e7517919940993e7ab7c74fb7aa92a910a7b6c419b7b60231d08e7cbdc
 
     jpa:
         hibernate:
