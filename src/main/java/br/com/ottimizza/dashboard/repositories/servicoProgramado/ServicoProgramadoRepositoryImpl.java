@@ -77,10 +77,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         
                         if(filtro.getPrazo() == ServicoProgramadoPrazo.VENCIDO)
                             query.where(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
-                    }
-                    
+                    } 
                 }
-                
             }
             
             //DEPARTAMENTO

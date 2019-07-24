@@ -6,6 +6,8 @@ import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
 import br.com.ottimizza.dashboard.services.UserService;
 import java.security.Principal;
 import javax.inject.Inject;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class ServicoProgramadoController {
 
     @PostMapping("contar")
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<Long> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<JSONObject> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
         // Get Authorized User by Username.

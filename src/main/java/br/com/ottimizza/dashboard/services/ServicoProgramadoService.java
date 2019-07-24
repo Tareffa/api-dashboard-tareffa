@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
 
 import javax.inject.Inject;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,8 +14,10 @@ public class ServicoProgramadoService {
     private ServicoProgramadoRepository repository;
 
     //<editor-fold defaultstate="collapsed" desc="Save">
-    public Long count(ServicoProgramadoFiltroAvancado filtro)throws Exception{
-        return repository.contadorServicoProgramado(filtro);
+    public JSONObject count(ServicoProgramadoFiltroAvancado filtro)throws Exception{
+        JSONObject resultado = new JSONObject();
+        resultado.put("tamanho", repository.contadorServicoProgramado(filtro));
+        return resultado;
     }
     //</editor-fold>
 
