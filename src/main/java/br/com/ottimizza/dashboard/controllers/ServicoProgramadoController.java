@@ -27,7 +27,7 @@ public class ServicoProgramadoController {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<JSONObject> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<Object> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
         // Get Authorized User by Username.
