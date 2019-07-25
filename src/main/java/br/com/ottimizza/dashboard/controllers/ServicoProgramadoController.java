@@ -25,7 +25,7 @@ public class ServicoProgramadoController {
     @Inject
     UserService userService;
 
-    @PostMapping("contar")
+    @PostMapping(produces = "application/json", consumes = "application/json")
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<JSONObject> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
