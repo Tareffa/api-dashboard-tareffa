@@ -17,6 +17,7 @@ public class ServicoProgramadoService {
     public JSONObject count(ServicoProgramadoFiltroAvancado filtro)throws Exception{
         JSONObject resultado = new JSONObject();
         resultado.put("tamanho", repository.contadorServicoProgramado(filtro));
+        System.out.println("Gerando Mensagem");
         return resultado;
     }
     //</editor-fold>
