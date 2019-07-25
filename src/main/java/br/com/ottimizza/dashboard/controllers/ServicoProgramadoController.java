@@ -32,7 +32,7 @@ public class ServicoProgramadoController {
         //User authorized = userService.findByUsername(principal.getName());
         //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
 
-        return ResponseEntity<Object>(servicoProgramadoService.count(filtro),HttpStatus.OK);
+        return new ResponseEntity<Object>(servicoProgramadoService.count(filtro),HttpStatus.OK);
     }
 
 }
