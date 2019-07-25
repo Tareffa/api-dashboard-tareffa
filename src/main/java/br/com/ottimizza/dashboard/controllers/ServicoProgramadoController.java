@@ -25,14 +25,14 @@ public class ServicoProgramadoController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<Object> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<String> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
         // Get Authorized User by Username.
         //User authorized = userService.findByUsername(principal.getName());
         //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
 
-        return new ResponseEntity<Object>(servicoProgramadoService.count(filtro),HttpStatus.OK);
+        return ResponseEntity.ok(servicoProgramadoService.count(filtro).toString());
     }
 
 }
