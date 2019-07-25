@@ -8,6 +8,7 @@ import java.security.Principal;
 import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class ServicoProgramadoController {
     @Inject
     UserService userService;
 
-    @PostMapping(produces = "application/json", consumes = "application/json")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<Object> findCompanyByID(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
