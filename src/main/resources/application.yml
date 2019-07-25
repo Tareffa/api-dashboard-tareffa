@@ -15,9 +15,9 @@ sentry-config:
     
 spring: 
     datasource:
-        url: jdbc:postgresql://ec2-54-243-253-24.compute-1.amazonaws.com:5432/db3hmvsfad1ru0?useSSL=true&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
-        username: oflbkrmqrgjcii
-        password: 075a46e7517919940993e7ab7c74fb7aa92a910a7b6c419b7b60231d08e7cbdc
+        url: jdbc:postgresql://ec2-3-221-72-63.compute-1.amazonaws.com:5432/de6vte08bnpfce?useSSL=true&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+        username: uftkhdankcc1tn
+        password: p99e08e52eeafd8423591f3eb1cab579142a614f0dd8645fa7855baa8a279ab63
 
     jpa:
         hibernate:
