@@ -11,6 +11,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import jdk.nashorn.internal.objects.NativeDate;
@@ -107,6 +108,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             e.printStackTrace();
             return new Long(-1);
         }
+    }
+
+    @Override
+    public List<Object> contadorServicoProgramadoGroupBy() {
+        List resposta = new JPAQuery(em)
+                .select(servico.nome, servicoProgramado.count())
+                .from(servicoProgramado)
+                .innerJoin(servico).on(servico.id.eq(servicoProgramado.servico.id)).fetch();
+        return resposta;
     }
     
 }
