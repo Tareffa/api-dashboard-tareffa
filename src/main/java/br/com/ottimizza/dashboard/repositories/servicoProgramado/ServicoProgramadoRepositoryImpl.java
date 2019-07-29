@@ -124,7 +124,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             .select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
             .from(servicoProgramado)
             .innerJoin(servicoProgramado.servico, servico)
-            .groupBy(servico.id, servicoProgramado.count())
+            .groupBy(servico.id)
             .orderBy(aliasContagem.desc())
             .fetch();
     }
