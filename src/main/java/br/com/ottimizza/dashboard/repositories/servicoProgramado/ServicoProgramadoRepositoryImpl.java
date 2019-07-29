@@ -10,10 +10,12 @@ import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -112,14 +114,13 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List<Tuple> contadorServicoProgramadoGroupBy() {
-        List resultado = new JPAQueryFactory(em)
+    public Map<String, Long> contadorServicoProgramadoGroupBy() {
+        return new JPAQueryFactory(em)
             .select(servico.nome, servicoProgramado.count())
             .from(servicoProgramado)
             .innerJoin(servicoProgramado.servico, servico)
             .groupBy(servico.id)
-            .fetch();
-        return resultado;
+            .transform(GroupBy.groupBy(servico.nome).as(servicoProgramado.count()));
     }
     
 }

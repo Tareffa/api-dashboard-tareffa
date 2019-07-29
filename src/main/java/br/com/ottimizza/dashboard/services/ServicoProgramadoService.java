@@ -32,17 +32,11 @@ public class ServicoProgramadoService {
     
      //<editor-fold defaultstate="collapsed" desc="Save">
     public JSONObject countGroupBy()throws Exception{
-        JSONObject resposta = new JSONObject();
+        JSONObject resultado = new JSONObject();
         ObjectMapper mapper = new ObjectMapper();
-        List<Tuple> resultado = repository.contadorServicoProgramadoGroupBy();
         
-        for (Tuple row : resultado) {
-            System.out.println("firstName " + row.get(servico.nome));
-            System.out.println("lastName " + row.get(servicoProgramado.count()));
-        }
-        
-        //resultado.put("resultado", resultado);
-        return resposta;
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy());
+        return resultado;
     }
     //</editor-fold>
 
