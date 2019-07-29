@@ -13,6 +13,8 @@ import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Date;
@@ -117,11 +119,13 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
     @Override
     public List<ServicoAgrupado> contadorServicoProgramadoGroupBy() {
+        NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "Contagem");
         return new JPAQueryFactory(em)
-            .select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count()))
+            .select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
             .from(servicoProgramado)
             .innerJoin(servicoProgramado.servico, servico)
-            .groupBy(servico.id)
+            .groupBy(servico.id, servicoProgramado.count())
+            .orderBy(aliasContagem.desc())
             .fetch();
     }
     
