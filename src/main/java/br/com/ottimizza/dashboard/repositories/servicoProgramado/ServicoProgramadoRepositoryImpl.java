@@ -9,12 +9,15 @@ import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import jdk.nashorn.internal.objects.NativeDate;
+import org.springframework.data.jpa.repository.support.Querydsl;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -112,9 +115,13 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
     @Override
     public List<Object> contadorServicoProgramadoGroupBy() {
-        List resposta = new JPAQuery(em).from(servicoProgramado).fetch();
-            //.innerJoin(servicoProgramado.servico, servico)
-        return resposta;
+        List resultado = new JPAQueryFactory(em)
+            .select(servico.nome, servicoProgramado.count())
+            .from(servicoProgramado)
+            .innerJoin(servicoProgramado.servico, servico)
+            .groupBy(servico.id)
+            .fetch();
+        return resultado;
     }
     
 }
