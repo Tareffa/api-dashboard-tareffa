@@ -27,7 +27,7 @@ public class ServicoProgramadoService {
     public JSONObject countGroupBy()throws Exception{
         JSONObject resultado = new JSONObject();
         ObjectMapper mapper = new ObjectMapper();
-        resultado.put("resultado", new JSONArray(mapper.writeValueAsString(repository.contadorServicoProgramadoGroupBy())));
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy());
         return resultado;
     }
     //</editor-fold>
