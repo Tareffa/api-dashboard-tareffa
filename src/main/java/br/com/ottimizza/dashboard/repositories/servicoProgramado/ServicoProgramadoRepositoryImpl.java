@@ -61,16 +61,18 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
                         if(filtro.getPrazo() != null){
                             Date dataAtual = new Date();
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.NO_PRAZO)
-                                query.where(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
+                            for (Short tipoPrazo : filtro.getPrazo()) {
+                                if(tipoPrazo == ServicoProgramadoPrazo.NO_PRAZO)
+                                    query.where(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
 
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.ATRASADO){
-                                query.where(servicoProgramado.dataProgramadaEntrega.lt(dataAtual));
-                                query.where(servicoProgramado.dataVencimento.goe(dataAtual));
+                                if(tipoPrazo == ServicoProgramadoPrazo.ATRASADO){
+                                    query.where(servicoProgramado.dataProgramadaEntrega.lt(dataAtual));
+                                    query.where(servicoProgramado.dataVencimento.goe(dataAtual));
+                                }
+
+                                if(tipoPrazo == ServicoProgramadoPrazo.VENCIDO)
+                                    query.where(servicoProgramado.dataVencimento.lt(dataAtual));
                             }
-
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.VENCIDO)
-                                query.where(servicoProgramado.dataVencimento.lt(dataAtual));
                         }
                     }
 
@@ -79,16 +81,18 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
 
                         if(filtro.getPrazo() != null){
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.NO_PRAZO)
-                                query.where(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
+                            for (Short tipoPrazo : filtro.getPrazo()) {
+                                if(tipoPrazo == ServicoProgramadoPrazo.NO_PRAZO)
+                                    query.where(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
 
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.ATRASADO){
-                                query.where(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino));
-                                query.where(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino));
+                                if(tipoPrazo == ServicoProgramadoPrazo.ATRASADO){
+                                    query.where(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino));
+                                    query.where(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino));
+                                }
+
+                                if(tipoPrazo == ServicoProgramadoPrazo.VENCIDO)
+                                    query.where(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
                             }
-
-                            if(filtro.getPrazo() == ServicoProgramadoPrazo.VENCIDO)
-                                query.where(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
                         } 
                     }
                 }

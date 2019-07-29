@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.empresas.EmpresaShort;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -55,7 +56,7 @@ public class ServicoProgramadoFiltroAvancado implements Serializable {
     
     @Getter
     @Setter
-    private Short prazo;
+    private List<Short> prazo;
     
     @Getter
     @Setter
