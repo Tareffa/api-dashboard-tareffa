@@ -3,26 +3,24 @@ package br.com.ottimizza.dashboard.repositories.servicoProgramado;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
+import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
+import br.com.ottimizza.dashboard.models.empresas.EmpresaShort;
 import br.com.ottimizza.dashboard.models.empresas.QEmpresaShort;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.querydsl.jpa.sql.JPASQLQuery;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -32,6 +30,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     
     @PersistenceContext
     EntityManager em;
+    
+    private List<Long> departamentosId;
+    private List<Long> empresasId;
+    private List<Long> servicosId;
+    private List<Long> usuariosId;
     
     private QServicoProgramado servicoProgramado = QServicoProgramado.servicoProgramado;
     private QUsuario usuario = QUsuario.usuario;
@@ -100,20 +103,40 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
 
                 //DEPARTAMENTO
-                if(filtro.getDepartamento() != null && filtro.getDepartamento().getId() != null) 
-                query.where(departamento.id.in(filtro.getDepartamento().getId()));
+                if(filtro.getDepartamento() != null){
+                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        departamentosId.add(departamentoShort.getId());
+                    }
+                    
+                    query.where(departamento.id.in(departamentosId));
+                } 
 
                 //USUARIO
-                if(filtro.getUsuario() != null && filtro.getUsuario().getId() != null) 
-                query.where(usuario.id.in(filtro.getUsuario().getId()));
+                if(filtro.getUsuario() != null){
+                    for (Usuario usuario : filtro.getUsuario()) {
+                        usuariosId.add(usuario.getId());
+                    }
+                    
+                    query.where(usuario.id.in(usuariosId));
+                } 
 
                 //SERVIÇO
-                if(filtro.getServico() != null && filtro.getServico().getId() != null) 
-                query.where(servico.id.in(filtro.getServico().getId()));
+                if(filtro.getServico() != null){
+                    for (ServicoShort servicoShort : filtro.getServico()) {
+                        servicosId.add(servicoShort.getId());
+                    }
+                    
+                    query.where(servico.id.in(servicosId));
+                } 
 
                 //EMPRESA
-                if(filtro.getEmpresa() != null && filtro.getEmpresa().getId() != null) 
-                query.where(empresa.id.in(filtro.getEmpresa().getId()));
+                if(filtro.getEmpresa() != null){
+                    for (EmpresaShort empresaShort : filtro.getEmpresa()) {
+                        empresasId.add(empresaShort.getId());
+                    }
+                    
+                    query.where(empresa.id.in(empresasId));
+                } 
 
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 

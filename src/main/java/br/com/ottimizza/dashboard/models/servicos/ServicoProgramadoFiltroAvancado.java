@@ -31,16 +31,16 @@ public class ServicoProgramadoFiltroAvancado implements Serializable {
 
     @Getter
     @Setter
-    private DepartamentoShort departamento;
+    private List<DepartamentoShort> departamento;
     @Getter
     @Setter
-    private EmpresaShort empresa;
+    private List<EmpresaShort> empresa;
     @Getter
     @Setter
-    private ServicoShort servico;
+    private List<ServicoShort> servico;
     @Getter
     @Setter
-    private Usuario usuario;
+    private List<Usuario> usuario;
 
     @Getter
     @Setter
