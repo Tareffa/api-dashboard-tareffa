@@ -116,13 +116,13 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public Map<String, Long> contadorServicoProgramadoGroupBy() {
+    public List<ServicoAgrupado> contadorServicoProgramadoGroupBy() {
         return new JPAQueryFactory(em)
             .select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count()))
             .from(servicoProgramado)
             .innerJoin(servicoProgramado.servico, servico)
             .groupBy(servico.id)
-            .transform(GroupBy.groupBy(servico.nome).as(servicoProgramado.count()));
+            .fetch();
     }
     
 }
