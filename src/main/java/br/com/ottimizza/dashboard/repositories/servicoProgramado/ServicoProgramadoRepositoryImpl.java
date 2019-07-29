@@ -7,10 +7,12 @@ import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
 import br.com.ottimizza.dashboard.models.empresas.QEmpresaShort;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Date;
@@ -116,7 +118,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     @Override
     public Map<String, Long> contadorServicoProgramadoGroupBy() {
         return new JPAQueryFactory(em)
-            .select(servico.nome, servicoProgramado.count())
+            .select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count()))
             .from(servicoProgramado)
             .innerJoin(servicoProgramado.servico, servico)
             .groupBy(servico.id)
