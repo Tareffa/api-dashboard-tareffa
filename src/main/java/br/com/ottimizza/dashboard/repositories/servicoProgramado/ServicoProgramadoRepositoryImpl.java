@@ -138,6 +138,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(empresa.id.in(empresasId));
                 } 
 
+                //DATA PROGRAMADA
+                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+                }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
             return query.fetchCount();
