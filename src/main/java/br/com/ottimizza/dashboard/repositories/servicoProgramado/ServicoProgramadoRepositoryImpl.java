@@ -112,10 +112,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
     @Override
     public List<Object> contadorServicoProgramadoGroupBy() {
-        List resposta = new JPAQuery(em)
-                .select(servico.nome, servicoProgramado.count())
-                .from(servicoProgramado)
-                .innerJoin(servico).on(servico.id.eq(servicoProgramado.servico.id)).fetch();
+        List resposta = new JPAQuery(em).from(servicoProgramado).fetch();
+            //.innerJoin(servicoProgramado.servico, servico)
         return resposta;
     }
     
