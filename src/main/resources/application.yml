@@ -20,7 +20,6 @@ spring:
         password: p99e08e52eeafd8423591f3eb1cab579142a614f0dd8645fa7855baa8a279ab63
 
     jpa:
-        show-sql: true
         hibernate:
             ddl-auto: update
         properties:
