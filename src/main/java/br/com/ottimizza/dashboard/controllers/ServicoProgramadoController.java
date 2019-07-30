@@ -7,7 +7,7 @@ import java.security.Principal;
 import javax.inject.Inject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,18 +27,13 @@ public class ServicoProgramadoController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<String> countServiceProgram(@RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<String> countServiceProgram(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        System.out.println("-- PASSO 1 --");
         // Get Authorized User by Username.
-        if (principal instanceof UserDetails) {
-            String username = ((UserDetails)principal).getUsername();
-            System.out.println("Nomu é: " + username);
-        }
-        System.out.println("-- PASSO 2 --");
+        System.out.println("Principal: " + principal.getName());
+        UserDetails usuario = (UserDetails) ((Authentication) principal).getPrincipal();
+        System.out.println("INFO->USER:"+usuario.getUsername()+"\nPASSWORD:"+usuario.getPassword());
         
         //User authorized = userService.findByUsername(principal.getName());
         //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
