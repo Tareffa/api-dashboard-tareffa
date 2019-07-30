@@ -169,7 +169,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     //--DEPARTAMENTO
                     if(filtro.getDepartamento() != null){
                         for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                            System.out.println("DEPARTAMENTO ID: " + departamentoShort.getId());
                             departamentosId.add(departamentoShort.getId());
                         }  
                         query.where(usuario.departamento.id.in(departamentosId));
