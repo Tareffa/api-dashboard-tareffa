@@ -38,11 +38,11 @@ public class ServicoProgramadoController {
         return ResponseEntity.ok(servicoProgramadoService.count(filtro).toString());
     }
 
-    @GetMapping(path = "agrupamento/{tipo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "agrupamento/{tipo}",produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<String> findGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento)
+    public ResponseEntity<String> findGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
-        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento).toString());
+        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro).toString());
     }
     
 }

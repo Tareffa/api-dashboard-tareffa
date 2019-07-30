@@ -7,6 +7,6 @@ public interface ServicoProgramadoRepositoryCustom {
     
     Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro);
     
-    List<?> contadorServicoProgramadoGroupBy(Short tipoAgrupamento);
+    List<?> contadorServicoProgramadoGroupBy(Short tipoAgrupamento, ServicoProgramadoFiltroAvancado filtro);
     
 }

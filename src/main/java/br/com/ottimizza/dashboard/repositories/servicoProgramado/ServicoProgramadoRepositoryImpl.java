@@ -1,5 +1,6 @@
 package br.com.ottimizza.dashboard.repositories.servicoProgramado;
 
+import br.com.ottimizza.dashboard.constraints.Agrupamento;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
@@ -56,10 +57,10 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
 
-                //STATUS
+                //--STATUS
                 if(filtro.getSituacao() != null){
 
-                    //ABERTO
+                    //---ABERTO
                     if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
                         query.where(servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO));
                         
@@ -80,7 +81,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         }
                     }
 
-                    //ENCERRADO
+                    //---ENCERRADO
                     if(filtro.getSituacao() == ServicoProgramadoSituacao.ENCERRADO){
                         query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
 
@@ -101,7 +102,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     }
                 }
 
-                //DEPARTAMENTO
+                //--DEPARTAMENTO
                 if(filtro.getDepartamento() != null){
                     for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
                         departamentosId.add(departamentoShort.getId());
@@ -110,7 +111,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(departamento.id.in(departamentosId));
                 } 
 
-                //USUARIO
+                //--USUARIO
                 if(filtro.getUsuario() != null){
                     for (Usuario usuario : filtro.getUsuario()) {
                         usuariosId.add(usuario.getId());
@@ -119,7 +120,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(usuario.id.in(usuariosId));
                 } 
 
-                //SERVIÇO
+                //--SERVIÇO
                 if(filtro.getServico() != null){
                     for (ServicoShort servicoShort : filtro.getServico()) {
                         servicosId.add(servicoShort.getId());
@@ -128,7 +129,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(servico.id.in(servicosId));
                 } 
 
-                //EMPRESA
+                //--EMPRESA
                 if(filtro.getEmpresa() != null){
                     for (EmpresaShort empresaShort : filtro.getEmpresa()) {
                         empresasId.add(empresaShort.getId());
@@ -152,24 +153,36 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List contadorServicoProgramadoGroupBy(Short agrupamento) {
-        NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "Contagem");
+    public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro) {
+        NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
         JPAQuery query = new JPAQuery(em);
-            if(agrupamento == 1){
+        
+            if(agrupamento == Agrupamento.SERVICO){
                 query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
                 .from(servicoProgramado)    
                 .innerJoin(servicoProgramado.servico, servico)
-                .groupBy(servico.id)
-                .orderBy(aliasContagem.desc());
+                .innerJoin(servicoProgramado.alocadoPara, usuario); //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
+                
+                //*** FILTRO SERVIÇO ***
+                
+                    //--DEPARTAMENTO
+                    if(filtro.getDepartamento() != null){
+                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()) departamentosId.add(departamentoShort.getId());  
+                        query.where(usuario.departamento.id.in(departamentosId));
+                    } 
+                
+                //*** FIM FILTRO SERVIÇO ***
+                
+                query.groupBy(servico.id).orderBy(aliasContagem.desc());
             }
             
-            if(agrupamento == 2){
+            if(agrupamento == Agrupamento.DEPARTAMENTO){
                 query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
                 .from(servicoProgramado)    
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id))
-                .groupBy(departamento.id)
-                .orderBy(aliasContagem.desc());
+                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
+                
+                query.groupBy(departamento.id).orderBy(aliasContagem.desc());
             }
             
         return query.fetch();

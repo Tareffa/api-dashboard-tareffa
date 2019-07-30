@@ -4,12 +4,8 @@ import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.querydsl.core.Tuple;
-import java.util.List;
 
 import javax.inject.Inject;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +27,9 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
      //<editor-fold defaultstate="collapsed" desc="Save">
-    public JSONObject countGroupBy(Short agrupamento)throws Exception{
+    public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro)throws Exception{
         JSONObject resultado = new JSONObject();
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento));
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro));
         return resultado;
     }
     //</editor-fold>
