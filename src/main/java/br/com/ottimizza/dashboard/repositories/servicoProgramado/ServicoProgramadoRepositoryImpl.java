@@ -21,6 +21,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,10 +40,10 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
     
-    public List<Long> departamentosId;
-    public List<Long> empresasId;
-    public List<Long> servicosId;
-    public List<Long> usuariosId;
+    private List<Long> departamentosId = new ArrayList<>();
+    private List<Long> empresasId = new ArrayList<>();
+    private List<Long> servicosId = new ArrayList<>();
+    private List<Long> usuariosId = new ArrayList<>();
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro) {
