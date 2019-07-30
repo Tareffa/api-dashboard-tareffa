@@ -33,7 +33,7 @@ public class ServicoProgramadoController {
             throws Exception {
         LinkedHashMap<String, Object> properties = (LinkedHashMap<String, Object>) authentication.getUserAuthentication().getDetails();
         // Get Authorized User by Username.
-        System.out.println("TUDAO: " + properties.toString());
+        //System.out.println("TUDAO: " + properties.toString());
         System.out.println("Email: " + properties.get("email"));
         
         //User authorized = userService.findByUsername(principal.getName());
