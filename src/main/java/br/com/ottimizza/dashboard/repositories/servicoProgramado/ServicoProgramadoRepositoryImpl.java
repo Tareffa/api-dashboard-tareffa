@@ -39,10 +39,10 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
     
-    private List<Long> departamentosId;
-    private List<Long> empresasId;
-    private List<Long> servicosId;
-    private List<Long> usuariosId;
+    public List<Long> departamentosId;
+    public List<Long> empresasId;
+    public List<Long> servicosId;
+    public List<Long> usuariosId;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro) {
