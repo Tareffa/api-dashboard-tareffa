@@ -166,8 +166,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             if(agrupamento == 2){
                 query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
                 .from(servicoProgramado)    
-                .innerJoin(servicoProgramado.alocadoPara, usuario)
-                .innerJoin(usuario.departamento, departamento)
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
+                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id))
                 .groupBy(departamento.id)
                 .orderBy(aliasContagem.desc());
             }
