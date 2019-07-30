@@ -31,11 +31,9 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
      //<editor-fold defaultstate="collapsed" desc="Save">
-    public JSONObject countGroupBy()throws Exception{
+    public JSONObject countGroupBy(Short agrupamento)throws Exception{
         JSONObject resultado = new JSONObject();
-        ObjectMapper mapper = new ObjectMapper();
-        
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy());
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento));
         return resultado;
     }
     //</editor-fold>

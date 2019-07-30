@@ -3,6 +3,7 @@ package br.com.ottimizza.dashboard.repositories.servicoProgramado;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
+import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
 import br.com.ottimizza.dashboard.models.empresas.EmpresaShort;
@@ -31,21 +32,19 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     @PersistenceContext
     EntityManager em;
     
-    private List<Long> departamentosId;
-    private List<Long> empresasId;
-    private List<Long> servicosId;
-    private List<Long> usuariosId;
-    
     private QServicoProgramado servicoProgramado = QServicoProgramado.servicoProgramado;
     private QUsuario usuario = QUsuario.usuario;
     private QDepartamento departamento = QDepartamento.departamento;
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
     
+    private List<Long> departamentosId;
+    private List<Long> empresasId;
+    private List<Long> servicosId;
+    private List<Long> usuariosId;
+    
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro) {
-
-        System.out.println("INICIANDO CONTAGEM");
         try {    
         
         JPAQuery query = new JPAQuery(em);
@@ -153,14 +152,25 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List<ServicoAgrupado> contadorServicoProgramadoGroupBy() {
+    public List contadorServicoProgramadoGroupBy(Short agrupamento) {
         NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "Contagem");
         JPAQuery query = new JPAQuery(em);
-            query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
-            .from(servicoProgramado)    
-            .innerJoin(servicoProgramado.servico, servico)
-            .groupBy(servico.id)
-            .orderBy(aliasContagem.desc());
+            if(agrupamento == 1){
+                query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
+                .from(servicoProgramado)    
+                .innerJoin(servicoProgramado.servico, servico)
+                .groupBy(servico.id)
+                .orderBy(aliasContagem.desc());
+            }
+            
+            if(agrupamento == 2){
+                query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
+                .from(servicoProgramado)    
+                .innerJoin(servicoProgramado.alocadoPara, usuario)
+                .innerJoin(usuario.departamento, departamento)
+                .groupBy(departamento.id)
+                .orderBy(aliasContagem.desc());
+            }
             
         return query.fetch();
     }

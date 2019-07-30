@@ -1,4 +1,4 @@
-package br.com.ottimizza.dashboard.models.servicos;
+package br.com.ottimizza.dashboard.models.departamentos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,12 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicoAgrupado {
+public class DepartamentoAgrupado {
     
     @Getter @Setter
-    private String nomeServico;
+    private String nomeDepartamento;
     
     @Getter @Setter
-    private Long servicosProgramadosContagem;
+    private Long servicosProgramadosContagem; 
     
 }
