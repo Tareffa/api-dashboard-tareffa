@@ -165,36 +165,36 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
         try {
             NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
             JPAQuery query = new JPAQuery(em);
+            query.from(servicoProgramado)
+                .innerJoin(servicoProgramado.servico, servico)
+                .innerJoin(servicoProgramado.alocadoPara, usuario) //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
+                .innerJoin(usuario.departamento, departamento);
 
+                //###SERVIÇO###
                 if(agrupamento == Agrupamento.SERVICO){
-                    query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
-                    .from(servicoProgramado)    
-                    .innerJoin(servicoProgramado.servico, servico)
-                    .innerJoin(servicoProgramado.alocadoPara, usuario); //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
+                    query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)));
 
                     //*** FILTRO SERVIÇO ***
-
                         //--DEPARTAMENTO
                         if(filtro.getDepartamento() != null){
                             for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
                                 departamentosId.add(departamentoShort.getId());
                             }  
                             query.where(usuario.departamento.id.in(departamentosId));
-                        } 
-
+                        }
                     //*** FIM FILTRO SERVIÇO ***
 
                     query.groupBy(servico.id).orderBy(aliasContagem.desc());
                 }
 
+                //###DEPARTAMENTO###
                 if(agrupamento == Agrupamento.DEPARTAMENTO){
-                    query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
-                    .from(servicoProgramado)    
-                    .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                    .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
-
+                    query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)));
                     query.groupBy(departamento.id).orderBy(aliasContagem.desc());
                 }
+
+                //CONTABILIDADE
+                query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
 
                 //DATA PROGRAMADA
                 if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
