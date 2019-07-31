@@ -36,6 +36,7 @@ public class ServicoProgramadoController {
         // Get Authorized User by Username.
         System.out.println("Principal: " + principal.getName());
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        System.out.println("Principal: " + autenticado.getContabilidade().getId());
         
         //User authorized = userService.findByUsername(principal.getName());
         //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
