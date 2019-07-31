@@ -166,9 +166,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
-                .innerJoin(servicoProgramado.servico, servico)
-                .innerJoin(servicoProgramado.alocadoPara, usuario) //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
-                .innerJoin(usuario.departamento, departamento);
+                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
+                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
 
                 //###SERVIÇO###
                 if(agrupamento == Agrupamento.SERVICO){
