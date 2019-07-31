@@ -20,7 +20,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
 
     @Override
     public Usuario findByEmail(String email) {
-        JPAQuery<Usuario> query = new JPAQuery<Usuario>(em).from(usuario).where(usuario.nome.like("%" + email + "%"));
+        JPAQuery<Usuario> query = new JPAQuery<Usuario>(em).from(usuario).where(usuario.email.eq(email));
         return query.fetchFirst();
     }
 
