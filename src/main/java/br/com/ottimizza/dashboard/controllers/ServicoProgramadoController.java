@@ -31,16 +31,11 @@ public class ServicoProgramadoController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<String> countServiceProgram(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
-            throws Exception {
+        throws Exception {
         
-        // Get Authorized User by Username.
-        System.out.println("Principal: " + principal.getName());
+        // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        System.out.println("Principal: " + autenticado.getContabilidade().getId());
         
-        //User authorized = userService.findByUsername(principal.getName());
-        //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
-
         return ResponseEntity.ok(servicoProgramadoService.count(filtro, autenticado).toString());
     }
 

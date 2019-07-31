@@ -48,6 +48,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         try {    
+            
+        if(autenticado == null) return 0L;
         
         JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
