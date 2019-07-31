@@ -159,47 +159,53 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro) {
-        NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
-        JPAQuery query = new JPAQuery(em);
+    public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        if(autenticado == null) return null;
         
-            if(agrupamento == Agrupamento.SERVICO){
-                query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
-                .from(servicoProgramado)    
-                .innerJoin(servicoProgramado.servico, servico)
-                .innerJoin(servicoProgramado.alocadoPara, usuario); //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
-                
-                //*** FILTRO SERVIÇO ***
-                
-                    //--DEPARTAMENTO
-                    if(filtro.getDepartamento() != null){
-                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                            departamentosId.add(departamentoShort.getId());
-                        }  
-                        query.where(usuario.departamento.id.in(departamentosId));
-                    } 
-                
-                //*** FIM FILTRO SERVIÇO ***
-                
-                query.groupBy(servico.id).orderBy(aliasContagem.desc());
-            }
-            
-            if(agrupamento == Agrupamento.DEPARTAMENTO){
-                query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
-                .from(servicoProgramado)    
-                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
-                
-                query.groupBy(departamento.id).orderBy(aliasContagem.desc());
-            }
-            
-            //DATA PROGRAMADA
-            if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
-                query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
-                    .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
-            }
-            
-        return query.fetch();
+        try {
+            NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
+            JPAQuery query = new JPAQuery(em);
+
+                if(agrupamento == Agrupamento.SERVICO){
+                    query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)))
+                    .from(servicoProgramado)    
+                    .innerJoin(servicoProgramado.servico, servico)
+                    .innerJoin(servicoProgramado.alocadoPara, usuario); //UTILIZADO O DEPARTAMENTO ALOCADO DO USUÁRIO PARA FILTRO
+
+                    //*** FILTRO SERVIÇO ***
+
+                        //--DEPARTAMENTO
+                        if(filtro.getDepartamento() != null){
+                            for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
+                                departamentosId.add(departamentoShort.getId());
+                            }  
+                            query.where(usuario.departamento.id.in(departamentosId));
+                        } 
+
+                    //*** FIM FILTRO SERVIÇO ***
+
+                    query.groupBy(servico.id).orderBy(aliasContagem.desc());
+                }
+
+                if(agrupamento == Agrupamento.DEPARTAMENTO){
+                    query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)))
+                    .from(servicoProgramado)    
+                    .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
+                    .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
+
+                    query.groupBy(departamento.id).orderBy(aliasContagem.desc());
+                }
+
+                //DATA PROGRAMADA
+                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+                }
+            return query.fetch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
 }

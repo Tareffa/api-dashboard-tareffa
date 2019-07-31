@@ -28,9 +28,9 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Count Scheduled Service Group By">
-    public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro)throws Exception{
+    public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro));
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro, autenticado));
         return resultado;
     }
     //</editor-fold>

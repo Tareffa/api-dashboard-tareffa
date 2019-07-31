@@ -32,7 +32,6 @@ public class ServicoProgramadoController {
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<String> countServiceProgram(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
-        
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
@@ -42,8 +41,11 @@ public class ServicoProgramadoController {
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<String> findGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
-            throws Exception {
-        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro).toString());
+        throws Exception {
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        
+        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro, autenticado).toString());
     }
     
 }
