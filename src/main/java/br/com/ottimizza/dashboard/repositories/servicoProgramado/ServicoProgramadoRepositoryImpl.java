@@ -46,7 +46,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private List<Long> usuariosId = new ArrayList<>();
     
     @Override
-    public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro) {
+    public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         try {    
         
         JPAQuery query = new JPAQuery(em);
@@ -55,8 +55,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id)) //JOIN EMPRESA
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
                 .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id)); //JOIN DEPARTAMENTO
-
+            
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
+            
+                //CONTABILIDADE
+                query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){

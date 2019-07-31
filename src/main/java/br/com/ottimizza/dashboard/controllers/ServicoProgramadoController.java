@@ -1,14 +1,14 @@
 package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
 import br.com.ottimizza.dashboard.services.UserService;
 import java.security.Principal;
 import javax.inject.Inject;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,18 +25,22 @@ public class ServicoProgramadoController {
     @Inject
     UserService userService;
 
+    @Inject
+    UsuarioRepository usuarioRepository;
+    
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
     public ResponseEntity<String> countServiceProgram(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
             throws Exception {
-
+        
         // Get Authorized User by Username.
         System.out.println("Principal: " + principal.getName());
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
         //User authorized = userService.findByUsername(principal.getName());
         //ServicoProgramadoFiltroAvancado filtro = new ServicoProgramadoFiltroAvancado();
 
-        return ResponseEntity.ok(servicoProgramadoService.count(filtro).toString());
+        return ResponseEntity.ok(servicoProgramadoService.count(filtro, autenticado).toString());
     }
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)

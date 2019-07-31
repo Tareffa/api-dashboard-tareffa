@@ -3,6 +3,7 @@ package br.com.ottimizza.dashboard.services;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
 
 import javax.inject.Inject;
@@ -18,15 +19,15 @@ public class ServicoProgramadoService {
     @Inject
     private ServicoProgramadoRepository repository;
 
-    //<editor-fold defaultstate="collapsed" desc="Save">
-    public JSONObject count(ServicoProgramadoFiltroAvancado filtro)throws Exception{
+    //<editor-fold defaultstate="collapsed" desc="Count scheduled service">
+    public JSONObject count(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
-        resultado.put("tamanho", repository.contadorServicoProgramado(filtro));
+        resultado.put("tamanho", repository.contadorServicoProgramado(filtro, autenticado));
         return resultado;
     }
     //</editor-fold>
     
-     //<editor-fold defaultstate="collapsed" desc="Save">
+    //<editor-fold defaultstate="collapsed" desc="Count Scheduled Service Group By">
     public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro)throws Exception{
         JSONObject resultado = new JSONObject();
         resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro));
