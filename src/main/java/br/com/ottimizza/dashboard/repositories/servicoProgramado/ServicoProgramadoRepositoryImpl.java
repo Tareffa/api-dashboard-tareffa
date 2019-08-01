@@ -164,15 +164,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
         if(autenticado == null) return null;
         try {
             //CASE BUILDER
-            CaseBuilder departamentoCase = new CaseBuilder();
-            departamentoCase.when(usuario.departamento.isNull()).then(servico.grupoServico.id).otherwise(usuario.departamento.id);
+            //CaseWhen<Usuario.class>
+            //.when(usuario.departamento.isNull()).then(servico.grupoServico.id).otherwise(usuario.departamento.id);
             
             NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
+                .innerJoin(departamento).on(usuario.departamento.id.eq(new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id).otherwise(usuario.departamento.id)));
 
                 //###SERVIÇO###
                 if(agrupamento == Agrupamento.SERVICO){
