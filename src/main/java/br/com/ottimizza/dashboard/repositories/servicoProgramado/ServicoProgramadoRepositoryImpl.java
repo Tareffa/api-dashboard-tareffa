@@ -18,6 +18,7 @@ import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -161,18 +162,21 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     @Override
     public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         if(autenticado == null) return null;
-        
         try {
+            //CASE BUILDER
+            CaseBuilder departamentoCase = new CaseBuilder();
+            departamentoCase.when(usuario.departamento.isNull()).then(servico.grupoServico.id).otherwise(usuario.departamento.id);
+            
             NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
+                .innerJoin(departamento).on();
 
                 //###SERVIÇO###
                 if(agrupamento == Agrupamento.SERVICO){
-                    query.select(Projections.constructor(ServicoAgrupado.class, servico.nome, servicoProgramado.count().as(aliasContagem)));
+                    query.select(Projections.constructor(ServicoAgrupado.class, servico.id, servico.nome, servicoProgramado.count().as(aliasContagem)));
 
                     //*** FILTRO SERVIÇO ***
                         //--DEPARTAMENTO
@@ -189,7 +193,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
                 //###DEPARTAMENTO###
                 if(agrupamento == Agrupamento.DEPARTAMENTO){
-                    query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.descricao, servicoProgramado.count().as(aliasContagem)));
+                    query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.id, departamento.descricao, servicoProgramado.count().as(aliasContagem)));
                     query.groupBy(departamento.id).orderBy(aliasContagem.desc());
                 }
 
