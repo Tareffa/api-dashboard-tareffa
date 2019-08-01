@@ -11,7 +11,7 @@ import lombok.Setter;
 public class DepartamentoAgrupado {
     
     @Getter @Setter
-    private Long id;
+    private BigInteger id;
     
     @Getter @Setter
     private String nomeDepartamento;

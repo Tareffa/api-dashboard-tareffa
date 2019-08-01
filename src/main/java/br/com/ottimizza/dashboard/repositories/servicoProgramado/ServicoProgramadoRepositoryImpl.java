@@ -172,7 +172,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on();
+                .innerJoin(departamento).on(usuario.departamento.id.eq(departamento.id));
 
                 //###SERVIÇO###
                 if(agrupamento == Agrupamento.SERVICO){
