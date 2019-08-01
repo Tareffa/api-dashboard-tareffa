@@ -11,7 +11,7 @@ import lombok.Setter;
 public class ServicoAgrupado {
     
     @Getter @Setter
-    private BigInteger id;
+    private Long id;
     
     @Getter @Setter
     private String nomeServico;
