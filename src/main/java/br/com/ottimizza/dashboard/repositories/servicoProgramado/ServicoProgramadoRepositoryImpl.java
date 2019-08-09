@@ -113,7 +113,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
 
                 //--DEPARTAMENTO
-                if(filtro.getDepartamento() != null){
+                if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
                     for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
                         departamentosId.add(departamentoShort.getId());
                     }
@@ -131,7 +131,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 } 
 
                 //--SERVIÇO
-                if(filtro.getServico() != null){
+                if(filtro.getServico() != null && !filtro.getDepartamento().isEmpty()){
                     for (ServicoShort servicoShort : filtro.getServico()) {
                         servicosId.add(servicoShort.getId());
                     }
