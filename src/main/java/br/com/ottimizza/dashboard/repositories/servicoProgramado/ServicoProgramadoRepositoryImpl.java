@@ -115,9 +115,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //--DEPARTAMENTO
                 if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
                     for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        System.out.println("DEPARTAMENTO ID: " + departamentoShort.getId());
                         departamentosId.add(departamentoShort.getId());
                     }
                     
+                    System.out.println("TAMANHO LISTA: " + departamentosId.size());
                     query.where(departamento.id.in(departamentosId));
                 } 
 
