@@ -41,13 +41,12 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
     
-    private List<Long> departamentosId = new ArrayList<>();
-    private List<Long> empresasId = new ArrayList<>();
-    private List<Long> servicosId = new ArrayList<>();
-    private List<Long> usuariosId = new ArrayList<>();
-    
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
+        List<Long> empresasId = new ArrayList<>();
+        List<Long> servicosId = new ArrayList<>();
+        List<Long> usuariosId = new ArrayList<>();
         try {    
             
         if(autenticado == null) return 0L;
@@ -115,11 +114,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //--DEPARTAMENTO
                 if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
                     for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
-                        System.out.println("DEPARTAMENTO ID: " + departamentoShort.getId());
                         departamentosId.add(departamentoShort.getId());
                     }
                     
-                    System.out.println("TAMANHO LISTA: " + departamentosId.size());
                     query.where(departamento.id.in(departamentosId));
                 } 
 
@@ -166,6 +163,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
     @Override
     public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
         if(autenticado == null) return null;
         try {
             
