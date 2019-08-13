@@ -131,7 +131,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 } 
 
                 //--SERVIÇO
-                if(filtro.getServico() != null && !filtro.getDepartamento().isEmpty()){
+                if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
                     for (ServicoShort servicoShort : filtro.getServico()) {
                         servicosId.add(servicoShort.getId());
                     }
