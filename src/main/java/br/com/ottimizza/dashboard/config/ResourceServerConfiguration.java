@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @EnableResourceServer
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
-    private static final String RESOURCE_ID = "bussola-contabil-resource-server";
+    private static final String RESOURCE_ID = "tareffa-resource-server";
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
