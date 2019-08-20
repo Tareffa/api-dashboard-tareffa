@@ -187,7 +187,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                             for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
                                 departamentosId.add(departamentoShort.getId());
                             }  
-                            query.where(usuario.departamento.id.in(departamentosId));
+                            query.where(departamento.id.in(departamentosId));
                         }
                     //*** FIM FILTRO SERVIÇO ***
 
