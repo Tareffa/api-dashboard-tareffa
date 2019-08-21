@@ -18,7 +18,7 @@ public class ServicoEmpresaResponsavel implements Serializable{
     @Getter @Setter
     private String nomeServico;
     
-    @Getter @Setter
-    private List<EmpresaResponsavelDataVencimento> lista;
+//    @Getter @Setter
+//    private List<EmpresaResponsavelDataVencimento> lista;
     
 }
