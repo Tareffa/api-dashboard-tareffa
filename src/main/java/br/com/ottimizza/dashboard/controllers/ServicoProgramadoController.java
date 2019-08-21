@@ -37,16 +37,6 @@ public class ServicoProgramadoController {
         
         return ResponseEntity.ok(servicoProgramadoService.count(filtro, autenticado).toString());
     }
-    
-    @PostMapping(path = "lista", produces = MediaType.APPLICATION_JSON_VALUE)
-    // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<String> listCompanyResponsibleDueDate(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
-        throws Exception {
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        
-        return ResponseEntity.ok(servicoProgramadoService.listCompanyResponsibleDueDate(filtro, autenticado).toString());
-    }
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Find company by ID">
