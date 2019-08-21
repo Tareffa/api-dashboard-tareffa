@@ -314,8 +314,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.groupBy(servico.id);
 //            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento));
             query.select(
-                Projections.constructor(ServicoEmpresaResponsavel.class, servico.id, servico.nome,
-                    Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento)
+                Projections.constructor(ServicoEmpresaResponsavel.class, servico.id, servico.nome, null
+//                    ,Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento)
                 )
             );
 
