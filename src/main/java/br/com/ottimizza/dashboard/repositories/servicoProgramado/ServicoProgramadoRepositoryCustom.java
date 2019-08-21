@@ -10,4 +10,6 @@ public interface ServicoProgramadoRepositoryCustom {
     
     List<?> contadorServicoProgramadoGroupBy(Short tipoAgrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
     
+    List<?> listaEmpresasResponsaveisPorServico(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
+    
 }

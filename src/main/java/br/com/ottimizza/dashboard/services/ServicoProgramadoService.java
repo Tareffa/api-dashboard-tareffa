@@ -34,5 +34,13 @@ public class ServicoProgramadoService {
         return resultado;
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="List Company Responsible Due Date">
+    public JSONObject listCompanyResponsibleDueDate(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+        JSONObject resultado = new JSONObject();
+        resultado.put("resultado", repository.listaEmpresasResponsaveisPorServico(filtro, autenticado));
+        return resultado;
+    }
+    //</editor-fold>
 
 }

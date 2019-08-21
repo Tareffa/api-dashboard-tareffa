@@ -7,6 +7,7 @@ import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
+import br.com.ottimizza.dashboard.models.empresas.EmpresaResponsavelDataVencimento;
 import br.com.ottimizza.dashboard.models.empresas.EmpresaShort;
 import br.com.ottimizza.dashboard.models.empresas.QEmpresaShort;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
@@ -208,6 +209,108 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
                         .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
                 }
+            return query.fetch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<?> listaEmpresasResponsaveisPorServico(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
+        List<Long> servicosId = new ArrayList<>();
+        try {    
+            
+//        if(autenticado == null) return 0L;
+        
+            JPAQuery query = new JPAQuery(em);
+            query.from(servicoProgramado)
+                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id)) //JOIN SERVIÇO
+                .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id)) //JOIN EMPRESA
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
+                .innerJoin(departamento).on(departamento.id.eq( //JOIN DEPARTAMENTO
+                    new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
+                        .otherwise(usuario.departamento.id))
+                );
+            
+            /*** FILTRO SERVIÇOS PROGRAMADOS ***/
+            
+                //CONTABILIDADE
+                query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+
+                //--STATUS
+                if(filtro.getSituacao() != null){
+
+                    //---ABERTO
+                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
+                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO));
+                        
+                        if(filtro.getPrazo() != null){
+                            Date dataAtual = new Date();
+                            BooleanBuilder prazos = new BooleanBuilder();
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual)));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                                prazos.or(servicoProgramado.dataVencimento.lt(dataAtual));
+                            
+                            query.where(prazos);
+                        }
+                    }
+
+                    //---ENCERRADO
+                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ENCERRADO){
+                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
+
+                        if(filtro.getPrazo() != null){
+                            BooleanBuilder prazos = new BooleanBuilder();
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino)));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                                prazos.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
+                            
+                            query.where(prazos);
+                        } 
+                    }
+                }
+
+                //--DEPARTAMENTO
+                if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
+                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        departamentosId.add(departamentoShort.getId());
+                    }
+                    
+                    query.where(departamento.id.in(departamentosId));
+                }
+
+                //--SERVIÇO
+                if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
+                    for (ServicoShort servicoShort : filtro.getServico()) {
+                        servicosId.add(servicoShort.getId());
+                    }
+                    
+                    query.where(servico.id.in(servicosId));
+                } 
+
+                //DATA PROGRAMADA
+                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+                }
+            /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
+            
+            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento));
+
             return query.fetch();
         } catch (Exception e) {
             e.printStackTrace();
