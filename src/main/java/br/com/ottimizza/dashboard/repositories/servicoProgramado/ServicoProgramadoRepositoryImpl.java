@@ -13,6 +13,7 @@ import br.com.ottimizza.dashboard.models.empresas.QEmpresaShort;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoEmpresaResponsavel;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
@@ -310,8 +311,13 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
             
             //servico.nome, 
+            query.groupBy(servico.id);
 //            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento));
-            query.select(servico.nome).groupBy(servico.id);
+            query.select(
+                Projections.constructor(ServicoEmpresaResponsavel.class, servico.id, servico.nome,
+                    Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento)
+                )
+            );
 
             return query.fetch();
         } catch (Exception e) {
