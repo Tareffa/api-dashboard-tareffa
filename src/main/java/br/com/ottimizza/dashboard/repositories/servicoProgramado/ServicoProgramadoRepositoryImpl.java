@@ -309,7 +309,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
             
-            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento)).groupBy(servico.id);
+            query.select(servico.nome, Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento));
 
             return query.fetch();
         } catch (Exception e) {
