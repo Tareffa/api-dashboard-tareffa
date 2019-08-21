@@ -182,9 +182,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //###SERVIÇO COM VENCIMENTO###
                 if(agrupamento == Agrupamento.SERVICOVENCIMENTO){
                     
+                    query.select(Projections.constructor(ServicoAgrupadoVencimento.class, servico.id, servico.nome, servicoProgramado.dataVencimento, servicoProgramado.count().as(aliasContagem)));
                     //--STATUS
                     if(filtro.getSituacao() != null){
-                        query.select(Projections.constructor(ServicoAgrupadoVencimento.class, servico.id, servico.nome, servicoProgramado.dataVencimento, servicoProgramado.count().as(aliasContagem)));
 
                         //---ABERTO
                         if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
