@@ -311,7 +311,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
             //servico.nome, 
 //            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, empresa.razaoSocial, usuario.nome, servicoProgramado.dataVencimento));
-            query.select(servico.nome.as("teste"));
+            query.select(servico.nome).groupBy(servico.id);
 
             return query.fetch();
         } catch (Exception e) {
