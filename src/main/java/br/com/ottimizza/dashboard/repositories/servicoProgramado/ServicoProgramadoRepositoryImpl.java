@@ -245,7 +245,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         query.where(departamento.id.in(departamentosId));
                     }
                     
-                    query.groupBy(servicoProgramado.id,servicoProgramado.dataVencimento,servico.nome).orderBy(servicoProgramado.id.asc(),servicoProgramado.dataVencimento.asc(),servico.nome.asc());
+                    query.groupBy(servicoProgramado.id,servicoProgramado.dataVencimento,servico.id,servico.nome).orderBy(servicoProgramado.id.asc(),servicoProgramado.dataVencimento.asc(),servico.id.asc(),servico.nome.asc());
                     
                 }
                 
