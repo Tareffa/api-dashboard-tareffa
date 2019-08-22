@@ -10,6 +10,6 @@ public interface ServicoProgramadoRepositoryCustom {
     
     List<?> contadorServicoProgramadoGroupBy(Short tipoAgrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
     
-    List<?> listaEmpresaResponsavelDataTermino(Long idServico, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
+    List<?> listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
     
 }

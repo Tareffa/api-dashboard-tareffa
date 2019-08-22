@@ -291,7 +291,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List<?> listaEmpresaResponsavelDataTermino(Long idServico, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+    public List<?> listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         List<Long> departamentosId = new ArrayList<>();
         if(autenticado == null) return null;
         try {
@@ -307,7 +307,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 );
             
             //SELECT
-            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.dataTermino));
+            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.id, servicoProgramado.dataTermino));
             
             //--STATUS
             if(filtro.getSituacao() != null){
@@ -320,7 +320,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         Date dataAtual = new Date();
                         BooleanBuilder prazos = new BooleanBuilder();
 
-                        System.out.println("DATA ATUAL: " + dataAtual);
                         if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
                             prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
 
@@ -355,8 +354,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
             }
             
-            String dataFormatado = DateUtils.formatDate(filtro.getDataProgramadaInicio(), "yyyy-MM-dd");
-            System.out.println("DATA PROGRAMADA ENTREGA: " + DateUtils.formatDate(filtro.getDataProgramadaInicio(), "yyyy-MM-dd"));
             //--DATA PROGRAMADA
             query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
             
@@ -374,6 +371,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
             //CONTABILIDADE
             query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+            
+            //ORDER BY
+            query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
             
             return query.fetch();
         } catch (Exception e) {

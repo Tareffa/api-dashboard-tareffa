@@ -13,21 +13,20 @@ import lombok.Setter;
 @NoArgsConstructor
 public class EmpresaResponsavelDataVencimento implements Serializable{
     
-    
-    @Getter
-    @Setter
+    @Getter @Setter
     private String nomeResponsavel;
     
-    @Getter
-    @Setter
+    @Getter @Setter
     private String codigoErpEmpresa;
     
-    @Getter
-    @Setter
+    @Getter @Setter
     private String razaoSocialEmpresa;
     
-    @Getter
-    @Setter
+    @Getter @Setter
+    private Long servicoProgramadoId;
+    
+    @Getter @Setter
     @Temporal(TemporalType.DATE)
     private Date dataTermino;
+    
 }
