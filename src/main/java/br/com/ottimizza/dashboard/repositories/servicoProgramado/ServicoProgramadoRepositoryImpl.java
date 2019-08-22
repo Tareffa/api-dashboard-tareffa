@@ -13,7 +13,7 @@ import br.com.ottimizza.dashboard.models.empresas.QEmpresaShort;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupado;
-import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupadoVencimento;
+import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupadoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
@@ -182,7 +182,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //###SERVIÇO COM VENCIMENTO###
                 if(agrupamento == Agrupamento.SERVICOVENCIMENTO){
                     
-                    query.select(Projections.constructor(ServicoAgrupadoVencimento.class, servico.id, servico.nome, servicoProgramado.dataVencimento, servicoProgramado.count().as(aliasContagem)));
+                    query.select(Projections.constructor(ServicoAgrupadoProgramado.class, servico.id, servico.nome, servicoProgramado.dataProgramadaEntrega, servicoProgramado.count().as(aliasContagem)));
                     //--STATUS
                     if(filtro.getSituacao() != null){
 
@@ -245,7 +245,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         query.where(departamento.id.in(departamentosId));
                     }
                     
-                    query.groupBy(servicoProgramado.id,servicoProgramado.dataVencimento,servico.id,servico.nome).orderBy(servicoProgramado.id.asc(),servicoProgramado.dataVencimento.asc(),servico.id.asc(),servico.nome.asc());
+                    query.groupBy(servicoProgramado.dataProgramadaEntrega,servico.nome,servico.id).orderBy(servicoProgramado.dataProgramadaEntrega.asc(),servico.nome.asc());
                     
                 }
                 

@@ -12,7 +12,7 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicoAgrupadoVencimento implements Serializable{
+public class ServicoAgrupadoProgramado implements Serializable{
     
     @Getter @Setter
     private Long id;
@@ -22,7 +22,7 @@ public class ServicoAgrupadoVencimento implements Serializable{
     
     @Getter @Setter
     @Temporal(TemporalType.DATE)
-    private Date dataVencimento;
+    private Date dataProgramado;
     
     @Getter @Setter
     private Long servicosProgramadosContagem;
