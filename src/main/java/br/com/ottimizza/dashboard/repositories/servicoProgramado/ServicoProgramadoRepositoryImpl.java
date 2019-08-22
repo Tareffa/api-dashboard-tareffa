@@ -319,6 +319,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         Date dataAtual = new Date();
                         BooleanBuilder prazos = new BooleanBuilder();
 
+                        System.out.println("DATA ATUAL: " + dataAtual);
                         if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
                             prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
 
@@ -353,6 +354,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
             }
             
+            System.out.println("DATA PROGRAMADA ENTREGA: " + filtro.getDataProgramadaInicio());
             //--DATA PROGRAMADA
             query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
             
