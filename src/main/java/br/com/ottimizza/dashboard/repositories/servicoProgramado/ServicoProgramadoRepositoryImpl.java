@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.http.client.utils.DateUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -354,7 +355,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
             }
             
-            System.out.println("DATA PROGRAMADA ENTREGA: " + filtro.getDataProgramadaInicio());
+            String dataFormatado = DateUtils.formatDate(filtro.getDataProgramadaInicio(), "yyyy-MM-dd");
+            System.out.println("DATA PROGRAMADA ENTREGA: " + DateUtils.formatDate(filtro.getDataProgramadaInicio(), "yyyy-MM-dd"));
             //--DATA PROGRAMADA
             query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
             
