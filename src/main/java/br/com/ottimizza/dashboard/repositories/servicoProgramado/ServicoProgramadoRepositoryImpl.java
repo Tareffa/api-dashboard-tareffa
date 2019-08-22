@@ -230,14 +230,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     }
                     
                     
-//                    //--DEPARTAMENTO
-//                    if(filtro.getDepartamento() != null){
-//                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-//                            departamentosId.add(departamentoShort.getId());
-//                        }  
-//                        query.where(departamento.id.in(departamentosId));
-//                    }
-//                    
+                    //--DEPARTAMENTO
+                    if(filtro.getDepartamento() != null){
+                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
+                            departamentosId.add(departamentoShort.getId());
+                        }  
+                        query.where(departamento.id.in(departamentosId));
+                    }
+                    
 //                    //--SERVIÇO
 //                    if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
 //                        for (ServicoShort servicoShort : filtro.getServico()) {
