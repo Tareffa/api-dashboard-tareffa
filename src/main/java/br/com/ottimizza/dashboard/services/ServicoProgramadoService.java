@@ -34,5 +34,13 @@ public class ServicoProgramadoService {
         return resultado;
     }
     //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Lista de Responsável Empresa Data Término">
+    public JSONObject listaEmpresaResponsavelDataTermino(Long idServico, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+        JSONObject resultado = new JSONObject();
+        resultado.put("resultado", repository.listaEmpresaResponsavelDataTermino(idServico, filtro, autenticado));
+        return resultado;
+    }
+    //</editor-fold>
 
 }

@@ -286,5 +286,93 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             return null;
         }
     }
+
+    @Override
+    public List<?> listaEmpresaResponsavelDataTermino(Long idServico, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
+        if(autenticado == null) return null;
+        try {
+            
+            JPAQuery query = new JPAQuery(em);
+            query.from(servicoProgramado)
+                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
+                .innerJoin(departamento).on(departamento.id.eq(
+                    new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
+                        .otherwise(usuario.departamento.id))
+                );
+            
+            //SELECT
+            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.dataTermino));
+            
+            //--STATUS
+            if(filtro.getSituacao() != null){
+
+                //---ABERTO
+                if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
+                    query.where(servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO));
+
+                    if(filtro.getPrazo() != null){
+                        Date dataAtual = new Date();
+                        BooleanBuilder prazos = new BooleanBuilder();
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                            prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                            prazos.or(servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual)));
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                            prazos.or(servicoProgramado.dataVencimento.lt(dataAtual));
+
+                        query.where(prazos);
+                    }
+                }
+
+                //---ENCERRADO
+                if(filtro.getSituacao() == ServicoProgramadoSituacao.ENCERRADO){
+                    query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
+
+                    if(filtro.getPrazo() != null){
+                        BooleanBuilder prazos = new BooleanBuilder();
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                            prazos.or(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                            prazos.or(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino)));
+
+                        if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                            prazos.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
+
+                        query.where(prazos);
+                    } 
+                }
+            }
+            
+            //--DATA PROGRAMADA
+            query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
+            
+            //--SERVIÇO
+            query.where(servico.id.eq(idServico));
+            
+            //--DEPARTAMENTO
+            if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
+                for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                    departamentosId.add(departamentoShort.getId());
+                }
+
+                query.where(departamento.id.in(departamentosId));
+            }
+            
+            //CONTABILIDADE
+            query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+            
+            return query.fetch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
 }

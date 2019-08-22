@@ -29,7 +29,7 @@ public class ServicoProgramadoController {
     UsuarioRepository usuarioRepository;
     
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    // <editor-fold defaultstate="collapsed" desc="Find company by ID">
+    // <editor-fold defaultstate="collapsed" desc="Contagem de serviço programado">
     public ResponseEntity<String> countServiceProgram(Principal principal, @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
@@ -39,13 +39,23 @@ public class ServicoProgramadoController {
     }
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
-    // <editor-fold defaultstate="collapsed" desc="Find company by ID">
-    public ResponseEntity<String> findGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    // <editor-fold defaultstate="collapsed" desc="Contagem de serviço programado agrupado">
+    public ResponseEntity<String> countGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
         return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro, autenticado).toString());
+    }
+    
+    @PostMapping(path = "{id}/informacao", produces = MediaType.APPLICATION_JSON_VALUE)
+    // <editor-fold defaultstate="collapsed" desc="Informações de serviço">
+    public ResponseEntity<String> listCompanyResponsible(Principal principal, @PathVariable("id") Long idServico, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+        throws Exception {
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        
+        return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, filtro, autenticado).toString());
     }
     
 }
