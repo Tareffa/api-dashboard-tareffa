@@ -230,22 +230,22 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     }
                     
                     
-                    //--DEPARTAMENTO
-                    if(filtro.getDepartamento() != null){
-                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                            departamentosId.add(departamentoShort.getId());
-                        }  
-                        query.where(departamento.id.in(departamentosId));
-                    }
-                    
-                    //--SERVIÇO
-                    if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
-                        for (ServicoShort servicoShort : filtro.getServico()) {
-                            servicosId.add(servicoShort.getId());
-                        }
-
-                        query.where(servico.id.in(servicosId));
-                    }
+//                    //--DEPARTAMENTO
+//                    if(filtro.getDepartamento() != null){
+//                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
+//                            departamentosId.add(departamentoShort.getId());
+//                        }  
+//                        query.where(departamento.id.in(departamentosId));
+//                    }
+//                    
+//                    //--SERVIÇO
+//                    if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
+//                        for (ServicoShort servicoShort : filtro.getServico()) {
+//                            servicosId.add(servicoShort.getId());
+//                        }
+//
+//                        query.where(servico.id.in(servicosId));
+//                    }
                     
                     query.groupBy(servicoProgramado.dataProgramadaEntrega,servico.nome,servico.id).orderBy(servicoProgramado.dataProgramadaEntrega.asc(),servico.nome.asc());
                     
