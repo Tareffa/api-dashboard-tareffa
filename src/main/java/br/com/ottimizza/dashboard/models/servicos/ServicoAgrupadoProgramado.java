@@ -22,7 +22,7 @@ public class ServicoAgrupadoProgramado implements Serializable{
     
     @Getter @Setter
     @Temporal(TemporalType.DATE)
-    private Date dataProgramado;
+    private Date dataProgramada;
     
     @Getter @Setter
     private Long servicosProgramadosContagem;
