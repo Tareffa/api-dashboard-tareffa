@@ -354,7 +354,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             }
             
             //--DATA PROGRAMADA
-            //query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
+            query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
             
             //--SERVIÇO
             query.where(servico.id.eq(idServico));
