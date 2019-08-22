@@ -166,6 +166,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     @Override
     public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         List<Long> departamentosId = new ArrayList<>();
+        List<Long> servicosId = new ArrayList<>();
         if(autenticado == null) return null;
         try {
             
@@ -238,11 +239,12 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     }
                     
                     //--SERVIÇO
-                    if(filtro.getServico()!= null){
-                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                            departamentosId.add(departamentoShort.getId());
-                        }  
-                        query.where(departamento.id.in(departamentosId));
+                    if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
+                        for (ServicoShort servicoShort : filtro.getServico()) {
+                            servicosId.add(servicoShort.getId());
+                        }
+
+                        query.where(servico.id.in(servicosId));
                     }
                     
                     query.groupBy(servicoProgramado.dataProgramadaEntrega,servico.nome,servico.id).orderBy(servicoProgramado.dataProgramadaEntrega.asc(),servico.nome.asc());
