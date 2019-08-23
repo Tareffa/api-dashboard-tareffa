@@ -55,8 +55,8 @@ public class ServicoProgramadoController {
             Principal principal, 
             @PathVariable("id") Long idServico,
             @QueryParam("limit") Long limit,
-            @QueryParam("before_servicoId") Long beforeServicoProgramaId,
-            @QueryParam("before_codigoErp") String beforeCodigoErp,
+            @QueryParam("beforeServicoId") Long beforeServicoProgramaId,
+            @QueryParam("beforeCodigoErp") String beforeCodigoErp,
             @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
