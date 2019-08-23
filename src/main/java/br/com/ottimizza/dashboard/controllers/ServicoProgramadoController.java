@@ -7,6 +7,7 @@ import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
 import br.com.ottimizza.dashboard.services.UserService;
 import java.security.Principal;
 import javax.inject.Inject;
+import javax.ws.rs.QueryParam;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,12 +51,18 @@ public class ServicoProgramadoController {
     
     @PostMapping(path = "{id}/informacao", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Informações de serviço">
-    public ResponseEntity<String> listCompanyResponsible(Principal principal, @PathVariable("id") Long idServico, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<String> listCompanyResponsible(
+            Principal principal, 
+            @PathVariable("id") Long idServico,
+            @QueryParam("limit") Long limit,
+            @QueryParam("before_servico_id") Long beforeServicoProgramaId,
+            @QueryParam("before_codigo_erp") String beforeCodigoErp,
+            @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
-        return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, filtro, autenticado).toString());
+        return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoProgramaId, beforeCodigoErp, filtro, autenticado).toString());
     }
     
 }

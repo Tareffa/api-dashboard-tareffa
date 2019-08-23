@@ -375,6 +375,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
             
+            if(limit != null ){
+                query.limit(limit);
+                if(beforeServicoProgramaId != null && beforeCodigoErp != null){
+                    query.where(servicoProgramado.id.gt(beforeServicoProgramaId));
+                    query.where(empresa.codigoErp.gt(beforeCodigoErp));
+                }
+            }
+            
             return query.fetch();
         } catch (Exception e) {
             e.printStackTrace();
