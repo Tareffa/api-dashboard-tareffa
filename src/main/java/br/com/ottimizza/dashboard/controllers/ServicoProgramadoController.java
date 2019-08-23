@@ -55,12 +55,13 @@ public class ServicoProgramadoController {
             Principal principal, 
             @PathVariable("id") Long idServico,
             @QueryParam("limit") Long limit,
-            @QueryParam("before_servico_id") Long beforeServicoProgramaId,
-            @QueryParam("before_codigo_erp") String beforeCodigoErp,
+            @QueryParam("before_servicoId") Long beforeServicoProgramaId,
+            @QueryParam("before_codigoErp") String beforeCodigoErp,
             @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        System.out.println("FILTRO LIMIT: " + limit);
         System.out.println("FILTRO BEFORE: " + beforeServicoProgramaId + "|" + beforeCodigoErp);
         return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoProgramaId, beforeCodigoErp, filtro, autenticado).toString());
     }
