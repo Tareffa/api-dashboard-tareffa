@@ -15,6 +15,7 @@ import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupadoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
@@ -292,10 +293,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List<?> listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+    public List<?> listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancadoDataProgramado info, Usuario autenticado) {
         List<Long> departamentosId = new ArrayList<>();
         if(autenticado == null) return null;
         try {
+            ServicoProgramadoFiltroAvancado filtro = info.getFiltroAvancado();
             
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
@@ -356,7 +358,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             }
             
             //--DATA PROGRAMADA
-            query.where(servicoProgramado.dataProgramadaEntrega.eq(filtro.getDataProgramadaInicio()));
+            query.where(servicoProgramado.dataProgramadaEntrega.eq(info.getDataProgramada()));
             
             //--SERVIÇO
             query.where(servico.id.eq(idServico));

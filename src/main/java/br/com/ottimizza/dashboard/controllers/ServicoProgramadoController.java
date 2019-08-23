@@ -1,6 +1,7 @@
 package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
@@ -57,12 +58,10 @@ public class ServicoProgramadoController {
             @QueryParam("limit") Long limit,
             @QueryParam("beforeServicoId") Long beforeServicoId,
             @QueryParam("beforeCodigoErp") String beforeCodigoErp,
-            @RequestBody ServicoProgramadoFiltroAvancado filtro)
+            @RequestBody ServicoProgramadoFiltroAvancadoDataProgramado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        System.out.println("FILTRO LIMIT: " + limit);
-        System.out.println("FILTRO BEFORE: " + beforeServicoId + "|" + beforeCodigoErp);
         return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoId, beforeCodigoErp, filtro, autenticado).toString());
     }
     

@@ -3,6 +3,7 @@ package br.com.ottimizza.dashboard.services;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
 
@@ -36,9 +37,8 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Lista de Responsável Empresa Data Término">
-    public JSONObject listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+    public JSONObject listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancadoDataProgramado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
-        System.out.println("FILTRO BEFORE: " + beforeServicoProgramaId + "|" + beforeCodigoErp);
         resultado.put("resultado", repository.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoProgramaId, beforeCodigoErp, filtro, autenticado));
         return resultado;
     }
