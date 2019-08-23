@@ -15,5 +15,5 @@ public class ServicoProgramadoFiltroAvancadoDataProgramado implements Serializab
     private Date dataProgramada;
     
     @Getter @Setter
-    private ServicoProgramadoFiltroAvancado filtroAvancado;
+    private ServicoProgramadoFiltroAvancado filtro;
 }

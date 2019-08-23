@@ -297,7 +297,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
         List<Long> departamentosId = new ArrayList<>();
         if(autenticado == null) return null;
         try {
-            ServicoProgramadoFiltroAvancado filtro = info.getFiltroAvancado();
+            ServicoProgramadoFiltroAvancado filtro = info.getFiltro();
             
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
