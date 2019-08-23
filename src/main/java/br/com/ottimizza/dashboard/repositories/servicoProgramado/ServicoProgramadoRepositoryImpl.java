@@ -20,6 +20,7 @@ import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
@@ -378,10 +379,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             if(limit != null){
                 query.limit(limit);
                 if(beforeServicoProgramaId != null && beforeCodigoErp != null){
-                    BooleanBuilder before = new BooleanBuilder();
-                    before.and(empresa.codigoErp.gt(beforeCodigoErp)
-                        .or(empresa.codigoErp.eq(beforeCodigoErp).and(servicoProgramado.id.gt(beforeServicoProgramaId))));        
-                    query.where(before);
+                    BooleanExpression expresion1 = empresa.codigoErp.gt(beforeCodigoErp);
+                    BooleanExpression expresion2 = empresa.codigoErp.eq(beforeCodigoErp);
+                    BooleanExpression expresion3 = servicoProgramado.id.gt(beforeServicoProgramaId);
+                    
+                    query.where(expresion1.or(expresion2.and(expresion3)));
                 }
             }
             
