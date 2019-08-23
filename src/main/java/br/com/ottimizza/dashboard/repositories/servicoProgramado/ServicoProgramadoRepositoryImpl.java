@@ -375,8 +375,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
             
-            if(limit != null ){
+            if(limit != null){
                 query.limit(limit);
+                System.out.println("FILTRO BEFORE: " + beforeServicoProgramaId + "|" + beforeCodigoErp);
                 if(beforeServicoProgramaId != null && beforeCodigoErp != null){
                     query.where(servicoProgramado.id.gt(beforeServicoProgramaId));
                     query.where(empresa.codigoErp.gt(beforeCodigoErp));
