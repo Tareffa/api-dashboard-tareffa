@@ -379,8 +379,8 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.limit(limit);
                 if(beforeServicoProgramaId != null && beforeCodigoErp != null){
                     BooleanBuilder before = new BooleanBuilder();
-                    before.and(before.and(empresa.codigoErp.eq(beforeCodigoErp).and(servicoProgramado.id.gt(beforeServicoProgramaId))))
-                        .or(empresa.codigoErp.gt(beforeCodigoErp));        
+                    before.and(empresa.codigoErp.gt(beforeCodigoErp))
+                        .or(empresa.codigoErp.eq(beforeCodigoErp).and(servicoProgramado.id.gt(beforeServicoProgramaId)));        
                     query.where(before);
                 }
             }
