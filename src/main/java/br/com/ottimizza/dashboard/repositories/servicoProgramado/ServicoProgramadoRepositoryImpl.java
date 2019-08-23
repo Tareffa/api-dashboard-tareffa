@@ -377,12 +377,12 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
             if(limit != null){
                 query.limit(limit);
-                System.out.println("FILTRO BEFORE: " + beforeServicoProgramaId + "|" + beforeCodigoErp);
                 if(beforeServicoProgramaId != null && beforeCodigoErp != null){
                     BooleanBuilder before = new BooleanBuilder();
                     before.and(
-                        (empresa.codigoErp.eq(beforeCodigoErp).and(servicoProgramado.id.gt(beforeServicoProgramaId)))
-                        .or(empresa.codigoErp.gt(beforeCodigoErp))
+                        empresa.codigoErp.eq(beforeCodigoErp)
+                            .and(servicoProgramado.id.gt(beforeServicoProgramaId))
+                        ).or(empresa.codigoErp.gt(beforeCodigoErp)
                     );        
                     query.where(before);
                 }
