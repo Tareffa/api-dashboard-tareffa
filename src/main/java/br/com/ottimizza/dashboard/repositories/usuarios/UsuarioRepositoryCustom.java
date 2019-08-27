@@ -5,5 +5,7 @@ import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 public interface UsuarioRepositoryCustom {
 
     Usuario findByEmail(String email);
+    
+    String findLogoAccountingFromUser(Long contabilidadeId);
 
 }
