@@ -26,104 +26,89 @@ import lombok.Setter;
 public class Usuario implements Serializable {
 
     @Id
-    @Getter
-    @Setter
+    @Getter @Setter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "senha", nullable = true)
     private String senha;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "tipo", nullable = false)
     private int tipoUsuario;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "nivel", nullable = false)
     private int nivelUsuario;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "situacao", nullable = true)
     private Short situacao = 1;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "tag_description", nullable = true)
     private String tagDescription;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Deprecated
     @Column(name = "email_altera_remetente")
     private Boolean permiteAlterarRemetente = false;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "email_recebe_circular")
     private Boolean recebeEmailCircular = false;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "comunicacao_envia_circular")
     private Boolean enviaCircular = false;
     
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "enxerga_como_cliente")
     private Boolean enxergaComoCliente = false;
     
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "consulta_gestao_servicos")
     private Boolean consultaGestaoServicos = false;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "is_notified")
     private Boolean notificaUsuario = true;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @Column(name = "comunicacao_contact_id", nullable = true)
     private String comunicacaoContactId;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "fk_usuarios_id", referencedColumnName = "id", nullable = true)
     private UsuarioImpl1 gerente;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "fk_contabilidades_id", referencedColumnName = "id", nullable = false)
     private ContabilidadeShort contabilidade;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "fk_departamentos_id", referencedColumnName = "id", nullable = true)
     private DepartamentoShort departamento;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "fk_empresas_id", referencedColumnName = "id", nullable = true)
     private Empresa empresa;
+    
+    @Getter @Setter
+    @Column(name = "url_foto", nullable = true, columnDefinition = "text")
+    private String urlFoto;
 }

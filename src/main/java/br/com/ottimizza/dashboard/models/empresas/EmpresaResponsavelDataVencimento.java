@@ -17,6 +17,9 @@ public class EmpresaResponsavelDataVencimento implements Serializable{
     private String nomeResponsavel;
     
     @Getter @Setter
+    private String fotoResponsavel;
+    
+    @Getter @Setter
     private String codigoErpEmpresa;
     
     @Getter @Setter

@@ -310,7 +310,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 );
             
             //SELECT
-            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.id, servicoProgramado.dataTermino));
+            query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, usuario.urlFoto, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.id, servicoProgramado.dataTermino));
             
             //--STATUS
             if(filtro.getSituacao() != null){
