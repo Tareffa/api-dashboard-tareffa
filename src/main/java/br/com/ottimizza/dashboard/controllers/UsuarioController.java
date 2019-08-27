@@ -25,7 +25,7 @@ public class UsuarioController {
         
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
-        return ResponseEntity.ok(usuarioService.findLogoAccountingFromUser(autenticado.getContabilidade().getId()));
+        return ResponseEntity.ok(usuarioService.findLogoAccountingFromUser(autenticado.getContabilidade().getId()).toString());
     }
 
 }
