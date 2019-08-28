@@ -43,7 +43,7 @@ public class OAuthClientController {
             
             System.out.println("URL: " + OAUTH2_SERVER_URL);
             
-            String uri = MessageFormat.format("{0}/oauth/token?grant_type={1}&code={2}&redirect_uri={3}", 
+            String uri = MessageFormat.format("{1}/oauth/token?grant_type={2}&code={3}&redirect_uri={4}", 
                     OAUTH2_SERVER_URL, "authorization_code", code, redirectUri
             );
             
