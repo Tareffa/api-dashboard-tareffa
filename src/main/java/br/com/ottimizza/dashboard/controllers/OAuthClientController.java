@@ -40,6 +40,7 @@ public class OAuthClientController {
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
 
+            System.out.println("REDIRECT_URI: " + redirectUri);
             URIBuilder uriBuilder = new URIBuilder(OAUTH2_SERVER_URL + "/oauth/token");
             uriBuilder.addParameter("code", code);
             uriBuilder.addParameter("grant_type", "authorization_code");
