@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
+import java.net.URI;
 import java.text.MessageFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,8 @@ public class OAuthClientController {
             
             System.out.println("URI: " + uri);
             
-            HttpPost httpPost = new HttpPost(uri);
+            HttpPost httpPost = new HttpPost();
+            httpPost.setURI(URI.create(uri));
 
             httpPost.setHeader("Authorization", "Basic " + encodedCredentials);
 
