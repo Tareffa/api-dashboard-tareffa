@@ -46,7 +46,7 @@ public class OAuthClientController {
             uriBuilder.addParameter("grant_type", "authorization_code");
             uriBuilder.addParameter("redirect_uri", redirectUri);
 
-            HttpPost httpPost = new HttpPost(uriBuilder.build());
+            HttpPost httpPost = new HttpPost(uriBuilder.toString());
 
             httpPost.setHeader("Authorization", "Basic " + encodedCredentials);
 
