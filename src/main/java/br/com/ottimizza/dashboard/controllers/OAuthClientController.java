@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
+import java.text.MessageFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,12 +42,21 @@ public class OAuthClientController {
             HttpClient httpClient = HttpClientBuilder.create().build();
 
             System.out.println("REDIRECT_URI: " + redirectUri);
+            
             URIBuilder uriBuilder = new URIBuilder(OAUTH2_SERVER_URL + "/oauth/token");
             uriBuilder.addParameter("code", code);
             uriBuilder.addParameter("grant_type", "authorization_code");
             uriBuilder.addParameter("redirect_uri", redirectUri);
 
-            HttpPost httpPost = new HttpPost(uriBuilder.toString());
+            System.out.println("REDIRECT_URI W/ BUILDER: " + uriBuilder.build());
+            
+            String uri = MessageFormat.format("{0}/oauth/token?grant_type={1}&code={2}&redirect_uri{3}", 
+                    OAUTH2_SERVER_URL, "authorization_code", code, redirectUri
+            );
+
+            System.out.println("REDIRECT_URI W/O BUILDER: " + uri);
+            
+            HttpPost httpPost = new HttpPost(uri);
 
             httpPost.setHeader("Authorization", "Basic " + encodedCredentials);
 
