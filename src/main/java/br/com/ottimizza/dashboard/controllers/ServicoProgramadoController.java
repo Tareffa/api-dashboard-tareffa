@@ -47,13 +47,12 @@ public class ServicoProgramadoController {
             Principal principal, 
             @PathVariable("tipo") Short agrupamento,
             @QueryParam("limit") Long limit,
-            @QueryParam("beforeServicoDataEntrega") Date beforeServicoDataEntrega,
+            @QueryParam("beforeServicoDataEntrega") String beforeServicoDataEntrega,
             @QueryParam("beforeServicoNome") String beforeServicoNome,
             @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        
         return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, limit, beforeServicoDataEntrega, beforeServicoNome, filtro, autenticado).toString());
     }
     

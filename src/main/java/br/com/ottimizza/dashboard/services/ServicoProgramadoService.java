@@ -6,6 +6,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -30,9 +31,18 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Count Scheduled Service Group By">
-    public JSONObject countGroupBy(Short agrupamento, Long limit, Date beforeServicoDataEntrega, String beforeServicoNome, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+    public JSONObject countGroupBy(Short agrupamento, Long limit, String beforeServicoDataEntrega, String beforeServicoNome, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, limit, beforeServicoDataEntrega, beforeServicoNome, filtro, autenticado));
+        
+        System.out.println("___CORTANDO A DATA___");
+        System.out.println("ANO:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.indexOf("-")));
+        System.out.println("MES:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.indexOf("-"),beforeServicoDataEntrega.lastIndexOf("-")));
+        System.out.println("DIA:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.lastIndexOf("-")));
+        //Calendar calendario = new Calendar();
+        
+        Date data = new Date(beforeServicoDataEntrega);
+        System.out.println("DATE UTIL: " + data);
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, limit, data, beforeServicoNome, filtro, autenticado));
         return resultado;
     }
     //</editor-fold>
