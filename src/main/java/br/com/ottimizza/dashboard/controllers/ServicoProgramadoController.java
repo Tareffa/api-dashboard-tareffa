@@ -43,17 +43,11 @@ public class ServicoProgramadoController {
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Contagem de serviço programado agrupado">
-    public ResponseEntity<String> countGroupBy(
-            Principal principal, 
-            @PathVariable("tipo") Short agrupamento,
-            @QueryParam("limit") Long limit,
-            @QueryParam("beforeServicoDataEntrega") String beforeServicoDataEntrega,
-            @QueryParam("beforeServicoNome") String beforeServicoNome,
-            @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<String> countGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, limit, beforeServicoDataEntrega, beforeServicoNome, filtro, autenticado).toString());
+        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro, autenticado).toString());
     }
     
     @PostMapping(path = "{id}/informacao", produces = MediaType.APPLICATION_JSON_VALUE)

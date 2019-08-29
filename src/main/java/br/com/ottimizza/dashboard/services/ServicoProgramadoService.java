@@ -31,18 +31,10 @@ public class ServicoProgramadoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Count Scheduled Service Group By">
-    public JSONObject countGroupBy(Short agrupamento, Long limit, String beforeServicoDataEntrega, String beforeServicoNome, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+    public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
         
-        System.out.println("___CORTANDO A DATA___");
-        System.out.println("ANO:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.indexOf("-")));
-        System.out.println("MES:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.indexOf("-"),beforeServicoDataEntrega.lastIndexOf("-")));
-        System.out.println("DIA:" + beforeServicoDataEntrega.substring(beforeServicoDataEntrega.lastIndexOf("-")));
-        //Calendar calendario = new Calendar();
-        
-        Date data = new Date(beforeServicoDataEntrega);
-        System.out.println("DATE UTIL: " + data);
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, limit, data, beforeServicoNome, filtro, autenticado));
+        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro, autenticado));
         return resultado;
     }
     //</editor-fold>
