@@ -167,7 +167,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     }
 
     @Override
-    public List contadorServicoProgramadoGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+    public List contadorServicoProgramadoGroupBy(Short agrupamento, Long limit, Date beforeServicoDataEntrega, String beforeServicoNome, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         List<Long> departamentosId = new ArrayList<>();
         List<Long> servicosId = new ArrayList<>();
         if(autenticado == null) return null;
@@ -249,6 +249,19 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
                         query.where(servico.id.in(servicosId));
                     }
+                    
+                    
+                    if(limit != null){
+                        query.limit(limit);
+                        if(beforeServicoDataEntrega != null && beforeServicoNome != null){
+                            BooleanExpression expresion1 = servicoProgramado.dataProgramadaEntrega.gt(beforeServicoDataEntrega);
+                            BooleanExpression expresion2 = servicoProgramado.dataProgramadaEntrega.eq(beforeServicoDataEntrega);
+                            BooleanExpression expresion3 = servico.nome.gt(beforeServicoNome);
+
+                            query.where(expresion1.or(expresion2.and(expresion3)));
+                        }
+                    }
+                    
                     
                     query.groupBy(servicoProgramado.dataProgramadaEntrega,servico.nome,servico.id).orderBy(servicoProgramado.dataProgramadaEntrega.asc(),servico.nome.asc());
                     

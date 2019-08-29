@@ -7,6 +7,7 @@ import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
 import br.com.ottimizza.dashboard.services.UserService;
 import java.security.Principal;
+import java.util.Date;
 import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 import org.springframework.http.MediaType;
@@ -42,12 +43,18 @@ public class ServicoProgramadoController {
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Contagem de serviço programado agrupado">
-    public ResponseEntity<String> countGroupBy(Principal principal, @PathVariable("tipo") Short agrupamento, @RequestBody ServicoProgramadoFiltroAvancado filtro)
+    public ResponseEntity<String> countGroupBy(
+            Principal principal, 
+            @PathVariable("tipo") Short agrupamento,
+            @QueryParam("limit") Long limit,
+            @QueryParam("beforeServicoDataEntrega") Date beforeServicoDataEntrega,
+            @QueryParam("beforeServicoNome") String beforeServicoNome,
+            @RequestBody ServicoProgramadoFiltroAvancado filtro)
         throws Exception {
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         
-        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro, autenticado).toString());
+        return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, limit, beforeServicoDataEntrega, beforeServicoNome, filtro, autenticado).toString());
     }
     
     @PostMapping(path = "{id}/informacao", produces = MediaType.APPLICATION_JSON_VALUE)
