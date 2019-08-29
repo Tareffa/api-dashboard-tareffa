@@ -42,13 +42,14 @@ public class OAuthClientController {
         try {
             HttpClient httpClient = HttpClientBuilder.create().build();
             
-            System.out.println("URL: " + OAUTH2_SERVER_URL);
-            
             String uri = MessageFormat.format("{0}/oauth/token?grant_type={1}&code={2}&redirect_uri={3}", 
                     OAUTH2_SERVER_URL, "authorization_code", code, redirectUri
             );
             
-            System.out.println("URI: " + uri);
+            System.out.println("OAUTH ***** ");
+            System.out.println("URI ............: " + uri);
+            System.out.println("Authorization ..: " + "Basic " + encodedCredentials);
+            
             
             HttpPost httpPost = new HttpPost();
             httpPost.setURI(URI.create(uri));
@@ -59,7 +60,7 @@ public class OAuthClientController {
             HttpEntity responseEntity = httpResponse.getEntity();
             
             String resposta = EntityUtils.toString(responseEntity, "UTF-8");
-            System.out.println("RESPOSTA: " + resposta);
+            System.out.println("Response .......: " + resposta);
 
             return ResponseEntity.ok(resposta);
         } catch (Exception ex) {
