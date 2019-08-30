@@ -117,12 +117,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
 
                 //--DEPARTAMENTO
-                if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
-                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
-                        departamentosId.add(departamentoShort.getId());
+                if(filtro.getDepartamento() != null){
+                    if(!filtro.getDepartamento().isEmpty()){
+                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                            departamentosId.add(departamentoShort.getId());
+                        }
+
+                        query.where(departamento.id.in(departamentosId));
                     }
-                    
-                    query.where(departamento.id.in(departamentosId));
                 } 
 
                 //--USUARIO
@@ -135,12 +137,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 } 
 
                 //--SERVIÇO
-                if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
-                    for (ServicoShort servicoShort : filtro.getServico()) {
-                        servicosId.add(servicoShort.getId());
+                if(filtro.getServico() != null){
+                    if(!filtro.getServico().isEmpty()){
+                        for (ServicoShort servicoShort : filtro.getServico()) {
+                            servicosId.add(servicoShort.getId());
+                        }
+
+                        query.where(servico.id.in(servicosId));
                     }
-                    
-                    query.where(servico.id.in(servicosId));
                 } 
 
                 //--EMPRESA
@@ -234,27 +238,24 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     
                     
                     //--DEPARTAMENTO
-                    System.out.println("---INICIO FILTRO DEPARTAMENTO---");
-                    System.out.println("FILTRO: " + filtro);
-                    System.out.println("DEPARTMENTO: " + filtro.getDepartamento());
                     if(filtro.getDepartamento() != null ){
                         if( !filtro.getDepartamento().isEmpty()){
                             for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
                                 departamentosId.add(departamentoShort.getId());
-                            }  
-                            System.out.println("Faz filtro!!!");
+                            }
                             query.where(departamento.id.in(departamentosId));
                         }
                     }
-                    System.out.println("---FIM FILTRO DEPARTAMENTO---");
                     
                     //--SERVIÇO
-                    if(filtro.getServico() != null && !filtro.getServico().isEmpty()){
-                        for (ServicoShort servicoShort : filtro.getServico()) {
-                            servicosId.add(servicoShort.getId());
-                        }
+                    if(filtro.getServico() != null){
+                        if(!filtro.getServico().isEmpty()){
+                            for (ServicoShort servicoShort : filtro.getServico()) {
+                                servicosId.add(servicoShort.getId());
+                            }
 
-                        query.where(servico.id.in(servicosId));
+                            query.where(servico.id.in(servicosId));
+                        }
                     }
                     
                     query.groupBy(servicoProgramado.dataProgramadaEntrega,servico.nome,servico.id).orderBy(servicoProgramado.dataProgramadaEntrega.asc(),servico.nome.asc());
@@ -371,12 +372,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.where(servico.id.eq(idServico));
             
             //--DEPARTAMENTO
-            if(filtro.getDepartamento() != null && !filtro.getDepartamento().isEmpty()){
-                for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
-                    departamentosId.add(departamentoShort.getId());
-                }
+            if(filtro.getDepartamento() != null){
+                if(!filtro.getDepartamento().isEmpty()){
+                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        departamentosId.add(departamentoShort.getId());
+                    }
 
-                query.where(departamento.id.in(departamentosId));
+                    query.where(departamento.id.in(departamentosId));
+                }
             }
             
             //CONTABILIDADE
