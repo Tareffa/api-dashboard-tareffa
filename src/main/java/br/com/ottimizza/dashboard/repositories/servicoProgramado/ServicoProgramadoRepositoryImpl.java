@@ -235,8 +235,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     
                     //--DEPARTAMENTO
                     System.out.println("---INICIO FILTRO DEPARTAMENTO---");
-                    System.out.println("Tamanho:" + filtro.getDepartamento().size());
-                    System.out.println("Empty?:" + filtro.getDepartamento().isEmpty());
                     if(filtro.getDepartamento() != null & !filtro.getDepartamento().isEmpty()){
                         for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
                             departamentosId.add(departamentoShort.getId());
