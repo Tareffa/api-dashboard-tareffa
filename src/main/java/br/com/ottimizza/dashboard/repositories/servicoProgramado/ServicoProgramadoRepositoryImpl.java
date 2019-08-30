@@ -237,12 +237,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     System.out.println("---INICIO FILTRO DEPARTAMENTO---");
                     System.out.println("FILTRO: " + filtro);
                     System.out.println("DEPARTMENTO: " + filtro.getDepartamento());
-                    if(filtro.getDepartamento() != null & !filtro.getDepartamento().isEmpty()){
-                        for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                            departamentosId.add(departamentoShort.getId());
-                        }  
-                        System.out.println("Faz filtro!!!");
-                        query.where(departamento.id.in(departamentosId));
+                    if(filtro.getDepartamento() != null ){
+                        if( !filtro.getDepartamento().isEmpty()){
+                            for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
+                                departamentosId.add(departamentoShort.getId());
+                            }  
+                            System.out.println("Faz filtro!!!");
+                            query.where(departamento.id.in(departamentosId));
+                        }
                     }
                     System.out.println("---FIM FILTRO DEPARTAMENTO---");
                     
