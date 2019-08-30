@@ -237,7 +237,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     System.out.println("---INICIO FILTRO DEPARTAMENTO---");
                     System.out.println("FILTRO: " + filtro);
                     System.out.println("DEPARTMENTO: " + filtro.getDepartamento());
-                    if(!filtro.getDepartamento().equals(null) & !filtro.getDepartamento().isEmpty()){
+                    if(filtro.getDepartamento() != null & !filtro.getDepartamento().isEmpty()){
                         for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
                             departamentosId.add(departamentoShort.getId());
                         }  
