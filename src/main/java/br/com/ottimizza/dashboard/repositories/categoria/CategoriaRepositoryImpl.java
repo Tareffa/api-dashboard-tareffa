@@ -6,11 +6,12 @@ import br.com.ottimizza.dashboard.models.contabilidade.QContabilidadeID;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CategoriaRepositoryImpl implements CategoriaRepositoryCustom{
     
     @PersistenceContext

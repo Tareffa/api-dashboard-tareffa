@@ -4,7 +4,9 @@ import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.categoria.CategoriaRepository;
 import javax.inject.Inject;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CategoriaService {
     
     @Inject
