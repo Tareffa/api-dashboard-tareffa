@@ -14,10 +14,10 @@ public class ServicoCategoriaID implements Serializable{
     
     @Getter @Setter
     @Column(name = "fk_empresa_id")
-    private Long categoriaId;
+    private Long fkCategoriaId;
 
     @Getter @Setter
     @Column(name = "fk_servico_id")
-    private Long servicoId;
+    private Long fkServicoId;
     
 }

@@ -24,12 +24,12 @@ public class ServicoCategoria implements Serializable {
     private ServicoCategoriaID id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("categoriaId")
+    @MapsId("fk_categoria_Id")
     @Getter @Setter
     private CategoriaShort categoria;
  
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("servicoId")
+    @MapsId("fk_servico_Id")
     @Getter @Setter
     private Servico servico;
     
