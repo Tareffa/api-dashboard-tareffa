@@ -17,7 +17,6 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoAgrupadoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
-import br.com.ottimizza.dashboard.models.servicos.servico_categorias.QServicoCategoria;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.BooleanBuilder;
@@ -32,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.http.client.utils.DateUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -46,7 +44,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QDepartamento departamento = QDepartamento.departamento;
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
-    private QServicoCategoria servicoCategoria = QServicoCategoria.servicoCategoria;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
@@ -164,17 +161,17 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
                 }
                 
-                //CATEGORIA
-                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
-                if(filtro.getCategoria() != null){
-                    if(filtro.getCategoria().getId() != null){
-                        query.innerJoin(servicoCategoria)
-                        .on(
-                            servico.id.eq(servicoCategoria.servico.id)
-                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
-                        );
-                    }
-                }
+                //CATEGORIA 
+//                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
+//                if(filtro.getCategoria() != null){
+//                    if(filtro.getCategoria().getId() != null){
+//                        query.innerJoin(servicoCategoria)
+//                        .on(
+//                            servico.id.eq(servicoCategoria.servico.id)
+//                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
+//                        );
+//                    }
+//                }
                 
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
