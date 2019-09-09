@@ -19,11 +19,11 @@ public class CategoriaServico implements Serializable{
     private CategoriaServicoId id;
     
     @ManyToOne
-    @JoinColumn(name = "fk_categoria_id")
+    @JoinColumn(name = "fk_categoria_id", insertable = false, updatable = false)
     private Categoria categoria;
     
     @ManyToOne
-    @JoinColumn(name = "fk_servico_id")
+    @JoinColumn(name = "fk_servico_id", insertable = false, updatable = false)
     private Servico servico;
     
 }
