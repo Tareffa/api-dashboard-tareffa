@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.constraints.Agrupamento;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
+import br.com.ottimizza.dashboard.models.categoria.QCategoria;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
@@ -20,11 +21,13 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +47,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QDepartamento departamento = QDepartamento.departamento;
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
+    private QCategoria categoria = QCategoria.categoria;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
@@ -162,16 +166,18 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
                 
                 //CATEGORIA 
-//                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
-//                if(filtro.getCategoria() != null){
-//                    if(filtro.getCategoria().getId() != null){
-//                        query.innerJoin(servicoCategoria)
-//                        .on(
-//                            servico.id.eq(servicoCategoria.servico.id)
-//                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
-//                        );
-//                    }
-//                }
+                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
+                if(filtro.getCategoria() != null){
+                    if(filtro.getCategoria().getId() != null){
+                        query
+                            .innerJoin(categoria.servicos,servico)
+                        .on(
+                            categoria.id.eq(filtro.getCategoria().getId()
+//                            servico.eq(categoria.servicos)
+//                            .and())
+                        ));
+                    }
+                }
                 
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
