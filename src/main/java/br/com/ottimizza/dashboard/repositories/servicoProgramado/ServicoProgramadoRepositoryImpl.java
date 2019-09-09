@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.constraints.Agrupamento;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
+import br.com.ottimizza.dashboard.models.categoria.categoria_servico.QServicoCategoria;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
@@ -44,6 +45,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QDepartamento departamento = QDepartamento.departamento;
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
+    private QServicoCategoria servicoCategoria = QServicoCategoria.servicoCategoria;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
@@ -162,16 +164,16 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
                 
                 //CATEGORIA 
-//                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
-//                if(filtro.getCategoria() != null){
-//                    if(filtro.getCategoria().getId() != null){
-//                        query.innerJoin(servicoCategoria)
-//                        .on(
-//                            servico.id.eq(servicoCategoria.servico.id)
-//                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
-//                        );
-//                    }
-//                }
+                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
+                if(filtro.getCategoria() != null){
+                    if(filtro.getCategoria().getId() != null){
+                        query.innerJoin(servicoCategoria)
+                        .on(
+                            servico.id.eq(servicoCategoria.servico.id)
+                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
+                        );
+                    }
+                }
                 
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
