@@ -45,7 +45,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QDepartamento departamento = QDepartamento.departamento;
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
-    private QServicoCategoria servicoCategoria = QServicoCategoria.servicoCategoria;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
