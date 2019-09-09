@@ -5,7 +5,9 @@ import br.com.ottimizza.dashboard.models.contabilidade.ContabilidadeShort;
 import br.com.ottimizza.dashboard.models.departamentos.Departamento;
 import br.com.ottimizza.dashboard.models.perfis.Perfil;
 import br.com.ottimizza.dashboard.models.Guia;
+import br.com.ottimizza.dashboard.models.categoria.Categoria;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -271,5 +273,9 @@ public class Servico implements Serializable {
     @Setter
     @Column(name = "is_processo_rescisao")
     private Boolean isProcessoRescisao = false;
+    
+//    @Getter @Setter
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "Servico")
+//    private Set<Categoria> categorias = new HashSet<>();
     
 }
