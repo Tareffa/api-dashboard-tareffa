@@ -165,7 +165,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
                 
                 //CATEGORIA 
-                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
                 if(filtro.getCategoria() != null){
                     if(filtro.getCategoria().getId() != null){
                         query.innerJoin(categoriaServico)
@@ -296,6 +295,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 if(agrupamento == Agrupamento.DEPARTAMENTO){
                     query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.id, departamento.descricao, servicoProgramado.count().as(aliasContagem)));
                     query.groupBy(departamento.id).orderBy(aliasContagem.desc());
+                }
+                
+                //CATEGORIA 
+                if(filtro.getCategoria() != null){
+                    if(filtro.getCategoria().getId() != null){
+                        query.innerJoin(categoriaServico)
+                            .on(servico.id.eq(categoriaServico.servico.id)
+                                .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
+                    }
                 }
 
                 //CONTABILIDADE
