@@ -164,16 +164,16 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
                 
                 //CATEGORIA 
-                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
-                if(filtro.getCategoria() != null){
-                    if(filtro.getCategoria().getId() != null){
-                        query.innerJoin(servicoCategoria)
-                        .on(
-                            servico.id.eq(servicoCategoria.servico.id)
-                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
-                        );
-                    }
-                }
+//                System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
+//                if(filtro.getCategoria() != null){
+//                    if(filtro.getCategoria().getId() != null){
+//                        query.innerJoin(servicoCategoria)
+//                        .on(
+//                            servico.id.eq(servicoCategoria.servico.id)
+//                            .and(servicoCategoria.categoria.id.eq(filtro.getCategoria().getId()))
+//                        );
+//                    }
+//                }
                 
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
