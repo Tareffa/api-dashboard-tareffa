@@ -168,7 +168,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 System.out.println("SERVICO-CATEGORIA: " + filtro.getCategoria().getId());
                 if(filtro.getCategoria() != null){
                     if(filtro.getCategoria().getId() != null){
-                        query.innerJoin(categoriaServico).on(servico.id.eq(categoriaServico.servico.id));
+                        query.innerJoin(categoriaServico)
+                            .on(servico.id.eq(categoriaServico.servico.id)
+                                .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
                     }
                 }
                 
