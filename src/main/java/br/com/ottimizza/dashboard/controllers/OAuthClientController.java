@@ -44,6 +44,8 @@ public class OAuthClientController {
                     OAUTH2_SERVER_URL, "authorization_code", code, redirectUri
             );
             
+            System.out.println("URI: " + uri);
+            
             HttpPost httpPost = new HttpPost(uri);
             httpPost.setHeader("Authorization", "Basic " + encodedCredentials);
 
