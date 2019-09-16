@@ -35,6 +35,7 @@ public class OAuthClientController {
             @RequestParam("redirect_uri") String redirectUri) throws IOException {
         
         String credentials = OAUTH2_CLIENT_ID + ":" + OAUTH2_CLIENT_SECRET;
+        System.out.println("CREDENCIAIS:" + credentials);
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
 
         try {
