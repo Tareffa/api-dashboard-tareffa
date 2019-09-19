@@ -4,14 +4,10 @@ import br.com.ottimizza.dashboard.models.QClassificacao;
 import br.com.ottimizza.dashboard.models.caracteristica.Caracteristica;
 import br.com.ottimizza.dashboard.models.caracteristica.QCaracteristica;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.SimpleTemplate;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.o;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,7 +31,8 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
 //                Expression<String> expressao = Expressions;
                 
                 query.innerJoin(classificacao)
-                    .on(caracteristica.classificacao.id.eq(classificacao.id));
+                    .on(caracteristica.classificacao.id.eq(classificacao.id))
+                        .where(classificacao.descricao.like(descricao+"%"));
             }
             
             return query.fetch();

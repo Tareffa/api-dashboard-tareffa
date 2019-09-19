@@ -286,6 +286,16 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                             }  
                             query.where(departamento.id.in(departamentosId));
                         }
+
+                        //--CATEGORIA
+                        //CATEGORIA 
+                        if(filtro.getCategoria() != null){
+                            if(filtro.getCategoria().getId() != null){
+                                query.innerJoin(categoriaServico)
+                                    .on(servico.id.eq(categoriaServico.servico.id)
+                                        .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
+                            }
+                        }
                     //*** FIM FILTRO SERVIÇO ***
 
                     query.groupBy(servico.id).orderBy(aliasContagem.desc());
