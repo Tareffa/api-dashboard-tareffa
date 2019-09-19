@@ -2,6 +2,7 @@ package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
+import br.com.ottimizza.dashboard.services.CaracteristicaService;
 import java.security.Principal;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +23,15 @@ public class CaracteristicaController {
     @Inject
     UsuarioRepository usuarioRepository;
 
+    @Inject
+    CaracteristicaService caracteristicaService;
+    
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Busca caracteristicas">
     public ResponseEntity<String> getCaracteristicas(@QueryParam("description") String descricao, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(caracteristicaService.getCategorias(descricao, autenticado).toString());
     }
     //</editor-fold>
     
