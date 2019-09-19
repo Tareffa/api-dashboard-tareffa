@@ -290,9 +290,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         //--CATEGORIA
                         if(filtro.getCategoria() != null){
                             if(filtro.getCategoria().getId() != null){
-                                query.innerJoin(categoriaServico)
-                                    .on(servico.id.eq(categoriaServico.servico.id)
-                                        .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
+//                                query.innerJoin(categoriaServico)
+//                                    .on(servico.id.eq(categoriaServico.servico.id)
+//                                        .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
                             }
                         }
                     //*** FIM FILTRO SERVIÇO ***
