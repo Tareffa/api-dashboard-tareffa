@@ -286,8 +286,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                             }  
                             query.where(departamento.id.in(departamentosId));
                         }
-
-                        System.out.println("\nCATEGORIA FILTRO:"+filtro.getCategoria()+"|"+filtro.getCategoria().getId()+"\n");
+                        
                         //--CATEGORIA
                         if(filtro.getCategoria() != null){
                             if(filtro.getCategoria().getId() != null){
