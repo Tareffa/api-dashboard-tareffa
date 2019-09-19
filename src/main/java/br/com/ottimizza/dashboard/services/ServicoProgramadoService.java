@@ -8,7 +8,6 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.servicoProgramado.ServicoProgramadoRepository;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.inject.Inject;
