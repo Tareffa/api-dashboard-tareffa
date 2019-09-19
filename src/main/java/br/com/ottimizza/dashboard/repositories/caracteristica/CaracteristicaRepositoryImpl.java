@@ -26,13 +26,12 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
         try {
             JPAQuery<Caracteristica> query = new JPAQuery(em);
             query.from(caracteristica)
-                .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()))
-                .where(Expressions.booleanTemplate(" {0} ILIKE {1} ", caracteristica.descricao, "%lucro%"));
+                .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()));
                 
             if(descricao != null){
                 query.innerJoin(classificacao)
                     .on(caracteristica.classificacao.id.eq(classificacao.id))
-                    .where(Expressions.booleanTemplate(" {0} ILIKE {1} ", classificacao.descricao, "%"+descricao+"%"));
+                    .where(classificacao.descricao.like(descricao+"%"));
             }
             
             return query.fetch();
