@@ -31,7 +31,7 @@ public class CaracteristicaController {
     public ResponseEntity<String> getCaracteristicas(@QueryParam("description") String descricao, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(caracteristicaService.getCategorias(descricao, autenticado).toString());
+        return ResponseEntity.ok(caracteristicaService.getCaracteristicas(descricao, autenticado).toString());
     }
     //</editor-fold>
     

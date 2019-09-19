@@ -13,7 +13,7 @@ public class CaracteristicaService {
     private CaracteristicaRepository categoriaRepository;
     
     //<editor-fold defaultstate="collapsed" desc="Busca lista de categorias">
-    public JSONObject getCategorias(String descricao, Usuario autenticado) throws Exception {
+    public JSONObject getCaracteristicas(String descricao, Usuario autenticado) throws Exception {
         JSONObject response = new JSONObject();
         try {
             response.put("status", "sucesso");
