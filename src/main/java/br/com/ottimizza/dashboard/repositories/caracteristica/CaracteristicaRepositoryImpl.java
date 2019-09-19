@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.models.QClassificacao;
 import br.com.ottimizza.dashboard.models.caracteristica.Caracteristica;
 import br.com.ottimizza.dashboard.models.caracteristica.QCaracteristica;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -28,11 +29,9 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
                 .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()));
                 
             if(descricao != null){
-//                Expression<String> expressao = Expressions;
-                
                 query.innerJoin(classificacao)
                     .on(caracteristica.classificacao.id.eq(classificacao.id))
-                        .where(classificacao.descricao.like(descricao+"%"));
+                    .where(Expressions.booleanTemplate(" {0} ILIKE {1} ", classificacao.descricao, "%"+descricao+"%"));
             }
             
             return query.fetch();
