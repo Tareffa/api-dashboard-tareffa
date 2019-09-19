@@ -251,11 +251,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     
                     //--DEPARTAMENTO
                     if(filtro.getDepartamento() != null ){
-                        if( !filtro.getDepartamento().isEmpty()){
+                        if(!filtro.getDepartamento().isEmpty()){
                             for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                                departamentosId.add(departamentoShort.getId());
+                                if(departamentoShort.getId() != null) departamentosId.add(departamentoShort.getId());
                             }
-                            query.where(departamento.id.in(departamentosId));
+                            if(!departamentosId.isEmpty()) query.where(departamento.id.in(departamentosId));
                         }
                     }
                     
@@ -265,7 +265,6 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                             for (ServicoShort servicoShort : filtro.getServico()) {
                                 servicosId.add(servicoShort.getId());
                             }
-
                             query.where(servico.id.in(servicosId));
                         }
                     }
