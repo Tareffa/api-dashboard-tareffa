@@ -28,7 +28,7 @@ public class CategoriaController {
     
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Busca categorias">
-    public ResponseEntity<String> getCategorias(@RequestParam("description") String descricao,Principal principal) throws Exception{
+    public ResponseEntity<String> getCategorias(@RequestParam(value="description", required = false) String descricao,Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(categoriaService.getCategorias(descricao, autenticado).toString());

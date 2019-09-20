@@ -28,7 +28,7 @@ public class CaracteristicaController {
     
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Busca caracteristicas">
-    public ResponseEntity<String> getCaracteristicas(@RequestParam("description") String descricao, Principal principal) throws Exception{
+    public ResponseEntity<String> getCaracteristicas(@RequestParam(value = "description", required = false) String descricao, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(caracteristicaService.getCaracteristicas(descricao, autenticado).toString());
