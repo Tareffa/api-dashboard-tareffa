@@ -1,5 +1,6 @@
 package br.com.ottimizza.dashboard.models.servicos;
 
+import br.com.ottimizza.dashboard.models.caracteristica.CaracteristicaShort;
 import br.com.ottimizza.dashboard.models.categoria.CategoriaShort;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
 import br.com.ottimizza.dashboard.models.empresas.EmpresaShort;
@@ -70,5 +71,9 @@ public class ServicoProgramadoFiltroAvancado implements Serializable {
     @Getter
     @Setter
     private CategoriaShort categoria;
+    
+    @Getter
+    @Setter
+    private CaracteristicaShort caracteristica;
     
 }

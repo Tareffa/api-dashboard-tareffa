@@ -40,6 +40,7 @@ public class ServicoProgramadoController {
         
         return ResponseEntity.ok(servicoProgramadoService.count(filtro, autenticado).toString());
     }
+    //</editor-fold>
 
     @PostMapping(path = "agrupamento/{tipo}", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Contagem de serviço programado agrupado">
@@ -49,6 +50,7 @@ public class ServicoProgramadoController {
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(servicoProgramadoService.countGroupBy(agrupamento, filtro, autenticado).toString());
     }
+    //</editor-fold>
     
     @PostMapping(path = "{id}/informacao", produces = MediaType.APPLICATION_JSON_VALUE)
     // <editor-fold defaultstate="collapsed" desc="Informações de serviço">
@@ -64,5 +66,6 @@ public class ServicoProgramadoController {
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(servicoProgramadoService.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoId, beforeCodigoErp, filtro, autenticado).toString());
     }
+    //</editor-fold>
     
 }

@@ -1,10 +1,9 @@
 package br.com.ottimizza.dashboard.repositories.caracteristica;
 
 import br.com.ottimizza.dashboard.models.QClassificacao;
-import br.com.ottimizza.dashboard.models.caracteristica.Caracteristica;
+import br.com.ottimizza.dashboard.models.caracteristica.CaracteristicaShort;
 import br.com.ottimizza.dashboard.models.caracteristica.QCaracteristica;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,10 +20,10 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
     private QClassificacao classificacao = QClassificacao.classificacao;
     
     @Override
-    public List<Caracteristica> buscaListaDeCaracteristicas(Usuario usuario, String descricao){
+    public List<CaracteristicaShort> buscaListaDeCaracteristicas(Usuario usuario, String descricao){
         
         try {
-            JPAQuery<Caracteristica> query = new JPAQuery(em);
+            JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
             query.from(caracteristica)
                 .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()));
                 

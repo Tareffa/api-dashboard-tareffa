@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.constraints.Agrupamento;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
+import br.com.ottimizza.dashboard.models.caracteristica.caracteristica_empresas.QCaracteristicaEmpresa;
 import br.com.ottimizza.dashboard.models.categoria.QCategoria;
 import br.com.ottimizza.dashboard.models.categoria.QCategoriaServico;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
@@ -47,6 +48,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QEmpresaShort empresa = QEmpresaShort.empresaShort;
     private QServico servico = QServico.servico;
     private QCategoriaServico categoriaServico = QCategoriaServico.categoriaServico;
+    private QCaracteristicaEmpresa caracteristicaEmpresa = QCaracteristicaEmpresa.caracteristicaEmpresa;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
@@ -170,6 +172,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                         query.innerJoin(categoriaServico)
                             .on(servico.id.eq(categoriaServico.servico.id)
                                 .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
+                    }
+                }
+                
+                //CARACTERISTICA
+                if(filtro.getCaracteristica()!= null){
+                    if(filtro.getCaracteristica().getId() != null){
+                        query.innerJoin(caracteristicaEmpresa)
+                            .on(empresa.id.eq(caracteristicaEmpresa.empresa.id)
+                                .and(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId())));
                     }
                 }
                 
