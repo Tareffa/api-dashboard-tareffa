@@ -291,10 +291,12 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     //*** FILTRO SERVIÇO ***
                         //--DEPARTAMENTO
                         if(filtro.getDepartamento() != null){
-                            for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
-                                departamentosId.add(departamentoShort.getId());
-                            }  
-                            query.where(departamento.id.in(departamentosId));
+                            if(!filtro.getDepartamento().isEmpty()){
+                                for (DepartamentoShort departamentoShort : filtro.getDepartamento()){
+                                    departamentosId.add(departamentoShort.getId());
+                                }  
+                                query.where(departamento.id.in(departamentosId));
+                            }
                         }
                         
                         //--CATEGORIA
