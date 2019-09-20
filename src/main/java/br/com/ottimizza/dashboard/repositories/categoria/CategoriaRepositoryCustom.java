@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface CategoriaRepositoryCustom {
     
-    List<?> buscaListaDeCategorias(Usuario usuario);
+    List<?> buscaListaDeCategorias(String descricao, Usuario usuario);
     
 }

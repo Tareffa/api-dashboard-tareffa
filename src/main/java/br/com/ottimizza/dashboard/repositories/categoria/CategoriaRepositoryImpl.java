@@ -21,12 +21,16 @@ public class CategoriaRepositoryImpl implements CategoriaRepositoryCustom{
     private QContabilidadeID contabilidadeID = QContabilidadeID.contabilidadeID;
     
     @Override
-    public List buscaListaDeCategorias(Usuario usuario){
+    public List buscaListaDeCategorias(String descricao, Usuario usuario){
         
         try {
             JPAQuery query = new JPAQuery(em);
             query.from(categoria).where(categoria.contabilidade.id.eq(usuario.getContabilidade().getId()));
 
+            if(descricao != null){
+                query.where(categoria.descricao.like(descricao+"%"));
+            }
+            
             //SELECT
             query.select(Projections.constructor(CategoriaDescricaoShort.class,categoria.id,categoria.descricao));
             return query.fetch();
