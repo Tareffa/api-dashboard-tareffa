@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.models.QClassificacao;
 import br.com.ottimizza.dashboard.models.caracteristica.CaracteristicaShort;
 import br.com.ottimizza.dashboard.models.caracteristica.QCaracteristica;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -33,6 +34,8 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
                     .where(classificacao.descricao.like(descricao+"%"));
             }
             
+            //SELECT
+            query.select(Projections.constructor(CaracteristicaShort.class,caracteristica.id,caracteristica.descricao));
             return query.fetch();
         } catch (Exception e) {
             e.printStackTrace();

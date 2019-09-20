@@ -15,8 +15,8 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "ot_caracteristicas")
 @Getter @Setter
+@Table(name = "ot_caracteristicas")
 public class CaracteristicaShort implements Serializable{
     
     @Id
