@@ -330,8 +330,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //CARACTERISTICA
                 if(filtro.getCaracteristica()!= null){
                     if(filtro.getCaracteristica().getId() != null){
-                        query.innerJoin(caracteristicaEmpresa)
-                            .on(empresa.id.eq(caracteristicaEmpresa.empresa.id)
+                        query
+                            .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id)) //EMPRESA
+                            .innerJoin(caracteristicaEmpresa).on(empresa.id.eq(caracteristicaEmpresa.empresa.id)//EMPRESA-CARACTERISTICA
                                 .and(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId())));
                     }
                 }
