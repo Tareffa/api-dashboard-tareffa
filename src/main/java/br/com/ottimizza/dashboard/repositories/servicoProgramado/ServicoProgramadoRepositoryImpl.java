@@ -326,6 +326,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                                 .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
                     }
                 }
+                
+                //CARACTERISTICA
+                if(filtro.getCaracteristica()!= null){
+                    if(filtro.getCaracteristica().getId() != null){
+                        query.innerJoin(caracteristicaEmpresa)
+                            .on(empresa.id.eq(caracteristicaEmpresa.empresa.id)
+                                .and(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId())));
+                    }
+                }
 
                 //CONTABILIDADE
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
