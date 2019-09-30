@@ -29,10 +29,10 @@ public class IndicadorController {
     
     @PostMapping
     //<editor-fold defaultstate="collapsed" desc="Busca caracteristicas">
-    public ResponseEntity<String> getCaracteristicas(@RequestBody Indicador indicador, Principal principal) throws Exception{
+    public ResponseEntity<Indicador> getCaracteristicas(@RequestBody Indicador indicador, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.save(indicador, autenticado).toString());
+        return ResponseEntity.ok(indicadorService.save(indicador, autenticado));
     }
     //</editor-fold>
     
