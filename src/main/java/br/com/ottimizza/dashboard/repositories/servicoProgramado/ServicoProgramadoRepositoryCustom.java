@@ -3,7 +3,6 @@ package br.com.ottimizza.dashboard.repositories.servicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import java.util.Date;
 import java.util.List;
 
 public interface ServicoProgramadoRepositoryCustom {
