@@ -27,9 +27,7 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
             query.from(indicador)
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
                 .where(indicador.id.eq(indicadorId)); //INDICADOR ID
-            
-            query.select(Projections.constructor(IndicadorShort.class, indicador.id, indicador.descricao));
-            
+
             return query.fetchOne();
         } catch (Exception e) {
             return null;
@@ -41,6 +39,8 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
         try {
             JPAQuery<Indicador> query = new JPAQuery(em);
             query.from(indicador).where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())); //CONTABILIDADE
+            query.select(Projections.constructor(IndicadorShort.class, indicador.id, indicador.descricao));
+            
             return query.fetch();
         } catch (Exception e) {
             return null;
