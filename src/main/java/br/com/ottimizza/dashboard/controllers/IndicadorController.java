@@ -34,6 +34,15 @@ public class IndicadorController {
     @Inject
     IndicadorService indicadorService;
     
+    @GetMapping("{id}")
+    //<editor-fold defaultstate="collapsed" desc="Busca indicador por id">
+    public ResponseEntity<Indicador> buscaIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(indicadorService.getIndicadorById(indicadorId, autenticado));
+    }
+    //</editor-fold>
+    
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Busca lista de indicadores">
     public ResponseEntity<List> buscaIndicadores(Principal principal) throws Exception{

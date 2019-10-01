@@ -15,7 +15,19 @@ public class IndicadorService {
     @Inject
     IndicadorRepository indicadorRepository;
     
-    //<editor-fold defaultstate="collapsed" desc="Save">
+    //<editor-fold defaultstate="collapsed" desc="Get Indicador By Id">
+    public Indicador getIndicadorById(BigInteger indicadorId, Usuario autenticado)throws Exception{
+        try {
+            return indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado);
+        } catch (Exception e) {
+            JSONObject message = new JSONObject();
+            message.put("message", "Erro ao buscar os indicador");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Get List of Indicadores">
     public List getListIndicadores(Usuario autenticado)throws Exception{
         try {
             return indicadorRepository.buscarListaDeIndicadores(autenticado);
