@@ -52,7 +52,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             Indicador indicadorReferencia = indicadorRepository.buscarIndicadorPorId(id, autenticado);
-            if(indicador != null){
+            if(indicadorReferencia != null){
                 indicadorReferencia.setDescricao(indicador.getDescricao());
                 indicadorRepository.save(indicadorReferencia);
                 message.put("message", "Atualizado o indicador com sucesso!");
