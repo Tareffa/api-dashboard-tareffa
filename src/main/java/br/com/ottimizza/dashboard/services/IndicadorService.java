@@ -61,7 +61,6 @@ public class IndicadorService {
             message.put("message", "Não é permitido alterar este indicador!");
             return message;
         } catch (Exception e) {
-            e.printStackTrace();
             message.put("message", "Erro ao atualizar o indicador");
             throw new Exception(message.toString());
         }

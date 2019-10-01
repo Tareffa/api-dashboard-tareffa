@@ -49,7 +49,7 @@ public class IndicadorController {
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
             return ResponseEntity.ok(indicadorService.delete(indicadorId, autenticado).toString());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
     //</editor-fold>
@@ -62,7 +62,7 @@ public class IndicadorController {
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
             return ResponseEntity.ok(indicadorService.update(indicadorId, indicador, autenticado).toString());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
     //</editor-fold>
