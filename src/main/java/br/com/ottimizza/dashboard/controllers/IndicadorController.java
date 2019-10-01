@@ -6,12 +6,14 @@ import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.IndicadorService;
 import java.math.BigInteger;
 import java.security.Principal;
+import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,6 +33,15 @@ public class IndicadorController {
 
     @Inject
     IndicadorService indicadorService;
+    
+    @GetMapping
+    //<editor-fold defaultstate="collapsed" desc="Busca lista de indicadores">
+    public ResponseEntity<List> buscaIndicadores(Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(indicadorService.getListIndicadores(autenticado));
+    }
+    //</editor-fold>
     
     @PostMapping
     //<editor-fold defaultstate="collapsed" desc="Cria indicador">

@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,17 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
                 .where(indicador.id.eq(indicadorId)); //INDICADOR ID
             
             return query.fetchOne();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<?> buscarListaDeIndicadores(Usuario usuario) {
+        try {
+            JPAQuery<Indicador> query = new JPAQuery(em);
+            query.from(indicador).where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())); //CONTABILIDADE
+            return query.fetch();
         } catch (Exception e) {
             return null;
         }

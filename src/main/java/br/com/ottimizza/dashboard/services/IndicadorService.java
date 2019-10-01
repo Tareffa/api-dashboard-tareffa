@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.Indicador.IndicadorRepository;
 import java.math.BigInteger;
+import java.util.List;
 import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,18 @@ public class IndicadorService {
     
     @Inject
     IndicadorRepository indicadorRepository;
+    
+    //<editor-fold defaultstate="collapsed" desc="Save">
+    public List getListIndicadores(Usuario autenticado)throws Exception{
+        try {
+            return indicadorRepository.buscarListaDeIndicadores(autenticado);
+        } catch (Exception e) {
+            JSONObject message = new JSONObject();
+            message.put("message", "Erro ao buscar os indicadorer");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Save">
     public Indicador save(Indicador indicador, Usuario autenticado)throws Exception{
