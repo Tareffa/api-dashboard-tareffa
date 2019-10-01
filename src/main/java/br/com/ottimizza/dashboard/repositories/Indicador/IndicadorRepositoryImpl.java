@@ -1,8 +1,10 @@
 package br.com.ottimizza.dashboard.repositories.Indicador;
 
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
+import br.com.ottimizza.dashboard.models.indicadores.IndicadorShort;
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.List;
@@ -25,6 +27,8 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
             query.from(indicador)
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
                 .where(indicador.id.eq(indicadorId)); //INDICADOR ID
+            
+            query.select(Projections.constructor(IndicadorShort.class, indicador.id, indicador.descricao));
             
             return query.fetchOne();
         } catch (Exception e) {
