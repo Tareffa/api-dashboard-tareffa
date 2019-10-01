@@ -47,4 +47,24 @@ public class IndicadorService {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Update">
+    public JSONObject update(BigInteger id, Indicador indicador,Usuario autenticado)throws Exception{
+        JSONObject message = new JSONObject();
+        try {
+            Indicador indicadorReferencia = indicadorRepository.buscarIndicadorPorId(id, autenticado);
+            if(indicador != null){
+                indicadorReferencia.setDescricao(indicador.getDescricao());
+                indicadorRepository.save(indicadorReferencia);
+                message.put("message", "Atualizado o indicador com sucesso!");
+                return message;
+            }
+            message.put("message", "Não é permitido alterar este indicador!");
+            return message;
+        } catch (Exception e) {
+            message.put("message", "Erro ao excluir o indicador");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+    
 }

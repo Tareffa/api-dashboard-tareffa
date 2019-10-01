@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ public class IndicadorController {
     IndicadorService indicadorService;
     
     @PostMapping
-    //<editor-fold defaultstate="collapsed" desc="Busca caracteristicas">
+    //<editor-fold defaultstate="collapsed" desc="Cria indicador">
     public ResponseEntity<Indicador> saveIndicador(@RequestBody Indicador indicador, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
@@ -41,12 +42,25 @@ public class IndicadorController {
     //</editor-fold>
     
     @DeleteMapping("{id}")
-    //<editor-fold defaultstate="collapsed" desc="Busca caracteristicas">
+    //<editor-fold defaultstate="collapsed" desc="Exclui indicador">
     public ResponseEntity<String> deleteIndicador(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
         try {
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
             return ResponseEntity.ok(indicadorService.delete(indicadorId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+        }
+    }
+    //</editor-fold>
+    
+    @PutMapping("{id}")
+    //<editor-fold defaultstate="collapsed" desc="Atualiza indicador">
+    public ResponseEntity<String> updateIndicador(@PathVariable("id") BigInteger indicadorId, @RequestBody Indicador indicador, Principal principal) throws Exception{
+        try {
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(indicadorService.update(indicadorId, indicador, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
         }
