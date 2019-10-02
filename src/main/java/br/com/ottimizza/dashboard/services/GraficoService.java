@@ -23,7 +23,7 @@ public class GraficoService {
     public Grafico save(Grafico grafico, Usuario autenticado)throws Exception{
         try {
             if(grafico.getIndicador().getId() == null) throw new Exception();
-            Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getId(), autenticado);
+            Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getIndicador().getId(), autenticado);
             grafico.setIndicador(indicador);
             return graficoRepository.save(grafico);
         } catch (Exception e) {
