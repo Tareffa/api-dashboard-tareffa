@@ -108,10 +108,10 @@ public class GraficoService {
     *************************/
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
-    public Optional<GraficoServico> saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
+    public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
             graficoServicoRepository.save(graficoServico);
-            return graficoServicoRepository.findById(graficoServico.getId());
+            return graficoServicoRepository.findByGraficoAndServico(graficoServico.getId().getGraficoId(),graficoServico.getId().getServicoId());
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");

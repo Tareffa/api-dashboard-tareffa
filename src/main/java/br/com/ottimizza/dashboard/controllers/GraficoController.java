@@ -95,7 +95,7 @@ public class GraficoController {
 
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar grafico">
-    public ResponseEntity<Optional<GraficoServico>> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<GraficoServico> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado));
