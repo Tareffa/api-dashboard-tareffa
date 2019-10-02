@@ -1,4 +1,4 @@
-package br.com.ottimizza.dashboard.repositories.Grafico;
+package br.com.ottimizza.dashboard.repositories.grafico;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;

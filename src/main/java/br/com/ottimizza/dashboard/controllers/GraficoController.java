@@ -1,6 +1,7 @@
 package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.GraficoService;
@@ -86,5 +87,18 @@ public class GraficoController {
         }
     }
     //</editor-fold>
+    
+    /************************
+    *   GRAFICO - SERVICO   *
+    *************************/
 
+    @PostMapping("servico")
+    //<editor-fold defaultstate="collapsed" desc="Criar grafico">
+    public ResponseEntity<GraficoServico> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado));
+    }
+    //</editor-fold>
+    
 }

@@ -1,4 +1,4 @@
-package br.com.ottimizza.dashboard.repositories.Indicador;
+package br.com.ottimizza.dashboard.repositories.indicador;
 
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import org.springframework.data.jpa.repository.JpaRepository;

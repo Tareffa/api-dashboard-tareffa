@@ -2,7 +2,7 @@ package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import br.com.ottimizza.dashboard.repositories.Indicador.IndicadorRepository;
+import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import java.util.List;
 import javax.inject.Inject;

@@ -1,10 +1,12 @@
 package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import br.com.ottimizza.dashboard.repositories.Grafico.GraficoRepository;
-import br.com.ottimizza.dashboard.repositories.Indicador.IndicadorRepository;
+import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
+import br.com.ottimizza.dashboard.repositories.grafico.GraficoServico.GraficoServicoRepository;
+import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,6 +18,9 @@ public class GraficoService {
     
     @Inject
     GraficoRepository graficoRepository;
+    
+    @Inject
+    GraficoServicoRepository graficoServicoRepository;
     
     @Inject
     IndicadorRepository indicadorRepository;
@@ -93,6 +98,21 @@ public class GraficoService {
         } catch (Exception e) {
             message.put("message", "Erro ao atualizar o gráfico");
             throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+    
+    /************************
+    *   GRAFICO - SERVICO   *
+    *************************/
+    
+    //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
+    public GraficoServico saveGraficoServico(GraficoServico graficoSerfico, Usuario autenticado)throws Exception{
+        try {
+            return graficoServicoRepository.save(graficoSerfico);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao salvar o gráfico/serviço");
         }
     }
     //</editor-fold>
