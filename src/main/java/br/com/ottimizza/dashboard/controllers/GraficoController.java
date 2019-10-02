@@ -8,6 +8,7 @@ import br.com.ottimizza.dashboard.services.GraficoService;
 import java.math.BigInteger;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -94,7 +95,7 @@ public class GraficoController {
 
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar grafico">
-    public ResponseEntity<GraficoServico> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<Optional<GraficoServico>> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado));

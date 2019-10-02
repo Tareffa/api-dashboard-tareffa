@@ -9,6 +9,7 @@ import br.com.ottimizza.dashboard.repositories.grafico.GraficoServico.GraficoSer
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -107,9 +108,10 @@ public class GraficoService {
     *************************/
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
-    public GraficoServico saveGraficoServico(GraficoServico graficoSerfico, Usuario autenticado)throws Exception{
+    public Optional<GraficoServico> saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
-            return graficoServicoRepository.save(graficoSerfico);
+            graficoServicoRepository.save(graficoServico);
+            return graficoServicoRepository.findById(graficoServico.getId());
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
