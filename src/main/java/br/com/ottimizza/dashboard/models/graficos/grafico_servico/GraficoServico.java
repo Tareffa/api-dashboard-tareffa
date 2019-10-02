@@ -1,7 +1,7 @@
 package br.com.ottimizza.dashboard.models.graficos.grafico_servico;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
-import br.com.ottimizza.dashboard.models.servicos.Servico;
+import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -31,6 +31,6 @@ public class GraficoServico implements Serializable{
     @ManyToOne
     @MapsId("fk_servico_id")
     @JoinColumn(name = "fk_servico_id", insertable = false, updatable = false)
-    private Servico servico;
+    private ServicoShort servico;
     
 }
