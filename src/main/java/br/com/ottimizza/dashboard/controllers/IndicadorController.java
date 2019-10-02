@@ -35,7 +35,7 @@ public class IndicadorController {
     IndicadorService indicadorService;
     
     @GetMapping("{id}")
-    //<editor-fold defaultstate="collapsed" desc="Busca indicador por id">
+    //<editor-fold defaultstate="collapsed" desc="Buscar indicador por id">
     public ResponseEntity<Indicador> buscaIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
@@ -44,7 +44,7 @@ public class IndicadorController {
     //</editor-fold>
     
     @GetMapping
-    //<editor-fold defaultstate="collapsed" desc="Busca lista de indicadores">
+    //<editor-fold defaultstate="collapsed" desc="Buscar lista de indicadores">
     public ResponseEntity<List> buscaIndicadores(Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
@@ -53,7 +53,7 @@ public class IndicadorController {
     //</editor-fold>
     
     @PostMapping
-    //<editor-fold defaultstate="collapsed" desc="Cria indicador">
+    //<editor-fold defaultstate="collapsed" desc="Criar indicador">
     public ResponseEntity<Indicador> saveIndicador(@RequestBody Indicador indicador, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
@@ -62,7 +62,7 @@ public class IndicadorController {
     //</editor-fold>
     
     @DeleteMapping("{id}")
-    //<editor-fold defaultstate="collapsed" desc="Exclui indicador">
+    //<editor-fold defaultstate="collapsed" desc="Excluir indicador">
     public ResponseEntity<String> deleteIndicador(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
         try {
             // Get User by Email.
@@ -75,7 +75,7 @@ public class IndicadorController {
     //</editor-fold>
     
     @PutMapping("{id}")
-    //<editor-fold defaultstate="collapsed" desc="Atualiza indicador">
+    //<editor-fold defaultstate="collapsed" desc="Atualizar indicador">
     public ResponseEntity<String> updateIndicador(@PathVariable("id") BigInteger indicadorId, @RequestBody Indicador indicador, Principal principal) throws Exception{
         try {
             // Get User by Email.

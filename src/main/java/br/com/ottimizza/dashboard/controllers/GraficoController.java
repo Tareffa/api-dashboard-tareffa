@@ -32,7 +32,7 @@ public class GraficoController {
     GraficoService graficoService;
     
     @PostMapping
-    //<editor-fold defaultstate="collapsed" desc="Cria grafico">
+    //<editor-fold defaultstate="collapsed" desc="Criar grafico">
     public ResponseEntity<Grafico> saveIndicador(@RequestBody Grafico grafico, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
@@ -41,7 +41,7 @@ public class GraficoController {
     //</editor-fold>
     
     @DeleteMapping("{id}")
-    //<editor-fold defaultstate="collapsed" desc="Exclui grafico">
+    //<editor-fold defaultstate="collapsed" desc="Excluir grafico">
     public ResponseEntity<String> deleteIndicador(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
         try {
             // Get User by Email.

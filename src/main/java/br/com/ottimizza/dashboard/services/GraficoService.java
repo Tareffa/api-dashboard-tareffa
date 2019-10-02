@@ -1,8 +1,10 @@
 package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.Grafico.GraficoRepository;
+import br.com.ottimizza.dashboard.repositories.Indicador.IndicadorRepository;
 import java.math.BigInteger;
 import javax.inject.Inject;
 import org.json.JSONObject;
@@ -14,9 +16,15 @@ public class GraficoService {
     @Inject
     GraficoRepository graficoRepository;
     
+    @Inject
+    IndicadorRepository indicadorRepository;
+    
     //<editor-fold defaultstate="collapsed" desc="Save">
     public Grafico save(Grafico grafico, Usuario autenticado)throws Exception{
         try {
+            if(grafico.getIndicador().getId() == null) throw new Exception();
+            Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getId(), autenticado);
+            grafico.setIndicador(indicador);
             return graficoRepository.save(grafico);
         } catch (Exception e) {
             JSONObject message = new JSONObject();
@@ -36,10 +44,10 @@ public class GraficoService {
                 message.put("message", "Removido o indicador com sucesso!");
                 return message;
             }
-            message.put("message", "Não é permitido excluir este indicador!");
+            message.put("message", "Não é permitido excluir este gráfico!");
             return message;
         } catch (Exception e) {
-            message.put("message", "Erro ao excluir o indicador");
+            message.put("message", "Erro ao excluir o gráfico");
             throw new Exception(message.toString());
         }
     }
