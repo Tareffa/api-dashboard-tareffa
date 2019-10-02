@@ -21,7 +21,7 @@ public class IndicadorService {
             return indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado);
         } catch (Exception e) {
             JSONObject message = new JSONObject();
-            message.put("message", "Erro ao buscar os indicador");
+            message.put("message", "Erro ao buscar o indicador");
             throw new Exception(message.toString());
         }
     }
@@ -33,7 +33,7 @@ public class IndicadorService {
             return indicadorRepository.buscarListaDeIndicadores(autenticado);
         } catch (Exception e) {
             JSONObject message = new JSONObject();
-            message.put("message", "Erro ao buscar os indicadorer");
+            message.put("message", "Erro ao buscar os indicadores");
             throw new Exception(message.toString());
         }
     }

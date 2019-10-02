@@ -6,6 +6,7 @@ import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.Grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.Indicador.IndicadorRepository;
 import java.math.BigInteger;
+import java.util.List;
 import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,30 @@ public class GraficoService {
     
     @Inject
     IndicadorRepository indicadorRepository;
+    
+    //<editor-fold defaultstate="collapsed" desc="Get Grafico By Id">
+    public Grafico getGraficoById(BigInteger graficoId, Usuario autenticado)throws Exception{
+        try {
+            return graficoRepository.buscarGraficoPorId(graficoId, autenticado);
+        } catch (Exception e) {
+            JSONObject message = new JSONObject();
+            message.put("message", "Erro ao buscar o gráfico");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Get List of Graficos">
+    public List getListGraficos(Usuario autenticado)throws Exception{
+        try {
+            return indicadorRepository.buscarListaDeIndicadores(autenticado);
+        } catch (Exception e) {
+            JSONObject message = new JSONObject();
+            message.put("message", "Erro ao buscar os gráficos");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Save">
     public Grafico save(Grafico grafico, Usuario autenticado)throws Exception{
@@ -40,7 +65,7 @@ public class GraficoService {
             Grafico grafico = graficoRepository.buscarGraficoPorId(id, autenticado);
             if(grafico != null){
                 graficoRepository.deleteById(grafico.getId());
-                message.put("message", "Removido o indicador com sucesso!");
+                message.put("message", "Removido o gráfico com sucesso!");
                 return message;
             }
             message.put("message", "Não é permitido excluir este gráfico!");
