@@ -111,7 +111,7 @@ public class GraficoService {
     public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
             graficoServicoRepository.save(graficoServico);
-            return graficoServicoRepository.findByGraficoAndServico(graficoServico.getId().getGraficoId(),graficoServico.getId().getServicoId());
+            return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
