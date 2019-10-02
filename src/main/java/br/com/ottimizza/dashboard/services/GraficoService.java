@@ -52,4 +52,24 @@ public class GraficoService {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Update">
+    public JSONObject update(BigInteger id, Grafico grafico,Usuario autenticado)throws Exception{
+        JSONObject message = new JSONObject();
+        try {
+            Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
+            if(graficoReferencia != null){
+                graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
+                graficoRepository.save(graficoReferencia);
+                message.put("message", "Atualizado o gráfico com sucesso!");
+                return message;
+            }
+            message.put("message", "Não é permitido alterar este gráfico!");
+            return message;
+        } catch (Exception e) {
+            message.put("message", "Erro ao atualizar o gráfico");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+    
 }

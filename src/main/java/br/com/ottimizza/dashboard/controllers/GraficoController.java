@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,19 @@ public class GraficoController {
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
             return ResponseEntity.ok(graficoService.delete(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    //</editor-fold>
+    
+    @PutMapping("{id}")
+    //<editor-fold defaultstate="collapsed" desc="Atualizar indicador">
+    public ResponseEntity<String> updateIndicador(@PathVariable("id") BigInteger indicadorId, @RequestBody Grafico grafico, Principal principal) throws Exception{
+        try {
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.update(indicadorId, grafico, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
