@@ -35,7 +35,7 @@ public class GraficoService {
     //<editor-fold defaultstate="collapsed" desc="Get List of Graficos">
     public List getListGraficos(Usuario autenticado)throws Exception{
         try {
-            return indicadorRepository.buscarListaDeIndicadores(autenticado);
+            return graficoRepository.buscarListaDeGraficos(autenticado);
         } catch (Exception e) {
             JSONObject message = new JSONObject();
             message.put("message", "Erro ao buscar os gráficos");
