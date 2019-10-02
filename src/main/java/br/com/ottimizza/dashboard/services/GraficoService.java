@@ -27,9 +27,8 @@ public class GraficoService {
             grafico.setIndicador(indicador);
             return graficoRepository.save(grafico);
         } catch (Exception e) {
-            JSONObject message = new JSONObject();
-            message.put("message", "Erro ao salvar o gráfico");
-            throw new Exception(message.toString());
+            e.printStackTrace();
+            throw new Exception("Erro ao salvar o gráfico");
         }
     }
     //</editor-fold>
