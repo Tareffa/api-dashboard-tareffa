@@ -143,7 +143,7 @@ public class GraficoService {
                 graficoServicoRepository.deleteById(graficoServico.getId());
                 return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
             }else{
-                throw new Exception();
+                return new JSONObject("{\"message\":\"Gráfico ou Serviço Inválido!\"}");
             }
         } catch (Exception e) {
             e.printStackTrace();
