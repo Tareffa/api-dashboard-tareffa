@@ -101,7 +101,7 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    @PostMapping("servico")
+    @DeleteMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/serviço">
     public ResponseEntity<String> deleteGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
         // Get User by Email.
