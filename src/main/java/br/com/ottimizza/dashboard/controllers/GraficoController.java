@@ -1,6 +1,7 @@
 package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
@@ -94,7 +95,7 @@ public class GraficoController {
 
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar relaciomento grafico/serviço">
-    public ResponseEntity<GraficoServico> saveGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<GraficoServico> saveGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado));
@@ -103,7 +104,7 @@ public class GraficoController {
     
     @DeleteMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/serviço">
-    public ResponseEntity<String> deleteGrafico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<String> deleteGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
         return ResponseEntity.ok(graficoService.deleteGraficoServico(graficoServico, autenticado).toString());
@@ -113,4 +114,12 @@ public class GraficoController {
     /*******************************
     *   GRAFICO - CARACTERISTICA   *
     ********************************/
+    @PostMapping("caracteristica")
+    //<editor-fold defaultstate="collapsed" desc="Criar relaciomento grafico/caracteristica">
+    public ResponseEntity<GraficoCaracteristica> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado));
+    }
+    //</editor-fold>
 }
