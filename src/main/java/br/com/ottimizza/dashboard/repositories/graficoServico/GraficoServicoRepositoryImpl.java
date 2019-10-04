@@ -1,4 +1,4 @@
-package br.com.ottimizza.dashboard.repositories.grafico.GraficoServico;
+package br.com.ottimizza.dashboard.repositories.graficoServico;
 
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServicoID;

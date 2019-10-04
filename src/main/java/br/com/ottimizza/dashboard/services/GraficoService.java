@@ -5,14 +5,13 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
-import br.com.ottimizza.dashboard.repositories.grafico.GraficoServico.GraficoServicoRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Optional;
 import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
 
 @Service
 public class GraficoService {
@@ -112,6 +111,18 @@ public class GraficoService {
         try {
             graficoServicoRepository.save(graficoServico);
             return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao salvar o gráfico/serviço");
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Delete grafico servico">
+    public JSONObject deleteGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
+        try {
+            graficoServicoRepository.deleteById(graficoServico.getId());
+            return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
