@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface GraficoRepositoryCustom {
     
-    Grafico buscarGraficoPorId(BigInteger indicadorId, Usuario usuario);
+    Grafico buscarGraficoPorId(BigInteger graficoId, Usuario usuario);
+    
+    Boolean verificarExistenciaGraficoPorId(BigInteger graficoId, Usuario usuario);
     
     List<?> buscarListaDeGraficos(Usuario usuario);
     

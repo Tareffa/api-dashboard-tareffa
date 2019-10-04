@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
+import br.com.ottimizza.dashboard.repositories.servico.ServicoRepository;
 
 @Service
 public class GraficoService {
@@ -26,6 +27,9 @@ public class GraficoService {
     
     @Inject
     GraficoCaracteristicaRepository graficoCaracteristicaRepository;
+    
+    @Inject
+    ServicoRepository servicoRepository;
     
     @Inject
     IndicadorRepository indicadorRepository;
@@ -107,15 +111,21 @@ public class GraficoService {
     }
     //</editor-fold>
     
-    /************************
-    *   GRAFICO - SERVICO   *
-    *************************/
+    //*************************
+    //*   GRAFICO - SERVICO   *
+    //*************************
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
     public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
-            graficoServicoRepository.save(graficoServico);
-            return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
+            //VALIDAÇÃO (GRAFICO E SERVIÇO PERTE)
+            if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
+               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
+                graficoServicoRepository.save(graficoServico);
+                return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
+            }else{
+                throw new Exception();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
@@ -126,8 +136,12 @@ public class GraficoService {
     //<editor-fold defaultstate="collapsed" desc="Delete grafico servico">
     public JSONObject deleteGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
-            graficoServicoRepository.deleteById(graficoServico.getId());
-            return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
+            if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()) != null){    
+                graficoServicoRepository.deleteById(graficoServico.getId());
+                return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
+            }else{
+                throw new Exception();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao excluir o gráfico/serviço");
@@ -135,9 +149,9 @@ public class GraficoService {
     }
     //</editor-fold>
     
-    /*******************************
-    *   GRAFICO - CARACTERISTICA   *
-    ********************************/
+    //********************************
+    //*   GRAFICO - CARACTERISTICA   *
+    //********************************
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico característica">
     public GraficoCaracteristica saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{

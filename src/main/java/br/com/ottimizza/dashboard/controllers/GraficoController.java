@@ -89,9 +89,9 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    /************************
-    *   GRAFICO - SERVICO   *
-    *************************/
+    //*************************
+    //*   GRAFICO - SERVICO   *
+    //*************************
 
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/serviço">
@@ -111,9 +111,9 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    /*******************************
-    *   GRAFICO - CARACTERISTICA   *
-    ********************************/
+    //********************************
+    //*   GRAFICO - CARACTERISTICA   *
+    //********************************
     @PostMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
     public ResponseEntity<GraficoCaracteristica> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{

@@ -23,13 +23,13 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     private QIndicador indicador = QIndicador.indicador;
 
     @Override
-    public Grafico buscarGraficoPorId(BigInteger indicadorId, Usuario usuario) {
+    public Grafico buscarGraficoPorId(BigInteger graficoId, Usuario usuario) {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico)
                 .innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
-                .where(grafico.id.eq(indicadorId)); //INDICADOR ID
+                .where(grafico.id.eq(graficoId)); //INDICADOR ID
 
             return query.fetchOne();
         } catch (Exception e) {
@@ -50,5 +50,20 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             return null;
         }
     }    
+
+    @Override
+    public Boolean verificarExistenciaGraficoPorId(BigInteger graficoId, Usuario usuario) {
+        try {
+            JPAQuery<Grafico> query = new JPAQuery(em);
+            query.from(grafico)
+                .innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
+                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(grafico.id.eq(graficoId)); //INDICADOR ID
+
+            return query.fetchCount() > 0;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }
