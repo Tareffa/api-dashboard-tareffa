@@ -1,10 +1,12 @@
 package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
+import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import java.util.List;
@@ -21,6 +23,9 @@ public class GraficoService {
     
     @Inject
     GraficoServicoRepository graficoServicoRepository;
+    
+    @Inject
+    GraficoCaracteristicaRepository graficoCaracteristicaRepository;
     
     @Inject
     IndicadorRepository indicadorRepository;
@@ -126,6 +131,22 @@ public class GraficoService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
+        }
+    }
+    //</editor-fold>
+    
+    /*******************************
+    *   GRAFICO - CARACTERISTICA   *
+    ********************************/
+    
+    //<editor-fold defaultstate="collapsed" desc="Insert grafico caracteristica">
+    public GraficoCaracteristica saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
+        try {
+            graficoCaracteristicaRepository.save(graficoCaracteristica);
+            return graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao salvar o gráfico/característica");
         }
     }
     //</editor-fold>

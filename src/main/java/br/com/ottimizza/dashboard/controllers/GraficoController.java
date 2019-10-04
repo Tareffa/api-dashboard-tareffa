@@ -110,4 +110,7 @@ public class GraficoController {
     }
     //</editor-fold>
     
+    /*******************************
+    *   GRAFICO - CARACTERISTICA   *
+    ********************************/
 }
