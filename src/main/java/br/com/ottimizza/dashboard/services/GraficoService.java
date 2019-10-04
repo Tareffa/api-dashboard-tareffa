@@ -116,16 +116,18 @@ public class GraficoService {
     //*************************
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
-    public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
+    public JSONObject saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
+            
             //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
                servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
                 graficoServicoRepository.save(graficoServico);
-                return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
+                return new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()));
             }else{
-                throw new Exception();
+                return new JSONObject("{\"message\":\"Gráfico ou Serviço Inválido!\"}");
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/serviço");
