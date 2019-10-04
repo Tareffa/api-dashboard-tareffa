@@ -130,7 +130,7 @@ public class GraficoService {
             return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Erro ao salvar o gráfico/serviço");
+            throw new Exception("Erro ao excluir o gráfico/serviço");
         }
     }
     //</editor-fold>
@@ -139,7 +139,7 @@ public class GraficoService {
     *   GRAFICO - CARACTERISTICA   *
     ********************************/
     
-    //<editor-fold defaultstate="collapsed" desc="Insert grafico caracteristica">
+    //<editor-fold defaultstate="collapsed" desc="Insert grafico característica">
     public GraficoCaracteristica saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
         try {
             graficoCaracteristicaRepository.save(graficoCaracteristica);
@@ -151,4 +151,15 @@ public class GraficoService {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Delete gráfico característica">
+    public JSONObject deleteGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
+        try {
+            graficoCaracteristicaRepository.deleteById(graficoCaracteristica.getId());
+            return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao excluir o gráfico/característica");
+        }
+    }
+    //</editor-fold>
 }
