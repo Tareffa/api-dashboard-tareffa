@@ -118,12 +118,8 @@ public class GraficoService {
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
     public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
-            //VALIDAÇÃO (GRAFICO E SERVIÇO PERTE)
-            System.out.println("VERIFICAÇÃO");
-            System.out.println("GRAFICO: " + graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado));
-            System.out.println("SERVIÇO: " + servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado));
-            if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
-               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
+            //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoServicoRepository.verificarPermissaoGraficoServicoPorId(graficoServico.getId(), autenticado)){
                 graficoServicoRepository.save(graficoServico);
                 return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
             }else{
