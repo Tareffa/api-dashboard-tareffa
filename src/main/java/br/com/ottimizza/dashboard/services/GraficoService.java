@@ -119,7 +119,8 @@ public class GraficoService {
     public GraficoServico saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         try {
             //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
-            if(graficoServicoRepository.verificarPermissaoGraficoServicoPorId(graficoServico.getId(), autenticado)){
+            if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
+               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
                 graficoServicoRepository.save(graficoServico);
                 return graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId());
             }else{
