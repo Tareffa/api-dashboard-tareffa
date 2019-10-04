@@ -121,7 +121,8 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
-               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
+               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado) &&
+               graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()) == null){
                 graficoServicoRepository.save(graficoServico);
                 return new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()));
             }else{
