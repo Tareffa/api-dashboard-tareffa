@@ -40,6 +40,7 @@ public class ServicoRepositoryImpl implements ServicoRepositoryCustom{
 
             return query.fetchCount() > 0;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
