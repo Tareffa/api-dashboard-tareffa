@@ -79,6 +79,8 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
                 .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
                 .where(graficoServico.grafico.id.eq(graficoId));
             
+            query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
+            
             return query.fetch();
         } catch (Exception e) {
             return null;
