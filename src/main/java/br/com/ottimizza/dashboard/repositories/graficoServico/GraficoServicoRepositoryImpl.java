@@ -8,10 +8,12 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.QGraficoServic
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.Servico;
+import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -67,5 +69,20 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             return null;
         }
     }
-    
+ 
+    //<editor-fold defaultstate="collapsed" desc="Busca de serviços relacionados por gráfico Id">
+        @Override
+        public List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario) {
+            try {
+            JPAQuery<ServicoShort> query = new JPAQuery(em);
+            query.from(graficoServico)
+                .innerJoin(servico).on(graficoServico.servico.id.eq(servico.id))
+                .where(graficoServico.grafico.id.eq(graficoId));
+            return query.fetch();
+        } catch (Exception e) {
+            return null;
+        }
+        }
+    //</editor-fold>
+
 }

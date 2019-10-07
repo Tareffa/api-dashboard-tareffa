@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
 import br.com.ottimizza.dashboard.repositories.servico.ServicoRepository;
+import org.json.JSONArray;
 
 @Service
 public class GraficoService {
@@ -134,10 +135,14 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
-               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado) &&
-               graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) == null){
-                graficoServicoRepository.save(graficoServico);
-                resposta = new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado));
+               servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado)){
+                //VERIFICA A EXISTÊNCIA DO GRÁFICO/SERVIÇO
+                if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) == null){
+                     graficoServicoRepository.save(graficoServico);
+                     resposta = new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado));
+                }else{
+
+                }
             }else{
                 resposta.put("message","Gráfico ou Serviço Inválido!");
             }
@@ -172,6 +177,28 @@ public class GraficoService {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
+    public JSONObject buscaServicosRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta = new JSONObject(new JSONArray(graficoServicoRepository.buscarServicosRelacionadorPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao buscar os serviços relacionados");
+        }
+    }
+    
+    //</editor-fold>
+    
     //********************************
     //*   GRAFICO - CARACTERISTICA   *
     //********************************
@@ -182,12 +209,16 @@ public class GraficoService {
         try {
             //VALIDAÇÃO (GRÁFICO E CARACTERÍSTICA PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoCaracteristica.getId().getGraficoId()), autenticado) && 
-               caracteristicaRepository.verificarExistenciaCaracteristicaPorId(graficoCaracteristica.getId().getCaracteristicaId(), autenticado) &&
-               graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) == null){
-                graficoCaracteristicaRepository.save(graficoCaracteristica);
-                resposta = new JSONObject(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado));
+               caracteristicaRepository.verificarExistenciaCaracteristicaPorId(graficoCaracteristica.getId().getCaracteristicaId(), autenticado)){
+                //VERIFICA A EXISTÊNCIA DO GRÁFICO/CARACTERÍSTICA
+                if(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) == null){
+                    graficoCaracteristicaRepository.save(graficoCaracteristica);
+                    resposta = new JSONObject(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado));
+                }else{
+                    resposta.put("message","Gráfico da característica já cadastrado!");
+                }
             }else{
-                resposta.put("message","Gráfico ou Característica Inválido!");
+                resposta.put("message","Gráfico ou característica inválido!");
             }
             
             return resposta;
@@ -208,7 +239,7 @@ public class GraficoService {
                 graficoCaracteristicaRepository.deleteById(graficoCaracteristica.getId());
                 resposta.put("message","Excluído com sucesso!");
             }else{
-                resposta.put("message","Gráfico ou Característica Inválido!");
+                resposta.put("message","Gráfico ou característica inválido!");
             }
             
             return resposta;
