@@ -99,12 +99,9 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     @Override
     public List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario) {
         try {
-            BooleanExpression expressao  = Expressions.booleanTemplate(" NOT EXISTS {0} ", JPAExpressions.select(graficoServico)
+            BooleanExpression expressao = Expressions.booleanTemplate(" NOT EXISTS {0} ", JPAExpressions.select(graficoServico)
                     .where(graficoServico.servico.id.eq(servico.id))
                     .where(graficoServico.grafico.id.eq(graficoId)));
-            
-            System.out.println("Teste1: " + expressao.stringValue());
-            System.out.println("Teste2: " + expressao.toString());
             
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servico).where(expressao)

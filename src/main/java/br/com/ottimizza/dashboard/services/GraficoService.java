@@ -141,7 +141,7 @@ public class GraficoService {
                      graficoServicoRepository.save(graficoServico);
                      resposta = new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado));
                 }else{
-
+                    resposta.put("message","Gráfico/Serviço existente!");
                 }
             }else{
                 resposta.put("message","Gráfico ou Serviço Inválido!");
