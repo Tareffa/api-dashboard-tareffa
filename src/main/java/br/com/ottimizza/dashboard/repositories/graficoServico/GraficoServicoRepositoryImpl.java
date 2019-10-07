@@ -75,11 +75,9 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
         public List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario) {
             try {
             JPAQuery<ServicoShort> query = new JPAQuery(em);
-            query.from(graficoServico)
-                .innerJoin(servico).on(graficoServico.servico.id.eq(servico.id))
+            query.from(servico)
+                .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
                 .where(graficoServico.grafico.id.eq(graficoId));
-            
-            query.select(Projections.constructor(ServicoShort.class));
             
             return query.fetch();
         } catch (Exception e) {
