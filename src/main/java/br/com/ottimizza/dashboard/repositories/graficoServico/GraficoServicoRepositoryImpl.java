@@ -11,6 +11,9 @@ import br.com.ottimizza.dashboard.models.servicos.Servico;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.List;
@@ -96,11 +99,17 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     @Override
     public List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario) {
         try {
+            BooleanExpression expressao  = Expressions.booleanTemplate(" NOT EXISTS {0} ", JPAExpressions.select(graficoServico)
+                    .where(graficoServico.servico.id.eq(servico.id))
+                    .where(graficoServico.grafico.id.eq(graficoId)));
+            
             JPAQuery<ServicoShort> query = new JPAQuery(em);
-            query.from(servico)
-                .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
-                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
-                .where(graficoServico.grafico.id.isNull());
+            query.from(servico).where(expressao)
+                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()));
+                    
+//                .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
+//                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
+//                .where(graficoServico.grafico.id.isNull());
 
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
