@@ -14,4 +14,6 @@ public interface GraficoServicoRepositoryCustom {
     
     List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario);
     
+    List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario);
+    
 }

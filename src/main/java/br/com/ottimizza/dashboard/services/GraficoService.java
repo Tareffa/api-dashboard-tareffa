@@ -196,7 +196,6 @@ public class GraficoService {
             throw new Exception("Erro ao buscar os serviços relacionados");
         }
     }
-    
     //</editor-fold>
     
     //********************************

@@ -5,17 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 public class ServicoAgrupado {
     
-    @Getter @Setter
     private Long id;
     
-    @Getter @Setter
     private String nomeServico;
     
-    @Getter @Setter
     private Long servicosProgramadosContagem;
     
 }

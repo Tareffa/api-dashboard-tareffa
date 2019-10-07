@@ -29,6 +29,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     private QIndicador indicador = QIndicador.indicador;
     private QGraficoServico graficoServico = QGraficoServico.graficoServico;
     
+    //<editor-fold defaultstate="collapsed" desc="Busca de gráfico serviço específico por Id">
     @Override
     public GraficoServico buscarGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario) {
         try {
@@ -45,7 +46,9 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             return null;
         }
     }
-
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Verifica permição ao uso do gráfico serviço">
     @Override
     public Boolean verificarPermissaoGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario) {
         try {
@@ -69,23 +72,42 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             return null;
         }
     }
- 
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Busca de serviços relacionados por gráfico Id">
-        @Override
-        public List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario) {
-            try {
+    @Override
+    public List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario) {
+        try {
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servico)
                 .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
                 .where(graficoServico.grafico.id.eq(graficoId));
-            
+
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
-            
+
             return query.fetch();
         } catch (Exception e) {
             return null;
         }
-        }
+    }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Busca de serviços faltantes por gráfico Id">
+    @Override
+    public List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario) {
+        try {
+            JPAQuery<ServicoShort> query = new JPAQuery(em);
+            query.from(servico)
+                .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
+                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
+                .where(graficoServico.grafico.id.isNull());
+
+            query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
+
+            return query.fetch();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    //</editor-fold>
 }
