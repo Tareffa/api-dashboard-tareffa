@@ -184,7 +184,7 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-               resposta = new JSONObject(new JSONArray(graficoServicoRepository.buscarServicosRelacionadorPorGraficoId(graficoId, autenticado)));
+               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadorPorGraficoId(graficoId, autenticado)));
             }else{
                 resposta.put("message","Gráfico inválido!");
             }
