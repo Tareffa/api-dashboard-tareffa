@@ -42,5 +42,20 @@ public class CaracteristicaRepositoryImpl implements CaracteristicaRepositoryCus
             return null;
         }
     }
+
+    @Override
+    public Boolean verificarExistenciaCaracteristicaPorId(Long caracteristicaId, Usuario usuario) {
+        try {
+            JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
+            query.from(caracteristica)
+                .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()))
+                .where(caracteristica.id.eq(caracteristicaId));
+
+            return query.fetchCount() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
 }

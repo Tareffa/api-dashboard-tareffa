@@ -8,4 +8,6 @@ public interface CaracteristicaRepositoryCustom {
     
     List<CaracteristicaShort> buscaListaDeCaracteristicas(Usuario usuario, String Descricao);
     
+    Boolean verificarExistenciaCaracteristicaPorId(Long caracteristicaId, Usuario usuario);
+    
 }

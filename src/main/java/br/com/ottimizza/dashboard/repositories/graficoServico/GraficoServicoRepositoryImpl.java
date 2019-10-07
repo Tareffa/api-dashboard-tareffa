@@ -28,12 +28,13 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     private QGraficoServico graficoServico = QGraficoServico.graficoServico;
     
     @Override
-    public GraficoServico buscarGraficoServicoPorId(GraficoServicoID graficoServicoId) {
+    public GraficoServico buscarGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario) {
         try {
             JPAQuery<GraficoServico> query = new JPAQuery(em);
             query.from(graficoServico)
                 .where(graficoServico.grafico.id.eq(BigInteger.valueOf(graficoServicoId.getGraficoId())))
-                .where(graficoServico.servico.id.eq(graficoServicoId.getServicoId()));
+                .where(graficoServico.servico.id.eq(graficoServicoId.getServicoId()))
+                .where(graficoServico.servico.contabilidade.id.eq(usuario.getContabilidade().getId()));
 
             query.select(Projections.constructor(GraficoServico.class, graficoServico.id, graficoServico.grafico, graficoServico.servico));
             

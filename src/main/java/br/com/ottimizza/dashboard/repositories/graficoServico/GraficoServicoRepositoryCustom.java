@@ -6,7 +6,7 @@ import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 
 public interface GraficoServicoRepositoryCustom {
     
-    GraficoServico buscarGraficoServicoPorId(GraficoServicoID graficoServicoId);
+    GraficoServico buscarGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario);
     
     Boolean verificarPermissaoGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario);
     

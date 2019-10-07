@@ -3,6 +3,7 @@ package br.com.ottimizza.dashboard.repositories.graficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristicaID;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.QGraficoCaracteristica;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
@@ -19,12 +20,13 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
     private QGraficoCaracteristica graficoCaracteristica = QGraficoCaracteristica.graficoCaracteristica;
 
     @Override
-    public GraficoCaracteristica buscarGraficoCaracteristicaPorId(GraficoCaracteristicaID graficoCaracteristicaId) {
+    public GraficoCaracteristica buscarGraficoCaracteristicaPorId(GraficoCaracteristicaID graficoCaracteristicaId, Usuario usuario) {
         try {
             JPAQuery<GraficoCaracteristica> query = new JPAQuery(em);
             query.from(graficoCaracteristica)
                 .where(graficoCaracteristica.grafico.id.eq(BigInteger.valueOf(graficoCaracteristicaId.getGraficoId())))
-                .where(graficoCaracteristica.caracteristica.id.eq(graficoCaracteristicaId.getCaracteristicaId()));
+                .where(graficoCaracteristica.caracteristica.id.eq(graficoCaracteristicaId.getCaracteristicaId()))
+                .where(graficoCaracteristica.caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()));
 
             query.select(Projections.constructor(GraficoCaracteristica.class, graficoCaracteristica.id, graficoCaracteristica.grafico, graficoCaracteristica.caracteristica));
             

@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.Grafico
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.repositories.caracteristica.CaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
@@ -30,6 +31,9 @@ public class GraficoService {
     
     @Inject
     ServicoRepository servicoRepository;
+    
+    @Inject
+    CaracteristicaRepository caracteristicaRepository;
     
     @Inject
     IndicadorRepository indicadorRepository;
@@ -61,10 +65,12 @@ public class GraficoService {
     //<editor-fold defaultstate="collapsed" desc="Save">
     public Grafico save(Grafico grafico, Usuario autenticado)throws Exception{
         try {
+            
             if(grafico.getIndicador().getId() == null) throw new Exception();
             Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getIndicador().getId(), autenticado);
             grafico.setIndicador(indicador);
             return graficoRepository.save(grafico);
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico");
@@ -77,13 +83,16 @@ public class GraficoService {
         JSONObject message = new JSONObject();
         try {
             Grafico grafico = graficoRepository.buscarGraficoPorId(id, autenticado);
+            
             if(grafico != null){
                 graficoRepository.deleteById(grafico.getId());
                 message.put("message", "Removido o gráfico com sucesso!");
-                return message;
+            }else{
+                message.put("message", "Não é permitido excluir este gráfico!");
             }
-            message.put("message", "Não é permitido excluir este gráfico!");
+            
             return message;
+            
         } catch (Exception e) {
             message.put("message", "Erro ao excluir o gráfico");
             throw new Exception(message.toString());
@@ -96,14 +105,17 @@ public class GraficoService {
         JSONObject message = new JSONObject();
         try {
             Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
+            
             if(graficoReferencia != null){
                 graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
                 graficoRepository.save(graficoReferencia);
                 message.put("message", "Atualizado o gráfico com sucesso!");
-                return message;
+            }else{
+                message.put("message", "Não é permitido alterar este gráfico!");
             }
-            message.put("message", "Não é permitido alterar este gráfico!");
+            
             return message;
+            
         } catch (Exception e) {
             message.put("message", "Erro ao atualizar o gráfico");
             throw new Exception(message.toString());
@@ -117,17 +129,20 @@ public class GraficoService {
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
     public JSONObject saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
         try {
             
             //VALIDAÇÃO (GRÁFICO E SERVIÇO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoServico.getId().getGraficoId()), autenticado) && 
                servicoRepository.verificarExistenciaServicoPorId(graficoServico.getId().getServicoId(), autenticado) &&
-               graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()) == null){
+               graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) == null){
                 graficoServicoRepository.save(graficoServico);
-                return new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()));
+                resposta = new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado));
             }else{
-                return new JSONObject("{\"message\":\"Gráfico ou Serviço Inválido!\"}");
+                resposta.put("message","Gráfico ou Serviço Inválido!");
             }
+            
+            return resposta;
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,13 +153,18 @@ public class GraficoService {
     
     //<editor-fold defaultstate="collapsed" desc="Delete grafico servico">
     public JSONObject deleteGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
         try {
-            if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId()) != null){    
+            
+            if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) != null){    
                 graficoServicoRepository.deleteById(graficoServico.getId());
-                return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
+                resposta.put("message","Excluído com sucesso");
             }else{
-                return new JSONObject("{\"message\":\"Gráfico ou Serviço Inválido!\"}");
+                resposta.put("message","Gráfico ou Serviço Inválido!");
             }
+            
+            return resposta;
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao excluir o gráfico/serviço");
@@ -157,10 +177,21 @@ public class GraficoService {
     //********************************
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico característica">
-    public GraficoCaracteristica saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
+    public JSONObject saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
         try {
-            graficoCaracteristicaRepository.save(graficoCaracteristica);
-            return graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId());
+            //VALIDAÇÃO (GRÁFICO E CARACTERÍSTICA PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(BigInteger.valueOf(graficoCaracteristica.getId().getGraficoId()), autenticado) && 
+               caracteristicaRepository.verificarExistenciaCaracteristicaPorId(graficoCaracteristica.getId().getCaracteristicaId(), autenticado) &&
+               graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) == null){
+                graficoCaracteristicaRepository.save(graficoCaracteristica);
+                resposta = new JSONObject(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado));
+            }else{
+                resposta.put("message","Gráfico ou Característica Inválido!");
+            }
+            
+            return resposta;
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao salvar o gráfico/característica");
@@ -170,9 +201,18 @@ public class GraficoService {
     
     //<editor-fold defaultstate="collapsed" desc="Delete gráfico característica">
     public JSONObject deleteGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
         try {
-            graficoCaracteristicaRepository.deleteById(graficoCaracteristica.getId());
-            return new JSONObject("{\"message\":\"Excluído com sucesso\"}");
+            
+            if(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) != null){
+                graficoCaracteristicaRepository.deleteById(graficoCaracteristica.getId());
+                resposta.put("message","Excluído com sucesso!");
+            }else{
+                resposta.put("message","Gráfico ou Característica Inválido!");
+            }
+            
+            return resposta;
+            
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao excluir o gráfico/característica");

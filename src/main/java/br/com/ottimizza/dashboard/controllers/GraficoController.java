@@ -116,10 +116,10 @@ public class GraficoController {
     //********************************
     @PostMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
-    public ResponseEntity<GraficoCaracteristica> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
+    public ResponseEntity<String> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado));
+        return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
     }
     //</editor-fold>
     
