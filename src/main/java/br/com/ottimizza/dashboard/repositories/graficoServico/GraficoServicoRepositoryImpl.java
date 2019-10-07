@@ -103,6 +103,9 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
                     .where(graficoServico.servico.id.eq(servico.id))
                     .where(graficoServico.grafico.id.eq(graficoId)));
             
+            System.out.println("Teste1: " + expressao.stringValue());
+            System.out.println("Teste2: " + expressao.toString());
+            
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servico).where(expressao)
                 .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()));
