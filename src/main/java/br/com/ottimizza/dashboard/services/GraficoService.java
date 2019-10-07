@@ -198,6 +198,27 @@ public class GraficoService {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços faltantes ao gráfico Id">
+    public JSONObject buscaServicosFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao buscar os serviços relacionados");
+        }
+    }
+    //</editor-fold>
+    
     //********************************
     //*   GRAFICO - CARACTERISTICA   *
     //********************************
