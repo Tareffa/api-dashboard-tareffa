@@ -116,7 +116,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
 //                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
 //                .where(graficoServico.grafico.id.isNull());
 
-            query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
+            //query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
             return query.distinct().fetch();
         } catch (Exception e) {
