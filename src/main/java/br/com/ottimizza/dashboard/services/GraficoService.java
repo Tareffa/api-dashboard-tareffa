@@ -128,6 +128,48 @@ public class GraficoService {
     //*   GRAFICO - SERVICO   *
     //*************************
     
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
+    public JSONObject buscaServicosRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao buscar os serviços relacionados");
+        }
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços faltantes ao gráfico Id">
+    public JSONObject buscaServicosFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao buscar os serviços faltantes");
+        }
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Insert grafico servico">
     public JSONObject saveGraficoServico(GraficoServico graficoServico, Usuario autenticado)throws Exception{
         JSONObject resposta = new JSONObject();
@@ -173,48 +215,6 @@ public class GraficoService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Erro ao excluir o gráfico/serviço");
-        }
-    }
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public JSONObject buscaServicosRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
-        JSONObject resposta = new JSONObject();
-        try {
-            
-            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
-            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, autenticado)));
-            }else{
-                resposta.put("message","Gráfico inválido!");
-            }
-            
-            return resposta;
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Erro ao buscar os serviços relacionados");
-        }
-    }
-    //</editor-fold>
-    
-    //<editor-fold defaultstate="collapsed" desc="Buscar serviços faltantes ao gráfico Id">
-    public JSONObject buscaServicosFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
-        JSONObject resposta = new JSONObject();
-        try {
-            
-            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
-            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, autenticado)));
-            }else{
-                resposta.put("message","Gráfico inválido!");
-            }
-            
-            return resposta;
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Erro ao buscar os serviços faltantes");
         }
     }
     //</editor-fold>
