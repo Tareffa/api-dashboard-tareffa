@@ -104,7 +104,8 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
                     .where(graficoServico.grafico.id.eq(graficoId)));
             
             JPAQuery<ServicoShort> query = new JPAQuery(em);
-            query.from(servico).where(expressao)
+            query.from(servico)
+                .where(expressao)
                 .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()));
                     
 //                .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
@@ -113,7 +114,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
 
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
-            return query.fetch();
+            return query.distinct().fetch();
         } catch (Exception e) {
             return null;
         }
