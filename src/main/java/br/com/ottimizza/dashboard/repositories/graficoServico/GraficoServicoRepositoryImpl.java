@@ -105,9 +105,9 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servicoShort)
                 .leftJoin(graficoServico).on(
-                    graficoServico.servico.id.eq(servico.id)
+                    graficoServico.servico.id.eq(servicoShort.id)
                     .and(graficoServico.grafico.id.eq(graficoId)))
-                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
+                .where(servicoShort.contabilidade.id.eq(usuario.getContabilidade().getId()))
                 .where(graficoServico.grafico.id.isNull());
             System.out.println("QUERY COMPLETO: " + query.toString());
             
