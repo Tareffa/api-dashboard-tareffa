@@ -55,5 +55,24 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
             return null;
         }
     }
-    
+
+    @Override
+    public List<?> buscarCaracteristicasFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario) {
+        try {
+            JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
+            query.from(caracteristica)
+                .leftJoin(graficoCaracteristica).on(
+                    graficoCaracteristica.caracteristica.id.eq(caracteristica.id)
+                    .and(graficoCaracteristica.grafico.id.eq(graficoId)))
+                .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()))
+                .where(graficoCaracteristica.grafico.id.isNull());
+            
+            query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
+
+            return query.distinct().fetch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

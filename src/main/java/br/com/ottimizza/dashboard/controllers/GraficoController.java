@@ -142,6 +142,15 @@ public class GraficoController {
     }
     //</editor-fold>
     
+    @GetMapping("{id}/caracteristica/faltantes")
+    //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
+    public ResponseEntity<String> buscaCaracteristicasFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.buscaCaracteristicasFaltantesGraficoId(graficoId, autenticado).toString());
+    }
+    //</editor-fold>
+    
     @PostMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
     public ResponseEntity<String> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{

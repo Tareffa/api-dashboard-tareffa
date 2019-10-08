@@ -214,7 +214,7 @@ public class GraficoService {
             
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Erro ao buscar os serviços relacionados");
+            throw new Exception("Erro ao buscar os serviços faltantes");
         }
     }
     //</editor-fold>
@@ -238,12 +238,31 @@ public class GraficoService {
             return resposta;
             
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Erro ao buscar os serviços relacionados");
+            throw new Exception("Erro ao buscar as características relacionadas");
         }
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="Buscar caracteristicas faltantes ao gráfico Id">
+    public JSONObject buscaCaracteristicasFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasFaltantesPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            throw new Exception("Erro ao buscar as características faltantes");
+        }
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Insert grafico característica">
     public JSONObject saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{
         JSONObject resposta = new JSONObject();
