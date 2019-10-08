@@ -103,15 +103,21 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
         try {
             
             JPAQuery<ServicoShort> query = new JPAQuery(em);
-            query.from(servicoShort)
+            query.from(servico)
                 .leftJoin(graficoServico).on(
-                    graficoServico.servico.id.eq(servicoShort.id)
+                    graficoServico.servico.id.eq(servico.id)
                     .and(graficoServico.grafico.id.eq(graficoId)))
-                .where(servicoShort.contabilidade.id.eq(usuario.getContabilidade().getId()))
+                .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
                 .where(graficoServico.grafico.id.isNull());
-            System.out.println("QUERY COMPLETO: " + query.toString());
             
-            //query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade.id, servico.permiteBaixaManual));
+//            query.from(servicoShort)
+//                .leftJoin(graficoServico).on(
+//                    graficoServico.servico.id.eq(servicoShort.id)
+//                    .and(graficoServico.grafico.id.eq(graficoId)))
+//                .where(servicoShort.contabilidade.id.eq(usuario.getContabilidade().getId()))
+//                .where(graficoServico.grafico.id.isNull());
+            
+            query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
             return query.distinct().fetch();
         } catch (Exception e) {
