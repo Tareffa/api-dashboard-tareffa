@@ -184,7 +184,7 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadorPorGraficoId(graficoId, autenticado)));
+               resposta.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, autenticado)));
             }else{
                 resposta.put("message","Gráfico inválido!");
             }
@@ -222,6 +222,27 @@ public class GraficoService {
     //********************************
     //*   GRAFICO - CARACTERISTICA   *
     //********************************
+    
+    //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
+    public JSONObject buscaCaracteristicasRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+        JSONObject resposta = new JSONObject();
+        try {
+            
+            //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
+            if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+               resposta.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasRelacionadosPorGraficoId(graficoId, autenticado)));
+            }else{
+                resposta.put("message","Gráfico inválido!");
+            }
+            
+            return resposta;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Erro ao buscar os serviços relacionados");
+        }
+    }
+    //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Insert grafico característica">
     public JSONObject saveGraficoCaracteristica(GraficoCaracteristica graficoCaracteristica, Usuario autenticado)throws Exception{

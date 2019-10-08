@@ -81,7 +81,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     
     //<editor-fold defaultstate="collapsed" desc="Busca de serviços relacionados por gráfico Id">
     @Override
-    public List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario) {
+    public List<?> buscarServicosRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario) {
         try {
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servico)
@@ -109,13 +109,6 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
                     .and(graficoServico.grafico.id.eq(graficoId)))
                 .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
                 .where(graficoServico.grafico.id.isNull());
-            
-//            query.from(servicoShort)
-//                .leftJoin(graficoServico).on(
-//                    graficoServico.servico.id.eq(servicoShort.id)
-//                    .and(graficoServico.grafico.id.eq(graficoId)))
-//                .where(servicoShort.contabilidade.id.eq(usuario.getContabilidade().getId()))
-//                .where(graficoServico.grafico.id.isNull());
             
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 

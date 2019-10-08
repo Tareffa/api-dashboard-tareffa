@@ -12,7 +12,7 @@ public interface GraficoServicoRepositoryCustom {
     
     Boolean verificarPermissaoGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario);
     
-    List<?> buscarServicosRelacionadorPorGraficoId(BigInteger graficoId, Usuario usuario);
+    List<?> buscarServicosRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario);
     
     List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario);
     

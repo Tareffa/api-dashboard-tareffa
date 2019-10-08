@@ -3,10 +3,13 @@ package br.com.ottimizza.dashboard.repositories.graficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristicaID;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.QGraficoCaracteristica;
+import br.com.ottimizza.dashboard.models.caracteristica.CaracteristicaShort;
+import br.com.ottimizza.dashboard.models.caracteristica.QCaracteristica;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -18,6 +21,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
     EntityManager em;
     
     private QGraficoCaracteristica graficoCaracteristica = QGraficoCaracteristica.graficoCaracteristica;
+    private QCaracteristica caracteristica = QCaracteristica.caracteristica;
 
     @Override
     public GraficoCaracteristica buscarGraficoCaracteristicaPorId(GraficoCaracteristicaID graficoCaracteristicaId, Usuario usuario) {
@@ -31,6 +35,22 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
             query.select(Projections.constructor(GraficoCaracteristica.class, graficoCaracteristica.id, graficoCaracteristica.grafico, graficoCaracteristica.caracteristica));
             
             return query.fetchOne();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public List<?> buscarCaracteristicasRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario) {
+        try {
+            JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
+            query.from(caracteristica)
+                .innerJoin(graficoCaracteristica).on(graficoCaracteristica.caracteristica.id.eq(caracteristica.id))
+                .where(graficoCaracteristica.grafico.id.eq(graficoId));
+
+            query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
+
+            return query.fetch();
         } catch (Exception e) {
             return null;
         }

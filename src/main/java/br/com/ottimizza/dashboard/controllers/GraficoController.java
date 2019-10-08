@@ -93,6 +93,24 @@ public class GraficoController {
     //*   GRAFICO - SERVICO   *
     //*************************
 
+    @GetMapping("{id}/servico")
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
+    public ResponseEntity<String> buscaServicosRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, autenticado).toString());
+    }
+    //</editor-fold>
+
+    @GetMapping("{id}/servico/faltantes")
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
+    public ResponseEntity<String> buscaServicosFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, autenticado).toString());
+    }
+    //</editor-fold>
+
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/serviço">
     public ResponseEntity<String> saveGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
@@ -111,27 +129,19 @@ public class GraficoController {
     }
     //</editor-fold>
 
-    @GetMapping("{id}/servico")
-    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaServicosRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, autenticado).toString());
-    }
-    //</editor-fold>
-    
-    @GetMapping("{id}/servico/faltantes")
-    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaServicosFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, autenticado).toString());
-    }
-    //</editor-fold>
-    
     //********************************
     //*   GRAFICO - CARACTERISTICA   *
     //********************************
+    
+    @GetMapping("{id}/caracteristica")
+    //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
+    public ResponseEntity<String> buscaCaracteristicasRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+        // Get User by Email.
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(graficoService.buscaCaracteristicasRelacionadosGraficoId(graficoId, autenticado).toString());
+    }
+    //</editor-fold>
+    
     @PostMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
     public ResponseEntity<String> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
