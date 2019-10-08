@@ -7,6 +7,7 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.QGraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.servicos.QServico;
+import br.com.ottimizza.dashboard.models.servicos.QServicoShort;
 import br.com.ottimizza.dashboard.models.servicos.Servico;
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
@@ -28,6 +29,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
     EntityManager em;
     
     private QServico servico = QServico.servico;
+    private QServicoShort servicoShort = QServicoShort.servicoShort;
     private QGrafico grafico = QGrafico.grafico;
     private QIndicador indicador = QIndicador.indicador;
     private QGraficoServico graficoServico = QGraficoServico.graficoServico;
@@ -101,14 +103,14 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
         try {
             
             JPAQuery<ServicoShort> query = new JPAQuery(em);
-            query.from(servico)
+            query.from(servicoShort)
                 .leftJoin(graficoServico).on(
                     graficoServico.servico.id.eq(servico.id)
                     .and(graficoServico.grafico.id.eq(graficoId)))
                 .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
                 .where(graficoServico.grafico.id.isNull());
             System.out.println("QUERY COMPLETO: " + query.toString());
-
+            
             //query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade.id, servico.permiteBaixaManual));
 
             return query.distinct().fetch();
