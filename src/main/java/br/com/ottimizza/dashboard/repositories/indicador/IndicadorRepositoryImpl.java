@@ -46,5 +46,19 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
             return null;
         }
     }
+
+    @Override
+    public boolean verificaExistenciaDescricaoDeIndicadores(String descricao, Usuario usuario) throws Exception{
+        try{
+            JPAQuery<Indicador> query = new JPAQuery(em);
+            query.from(indicador)
+                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.descricao.eq(descricao)); //INDICADOR DESCRIÇÃO
+
+            return query.fetchCount() > 0;
+        } catch (Exception e) {
+            throw new Exception("Error");
+        }
+    }
     
 }

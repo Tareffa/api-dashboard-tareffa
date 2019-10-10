@@ -50,8 +50,13 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             indicador.setContabilidade(autenticado.getContabilidade());
+            if(!indicadorRepository.verificaExistenciaDescricaoDeIndicadores(indicador.getDescricao(), autenticado)){
+                message.put("record", new JSONObject(indicadorRepository.save(indicador)));
+            }else{
+                message.put("message", "Descrição de indicador já cadastrado!");
+            }
+                
             message.put("status", "success");
-            message.put("record", new JSONObject(indicadorRepository.save(indicador)));
             return message;
         } catch (Exception e) {
             message.put("status", "error");

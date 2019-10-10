@@ -11,4 +11,6 @@ public interface IndicadorRepositoryCustom {
     
     List<?> buscarListaDeIndicadores(Usuario usuario);
     
+    boolean verificaExistenciaDescricaoDeIndicadores(String descricao, Usuario usuario) throws Exception;
+    
 }
