@@ -46,6 +46,19 @@ public class IndicadorController {
     }
     //</editor-fold>
     
+    @GetMapping("{id}/grafico")
+    //<editor-fold defaultstate="collapsed" desc="Buscar graficos relacionados ao indicador por id">
+    public ResponseEntity<String> buscaGraficosDoIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(indicadorService.getListGraphicFromIndicadores(indicadorId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    //</editor-fold>
+    
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Buscar lista de indicadores">
     public ResponseEntity<String> buscaIndicadores(Principal principal) throws Exception{

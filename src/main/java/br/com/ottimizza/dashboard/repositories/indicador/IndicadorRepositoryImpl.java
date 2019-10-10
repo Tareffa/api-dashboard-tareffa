@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.indicadores.IndicadorShort;
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPADeleteClause;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.List;
@@ -56,6 +57,20 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
                 .where(indicador.descricao.eq(descricao)); //INDICADOR DESCRIÇÃO
 
             return query.fetchCount() > 0;
+        } catch (Exception e) {
+            throw new Exception("Error");
+        }
+    }
+
+    @Override
+    public boolean excluirIndicadorPorId(BigInteger indicadorId, Usuario usuario) throws Exception {
+        try {
+            new JPADeleteClause(em,indicador)
+                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.id.eq(indicadorId) //INDICADOR ID
+            ).execute();
+
+            return true;
         } catch (Exception e) {
             throw new Exception("Error");
         }

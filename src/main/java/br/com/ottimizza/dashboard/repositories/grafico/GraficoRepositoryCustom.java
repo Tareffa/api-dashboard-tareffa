@@ -13,4 +13,6 @@ public interface GraficoRepositoryCustom {
     
     List<?> buscarListaDeGraficos(Usuario usuario);
     
+    List<?> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario);
+    
 }

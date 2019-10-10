@@ -2,6 +2,7 @@ package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import javax.inject.Inject;
@@ -14,6 +15,13 @@ public class IndicadorService {
     
     @Inject
     IndicadorRepository indicadorRepository;
+    
+    @Inject
+    GraficoRepository graficoRepository;
+    
+    /************
+    *   CRUD    *
+    *************/
     
     //<editor-fold defaultstate="collapsed" desc="Get Indicador By Id">
     public JSONObject getIndicadorById(BigInteger indicadorId, Usuario autenticado)throws Exception{
@@ -109,6 +117,23 @@ public class IndicadorService {
         } catch (Exception e) {
             message.put("status", "error");
             message.put("message", "Erro ao atualizar o indicador");
+            throw new Exception(message.toString());
+        }
+    }
+    //</editor-fold>
+
+    /*GRÁFICO*/
+
+    //<editor-fold defaultstate="collapsed" desc="Get List of Graphic - Indicadores">
+    public JSONObject getListGraphicFromIndicadores(BigInteger indicadorId, Usuario autenticado)throws Exception{
+        JSONObject message = new JSONObject();
+        try {
+            message.put("status", "success");
+            message.put("records", new JSONArray(graficoRepository.buscarListaDeGraficosPorIndicadorId(indicadorId, autenticado)));
+            return message;
+        } catch (Exception e) {
+            message.put("status", "error");
+            message.put("message", "Erro ao buscar os gráficos dos indicadores");
             throw new Exception(message.toString());
         }
     }
