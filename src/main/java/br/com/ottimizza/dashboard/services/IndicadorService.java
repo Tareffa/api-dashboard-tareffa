@@ -81,7 +81,7 @@ public class IndicadorService {
             Indicador indicador = indicadorRepository.buscarIndicadorPorId(id, autenticado);
             message.put("status", "success");
             if(indicador != null){
-                indicadorRepository.deleteById(indicador.getId());
+                indicadorRepository.excluirIndicadorPorId(indicador.getId(), autenticado);
                 message.put("message", "Removido o indicador com sucesso!");
                 return message;
             }
