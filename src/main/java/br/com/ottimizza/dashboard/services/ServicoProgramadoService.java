@@ -26,21 +26,25 @@ public class ServicoProgramadoService {
     //<editor-fold defaultstate="collapsed" desc="Count scheduled service">
     public JSONObject count(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
+        JSONObject contagemServicoProgramado = new JSONObject();
         
         //ABERTO
         filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
         filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
-        resultado.put("abertoNoPrazo", repository.contadorServicoProgramado(filtro, autenticado));
+        contagemServicoProgramado.put("abertoNoPrazo", repository.contadorServicoProgramado(filtro, autenticado));
         
         filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
-        resultado.put("abertoAtrasado", repository.contadorServicoProgramado(filtro, autenticado));
+        contagemServicoProgramado.put("abertoAtrasado", repository.contadorServicoProgramado(filtro, autenticado));
         
         //ENCERRADO
         filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
         filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
-        resultado.put("encerradoNoPrazo", repository.contadorServicoProgramado(filtro, autenticado));
+        contagemServicoProgramado.put("encerradoNoPrazo", repository.contadorServicoProgramado(filtro, autenticado));
         filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
-        resultado.put("encerradoAtrasado", repository.contadorServicoProgramado(filtro, autenticado));
+        contagemServicoProgramado.put("encerradoAtrasado", repository.contadorServicoProgramado(filtro, autenticado));
+        
+        resultado.put("status", "success");
+        resultado.put("records", contagemServicoProgramado);
         
         return resultado;
     }
@@ -50,7 +54,8 @@ public class ServicoProgramadoService {
     public JSONObject countGroupBy(Short agrupamento, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
         
-        resultado.put("resultado", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro, autenticado));
+        resultado.put("status", "success");
+        resultado.put("records", repository.contadorServicoProgramadoGroupBy(agrupamento, filtro, autenticado));
         return resultado;
     }
     //</editor-fold>
@@ -58,7 +63,9 @@ public class ServicoProgramadoService {
     //<editor-fold defaultstate="collapsed" desc="Lista de Responsável Empresa Data Término">
     public JSONObject listaEmpresaResponsavelDataTermino(Long idServico, Long limit, Long beforeServicoProgramaId, String beforeCodigoErp, ServicoProgramadoFiltroAvancadoDataProgramado filtro, Usuario autenticado)throws Exception{
         JSONObject resultado = new JSONObject();
-        resultado.put("resultado", repository.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoProgramaId, beforeCodigoErp, filtro, autenticado));
+        
+        resultado.put("status", "success");
+        resultado.put("records", repository.listaEmpresaResponsavelDataTermino(idServico, limit, beforeServicoProgramaId, beforeCodigoErp, filtro, autenticado));
         return resultado;
     }
     //</editor-fold>
