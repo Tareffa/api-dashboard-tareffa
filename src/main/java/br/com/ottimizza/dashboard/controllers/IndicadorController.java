@@ -6,7 +6,6 @@ import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.IndicadorService;
 import java.math.BigInteger;
 import java.security.Principal;
-import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -36,28 +35,28 @@ public class IndicadorController {
     
     @GetMapping("{id}")
     //<editor-fold defaultstate="collapsed" desc="Buscar indicador por id">
-    public ResponseEntity<Indicador> buscaIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
+    public ResponseEntity<String> buscaIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.getIndicadorById(indicadorId, autenticado));
+        return ResponseEntity.ok(indicadorService.getIndicadorById(indicadorId, autenticado).toString());
     }
     //</editor-fold>
     
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Buscar lista de indicadores">
-    public ResponseEntity<List> buscaIndicadores(Principal principal) throws Exception{
+    public ResponseEntity<String> buscaIndicadores(Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.getListIndicadores(autenticado));
+        return ResponseEntity.ok(indicadorService.getListIndicadores(autenticado).toString());
     }
     //</editor-fold>
     
     @PostMapping
     //<editor-fold defaultstate="collapsed" desc="Criar indicador">
-    public ResponseEntity<Indicador> saveIndicador(@RequestBody Indicador indicador, Principal principal) throws Exception{
+    public ResponseEntity<String> saveIndicador(@RequestBody Indicador indicador, Principal principal) throws Exception{
         // Get User by Email.
         Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.save(indicador, autenticado));
+        return ResponseEntity.ok(indicadorService.save(indicador, autenticado).toString());
     }
     //</editor-fold>
     
