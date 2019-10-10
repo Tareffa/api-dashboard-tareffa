@@ -63,31 +63,4 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
             throw new Exception("Error");
         }
     }
-
-    @Override
-    public boolean excluirIndicadorPorId(BigInteger indicadorId, Usuario usuario) throws Exception {
-        try {
-            //GRAFICO_CARACTERISTICA (GRAFICO_ID)
-            //GRAFICO_SERVICO (GRAFICO_ID)
-            //GRAFICO (INDICADOR_ID)
-            System.out.println("QUERY DELETE:" + 
-                new JPADeleteClause(em,grafico)
-                    .where(grafico.indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
-                    .where(grafico.indicador.id.eq(indicadorId) //INDICADOR ID
-                ).execute()
-            );
-            //.execute();            
-            
-            //INDICADOR
-//            new JPADeleteClause(em,indicador)
-//                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
-//                .where(indicador.id.eq(indicadorId) //INDICADOR ID
-//            ).execute();
-
-            return true;
-        } catch (Exception e) {
-            throw new Exception("Error");
-        }
-    }
-    
 }

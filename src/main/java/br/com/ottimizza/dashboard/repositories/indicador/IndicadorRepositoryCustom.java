@@ -11,7 +11,5 @@ public interface IndicadorRepositoryCustom {
     
     List<?> buscarListaDeIndicadores(Usuario usuario);
     
-    boolean excluirIndicadorPorId(BigInteger indicadorId, Usuario usuario) throws Exception;
-    
     boolean verificaExistenciaDescricaoDeIndicadores(String descricao, Usuario usuario) throws Exception;
 }

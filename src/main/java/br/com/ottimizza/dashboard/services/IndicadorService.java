@@ -3,6 +3,8 @@ package br.com.ottimizza.dashboard.services;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
+import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
+import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import javax.inject.Inject;
@@ -18,6 +20,12 @@ public class IndicadorService {
     
     @Inject
     GraficoRepository graficoRepository;
+    
+    @Inject
+    GraficoCaracteristicaRepository graficoCaracteristicaRepository;
+    
+    @Inject
+    GraficoServicoRepository graficoServicoRepository;
     
     /************
     *   CRUD    *
@@ -81,7 +89,10 @@ public class IndicadorService {
             Indicador indicador = indicadorRepository.buscarIndicadorPorId(id, autenticado);
             message.put("status", "success");
             if(indicador != null){
-                indicadorRepository.excluirIndicadorPorId(indicador.getId(), autenticado);
+                graficoCaracteristicaRepository.deleteGraficoCaracteristicaByIndicadorId(id, autenticado.getContabilidade().getId());
+                graficoServicoRepository.deleteGraficoServicoByIndicadorId(id, autenticado.getContabilidade().getId());
+                graficoRepository.deleteGraficoByIndicadorId(id, autenticado.getContabilidade().getId());
+                indicadorRepository.deleteById(indicador.getId());
                 message.put("message", "Removido o indicador com sucesso!");
                 return message;
             }
