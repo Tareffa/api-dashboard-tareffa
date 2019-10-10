@@ -93,14 +93,18 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             Indicador indicadorReferencia = indicadorRepository.buscarIndicadorPorId(id, autenticado);
-            message.put("status", "success");
-            if(indicadorReferencia != null){
-                indicadorReferencia.setDescricao(indicador.getDescricao());
-                indicadorRepository.save(indicadorReferencia);
-                message.put("message", "Atualizado o indicador com sucesso!");
-                return message;
+            if(!indicadorRepository.verificaExistenciaDescricaoDeIndicadores(indicador.getDescricao(), autenticado)){
+                if(indicadorReferencia != null){
+                    indicadorReferencia.setDescricao(indicador.getDescricao());
+                    indicadorRepository.save(indicadorReferencia);
+                    message.put("message", "Atualizado o indicador com sucesso!");
+                    return message;
+                }
+                message.put("message", "Não é permitido alterar este indicador!");
+            }else{
+                message.put("message", "Descrição de indicador já cadastrado!");
             }
-            message.put("message", "Não é permitido alterar este indicador!");
+            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
