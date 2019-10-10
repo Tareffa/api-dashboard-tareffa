@@ -18,7 +18,7 @@ public class IndicadorService {
     public JSONObject getIndicadorById(BigInteger indicadorId, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
-            message.put("status", "sucesso");
+            message.put("status", "success");
             message.put("record", indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado));
             return message;
         } catch (Exception e) {
@@ -33,8 +33,8 @@ public class IndicadorService {
     public JSONObject getListIndicadores(Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
-            message.put("status", "sucesso");
-            message.put("record", indicadorRepository.buscarListaDeIndicadores(autenticado));
+            message.put("status", "success");
+            message.put("records", indicadorRepository.buscarListaDeIndicadores(autenticado));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -49,7 +49,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             indicador.setContabilidade(autenticado.getContabilidade());
-            message.put("status", "sucesso");
+            message.put("status", "success");
             message.put("record",indicadorRepository.save(indicador));
             return message;
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             Indicador indicador = indicadorRepository.buscarIndicadorPorId(id, autenticado);
-            message.put("status", "sucesso");
+            message.put("status", "success");
             if(indicador != null){
                 indicadorRepository.deleteById(indicador.getId());
                 message.put("message", "Removido o indicador com sucesso!");
@@ -87,7 +87,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             Indicador indicadorReferencia = indicadorRepository.buscarIndicadorPorId(id, autenticado);
-            message.put("status", "sucesso");
+            message.put("status", "success");
             if(indicadorReferencia != null){
                 indicadorReferencia.setDescricao(indicador.getDescricao());
                 indicadorRepository.save(indicadorReferencia);

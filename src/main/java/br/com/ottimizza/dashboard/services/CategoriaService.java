@@ -16,8 +16,8 @@ public class CategoriaService {
     public JSONObject getCategorias(String descricao, Usuario autenticado) throws Exception {
         JSONObject response = new JSONObject();
         try {
-            response.put("status", "sucesso");
-            response.put("resultado", categoriaRepository.buscaListaDeCategorias(descricao, autenticado));
+            response.put("status", "success");
+            response.put("records", categoriaRepository.buscaListaDeCategorias(descricao, autenticado));
         } catch (Exception e) {
             e.printStackTrace();
         }

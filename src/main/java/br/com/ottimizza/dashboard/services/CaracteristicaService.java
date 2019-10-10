@@ -16,8 +16,8 @@ public class CaracteristicaService {
     public JSONObject getCaracteristicas(String descricao, Usuario autenticado) throws Exception {
         JSONObject response = new JSONObject();
         try {
-            response.put("status", "sucesso");
-            response.put("resultado", categoriaRepository.buscaListaDeCaracteristicas(autenticado, descricao));//categoriaRepository.buscaListaDeCategorias(autenticado)
+            response.put("status", "success");
+            response.put("records", categoriaRepository.buscaListaDeCaracteristicas(autenticado, descricao));//categoriaRepository.buscaListaDeCategorias(autenticado)
         } catch (Exception e) {
             e.printStackTrace();
         }
