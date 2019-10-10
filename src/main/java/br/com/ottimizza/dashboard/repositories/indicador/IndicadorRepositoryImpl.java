@@ -74,7 +74,7 @@ public class IndicadorRepositoryImpl implements IndicadorRepositoryCustom{
                 new JPADeleteClause(em,grafico)
                     .where(grafico.indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
                     .where(grafico.indicador.id.eq(indicadorId) //INDICADOR ID
-                ).toString()
+                ).execute()
             );
             //.execute();            
             
