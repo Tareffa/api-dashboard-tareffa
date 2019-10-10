@@ -8,7 +8,6 @@ import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.GraficoService;
 import java.math.BigInteger;
 import java.security.Principal;
-import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
@@ -38,28 +37,40 @@ public class GraficoController {
     
     @GetMapping("{id}")
     //<editor-fold defaultstate="collapsed" desc="Buscar grafico por id">
-    public ResponseEntity<Grafico> buscaGraficoPorId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.getGraficoById(graficoId, autenticado));
+    public ResponseEntity<String> buscaGraficoPorId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+        try {
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.getGraficoById(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Buscar lista de graficos">
-    public ResponseEntity<List> buscaGraficos(Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.getListGraficos(autenticado));
+    public ResponseEntity<String> buscaGraficos(Principal principal) throws Exception{
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.getListGraficos(autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @PostMapping
     //<editor-fold defaultstate="collapsed" desc="Criar grafico">
-    public ResponseEntity<Grafico> saveGrafico(@RequestBody Grafico grafico, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.save(grafico, autenticado));
+    public ResponseEntity<String> saveGrafico(@RequestBody Grafico grafico, Principal principal) throws Exception{
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.save(grafico, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
@@ -96,36 +107,52 @@ public class GraficoController {
     @GetMapping("{id}/servico")
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
     public ResponseEntity<String> buscaServicosRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
 
     @GetMapping("{id}/servico/faltantes")
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
     public ResponseEntity<String> buscaServicosFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
 
     @PostMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/serviço">
     public ResponseEntity<String> saveGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @DeleteMapping("servico")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/serviço">
     public ResponseEntity<String> deleteGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.deleteGraficoServico(graficoServico, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.deleteGraficoServico(graficoServico, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
 
@@ -136,36 +163,52 @@ public class GraficoController {
     @GetMapping("{id}/caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
     public ResponseEntity<String> buscaCaracteristicasRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaCaracteristicasRelacionadosGraficoId(graficoId, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.buscaCaracteristicasRelacionadosGraficoId(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @GetMapping("{id}/caracteristica/faltantes")
     //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
     public ResponseEntity<String> buscaCaracteristicasFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.buscaCaracteristicasFaltantesGraficoId(graficoId, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.buscaCaracteristicasFaltantesGraficoId(graficoId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @PostMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
     public ResponseEntity<String> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @DeleteMapping("caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/caracteristica">
     public ResponseEntity<String> deleteGraficoServico(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(graficoService.deleteGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.deleteGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
 }

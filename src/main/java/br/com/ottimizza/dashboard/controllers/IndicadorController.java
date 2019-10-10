@@ -36,27 +36,39 @@ public class IndicadorController {
     @GetMapping("{id}")
     //<editor-fold defaultstate="collapsed" desc="Buscar indicador por id">
     public ResponseEntity<String> buscaIndicadorPorId(@PathVariable("id") BigInteger indicadorId, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.getIndicadorById(indicadorId, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(indicadorService.getIndicadorById(indicadorId, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @GetMapping
     //<editor-fold defaultstate="collapsed" desc="Buscar lista de indicadores">
     public ResponseEntity<String> buscaIndicadores(Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.getListIndicadores(autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(indicadorService.getListIndicadores(autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
     @PostMapping
     //<editor-fold defaultstate="collapsed" desc="Criar indicador">
     public ResponseEntity<String> saveIndicador(@RequestBody Indicador indicador, Principal principal) throws Exception{
-        // Get User by Email.
-        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-        return ResponseEntity.ok(indicadorService.save(indicador, autenticado).toString());
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(indicadorService.save(indicador, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     //</editor-fold>
     
