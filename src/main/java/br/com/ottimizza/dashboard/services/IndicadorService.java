@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
 import javax.inject.Inject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             message.put("status", "success");
-            message.put("record", indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado));
+            message.put("record", new JSONObject(indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado)));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -34,7 +35,7 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             message.put("status", "success");
-            message.put("records", indicadorRepository.buscarListaDeIndicadores(autenticado));
+            message.put("records", new JSONArray(indicadorRepository.buscarListaDeIndicadores(autenticado)));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -50,7 +51,7 @@ public class IndicadorService {
         try {
             indicador.setContabilidade(autenticado.getContabilidade());
             message.put("status", "success");
-            message.put("record",indicadorRepository.save(indicador));
+            message.put("record", new JSONObject(indicadorRepository.save(indicador)));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
