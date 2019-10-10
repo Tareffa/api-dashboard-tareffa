@@ -19,11 +19,11 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             message.put("status", "sucesso");
-            message.put("record", indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado));
+            message.put("resultado", indicadorRepository.buscarIndicadorPorId(indicadorId, autenticado));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
-            message.put("message", "Erro ao buscar o indicador");
+            message.put("messagem", "Erro ao buscar o indicador");
             throw new Exception(message.toString());
         }
     }
@@ -34,11 +34,11 @@ public class IndicadorService {
         JSONObject message = new JSONObject();
         try {
             message.put("status", "sucesso");
-            message.put("records", indicadorRepository.buscarListaDeIndicadores(autenticado));
+            message.put("resultado", indicadorRepository.buscarListaDeIndicadores(autenticado));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
-            message.put("message", "Erro ao buscar os indicadores");
+            message.put("messagem", "Erro ao buscar os indicadores");
             throw new Exception(message.toString());
         }
     }
@@ -50,11 +50,11 @@ public class IndicadorService {
         try {
             indicador.setContabilidade(autenticado.getContabilidade());
             message.put("status", "sucesso");
-            message.put("record",indicadorRepository.save(indicador));
+            message.put("resultado",indicadorRepository.save(indicador));
             return message;
         } catch (Exception e) {
             message.put("status", "error");
-            message.put("message", "Erro ao salvar o indicador");
+            message.put("messagem", "Erro ao salvar o indicador");
             throw new Exception(message.toString());
         }
     }
@@ -68,15 +68,15 @@ public class IndicadorService {
             message.put("status", "sucesso");
             if(indicador != null){
                 indicadorRepository.deleteById(indicador.getId());
-                message.put("message", "Removido o indicador com sucesso!");
+                message.put("messagem", "Removido o indicador com sucesso!");
                 return message;
             }
             
-            message.put("message", "Não é permitido excluir este indicador!");
+            message.put("messagem", "Não é permitido excluir este indicador!");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
-            message.put("message", "Erro ao excluir o indicador");
+            message.put("messagem", "Erro ao excluir o indicador");
             throw new Exception(message.toString());
         }
     }
@@ -91,14 +91,14 @@ public class IndicadorService {
             if(indicadorReferencia != null){
                 indicadorReferencia.setDescricao(indicador.getDescricao());
                 indicadorRepository.save(indicadorReferencia);
-                message.put("message", "Atualizado o indicador com sucesso!");
+                message.put("messagem", "Atualizado o indicador com sucesso!");
                 return message;
             }
-            message.put("message", "Não é permitido alterar este indicador!");
+            message.put("messagem", "Não é permitido alterar este indicador!");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
-            message.put("message", "Erro ao atualizar o indicador");
+            message.put("messagem", "Erro ao atualizar o indicador");
             throw new Exception(message.toString());
         }
     }
