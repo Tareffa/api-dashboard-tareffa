@@ -27,4 +27,12 @@ public interface GraficoServicoRepository extends JpaRepository<GraficoServico, 
             nativeQuery = true)
     public void deleteGraficoServicoByIndicadorId(@Param("indicadorId") BigInteger indicadorId, @Param("contabilidadeId") Long usuarioContabilidadeId);
     
+    @Modifying
+    @Transactional
+    @Query( value =
+            "   DELETE FROM ot_grafico_servico graficoServico       \n" +
+            "       WHERE graficoServico.fk_grafico_id = :graficoId \n",
+            nativeQuery = true)
+    public void deleteGraficoServicoByGraficoId(@Param("graficoId") BigInteger graficoId);
+    
 }

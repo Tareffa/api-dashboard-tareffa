@@ -94,12 +94,14 @@ public class GraficoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Delete">
-    public JSONObject delete(BigInteger id, Usuario autenticado)throws Exception{
+    public JSONObject delete(BigInteger graficoId, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
-            Grafico grafico = graficoRepository.buscarGraficoPorId(id, autenticado);
+            Grafico grafico = graficoRepository.buscarGraficoPorId(graficoId, autenticado);
             
             if(grafico != null){
+                graficoCaracteristicaRepository.deleteGraficoCaracteristicaByGraficoId(graficoId);
+                graficoServicoRepository.deleteGraficoServicoByGraficoId(graficoId);
                 graficoRepository.deleteById(grafico.getId());
                 message.put("message", "Removido o gráfico com sucesso!");
             }else{
