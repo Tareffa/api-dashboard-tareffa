@@ -67,12 +67,13 @@ public class IndicadorService {
         try {
             indicador.setContabilidade(autenticado.getContabilidade());
             if(!indicadorRepository.verificaExistenciaDescricaoDeIndicadores(indicador.getDescricao(), autenticado)){
+                message.put("status", "success");
                 message.put("record", new JSONObject(indicadorRepository.save(indicador)));
             }else{
+                message.put("status", "error");
                 message.put("message", "Descrição de indicador já cadastrado!");
             }
                 
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
