@@ -101,6 +101,7 @@ public class IndicadorService {
             message.put("message", "Não é permitido excluir este indicador!");
             return message;
         } catch (Exception e) {
+            e.printStackTrace();
             message.put("status", "error");
             message.put("message", "Erro ao excluir o indicador");
             throw new Exception(message.toString());
