@@ -8,11 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface GraficoCaracteristicaRepository extends JpaRepository<GraficoCaracteristica, GraficoCaracteristicaID>, GraficoCaracteristicaRepositoryCustom{
     
     @Modifying
+    @Transactional
     @Query( value = 
             "   DELETE FROM ot_grafico_caracteristica graficoCaracteristica         \n" +
             "       WHERE graficoCaracteristica.fk_grafico_id IN (                  \n" +

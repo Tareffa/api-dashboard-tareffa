@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface GraficoRepository extends JpaRepository<Grafico, BigInteger>, GraficoRepositoryCustom{
     
     @Modifying
+    @Transactional
     @Query( value =
             "   DELETE FROM ot_grafico grafico                                      \n" +
             "       WHERE grafico.id IN (                                           \n" +
