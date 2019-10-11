@@ -11,6 +11,8 @@ public interface GraficoRepositoryCustom {
     
     Boolean verificarExistenciaGraficoPorId(BigInteger graficoId, Usuario usuario);
     
+    boolean verificaExistenciaNomeDeGraficos(String nomeGrafico, Usuario usuario) throws Exception;
+    
     List<?> buscarListaDeGraficos(Usuario usuario);
     
     List<?> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario);

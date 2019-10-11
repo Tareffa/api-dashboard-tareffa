@@ -73,11 +73,17 @@ public class GraficoService {
         JSONObject message = new JSONObject();
         try {
             if(grafico.getIndicador().getId() == null) throw new Exception();
-            Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getIndicador().getId(), autenticado);
-            grafico.setIndicador(indicador);
             
-            message.put("status", "success");
-            message.put("record", new JSONObject(graficoRepository.save(grafico)));
+            if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), autenticado)){
+                Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getIndicador().getId(), autenticado);
+                grafico.setIndicador(indicador);
+                message.put("status", "success");
+                message.put("record", new JSONObject(graficoRepository.save(grafico)));
+            }else{
+                message.put("status", "error");
+                message.put("message", "Nome de gráfico já cadastrado!");
+            }
+            
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -114,16 +120,22 @@ public class GraficoService {
     public JSONObject update(BigInteger id, Grafico grafico,Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
-            Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
             
-            if(graficoReferencia != null){
-                graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
-                graficoRepository.save(graficoReferencia);
-                message.put("message", "Atualizado o gráfico com sucesso!");
+            if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), autenticado)){
+                Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
+
+                if(graficoReferencia != null){
+                    graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
+                    graficoRepository.save(graficoReferencia);
+                    message.put("message", "Atualizado o gráfico com sucesso!");
+                }else{
+                    message.put("message", "Não é permitido alterar este gráfico!");
+                }
+                message.put("status", "success");
             }else{
-                message.put("message", "Não é permitido alterar este gráfico!");
+                message.put("status", "error");
+                message.put("message", "Nome de gráfico já cadastrado!");
             }
-            message.put("status", "success");
             
             return message;
         } catch (Exception e) {
