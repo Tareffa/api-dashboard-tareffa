@@ -10,14 +10,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GraficoRepository extends JpaRepository<Grafico, BigInteger>, GraficoRepositoryCustom{
     
-    @Query( "   DELETE FROM ot_grafico grafico                                      \n" +
+    @Query( value =
+            "   DELETE FROM ot_grafico grafico                                      \n" +
             "       WHERE grafico.id IN (                                           \n" +
             "       	SELECT grafico.id FROM ot_grafico                           \n" +
             "               INNER JOIN ot_indicador indicador                       \n" +
             "                   ON ot_grafico.fk_indicador_id = indicador.id        \n" +
             "               WHERE indicador.fk_contabilidade_id = :contabilidadeId  \n" +
             "               AND indicador.id = :indicadorId                         \n" +
-            "       )                                                               \n" )
+            "       )                                                               \n" ,
+            nativeQuery = true)
     public void deleteGraficoByIndicadorId(@Param("indicadorId") BigInteger indicadorId, @Param("contabilidadeId") Long usuarioContabilidadeId);
     
 }
