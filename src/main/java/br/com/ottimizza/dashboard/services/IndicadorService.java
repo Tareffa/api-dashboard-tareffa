@@ -93,6 +93,7 @@ public class IndicadorService {
                 graficoServicoRepository.deleteGraficoServicoByIndicadorId(id, autenticado.getContabilidade().getId());
                 graficoRepository.deleteGraficoByIndicadorId(id, autenticado.getContabilidade().getId());
                 indicadorRepository.deleteById(indicador.getId());
+                
                 message.put("message", "Removido o indicador com sucesso!");
                 return message;
             }
