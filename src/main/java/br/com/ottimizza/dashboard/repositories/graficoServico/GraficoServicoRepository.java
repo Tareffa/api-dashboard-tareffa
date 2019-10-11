@@ -4,6 +4,7 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServicoID;
 import java.math.BigInteger;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GraficoServicoRepository extends JpaRepository<GraficoServico, GraficoServicoID>, GraficoServicoRepositoryCustom{
     
+    @Modifying
     @Query( value =
             "   DELETE FROM ot_grafico_servico graficoServico                       \n" +
             "       WHERE graficoServico.fk_grafico_id IN (                         \n" +

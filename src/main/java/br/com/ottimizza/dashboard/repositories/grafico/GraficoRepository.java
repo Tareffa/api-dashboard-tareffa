@@ -3,6 +3,7 @@ package br.com.ottimizza.dashboard.repositories.grafico;
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
 import java.math.BigInteger;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GraficoRepository extends JpaRepository<Grafico, BigInteger>, GraficoRepositoryCustom{
     
+    @Modifying
     @Query( value =
             "   DELETE FROM ot_grafico grafico                                      \n" +
             "       WHERE grafico.id IN (                                           \n" +
