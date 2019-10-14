@@ -252,13 +252,13 @@ public class GraficoService {
     //********************************
     
     //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
-    public JSONObject buscaCaracteristicasRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+    public JSONObject buscaCaracteristicasRelacionadosGraficoId(BigInteger graficoId, String descricao, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-                message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasRelacionadosPorGraficoId(graficoId, autenticado)));
+                message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasRelacionadosPorGraficoId(graficoId, descricao, autenticado)));
             }else{
                 message.put("message","Gráfico inválido!");
             }
@@ -274,13 +274,13 @@ public class GraficoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Buscar caracteristicas faltantes ao gráfico Id">
-    public JSONObject buscaCaracteristicasFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+    public JSONObject buscaCaracteristicasFaltantesGraficoId(BigInteger graficoId, String descricao, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-                message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasFaltantesPorGraficoId(graficoId, autenticado)));
+                message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasFaltantesPorGraficoId(graficoId, descricao, autenticado)));
             }else{
                 message.put("message","Gráfico inválido!");
             }

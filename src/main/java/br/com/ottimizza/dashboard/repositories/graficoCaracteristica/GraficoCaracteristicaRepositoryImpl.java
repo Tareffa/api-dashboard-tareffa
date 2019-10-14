@@ -1,5 +1,6 @@
 package br.com.ottimizza.dashboard.repositories.graficoCaracteristica;
 
+import br.com.ottimizza.dashboard.models.QClassificacao;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristicaID;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.QGraficoCaracteristica;
@@ -22,6 +23,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
     
     private QGraficoCaracteristica graficoCaracteristica = QGraficoCaracteristica.graficoCaracteristica;
     private QCaracteristica caracteristica = QCaracteristica.caracteristica;
+    private QClassificacao classificacao = QClassificacao.classificacao;
 
     @Override
     public GraficoCaracteristica buscarGraficoCaracteristicaPorId(GraficoCaracteristicaID graficoCaracteristicaId, Usuario usuario) {
@@ -41,12 +43,18 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
     }
 
     @Override
-    public List<?> buscarCaracteristicasRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario) {
+    public List<?> buscarCaracteristicasRelacionadosPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario) {
         try {
             JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
             query.from(caracteristica)
                 .innerJoin(graficoCaracteristica).on(graficoCaracteristica.caracteristica.id.eq(caracteristica.id))
                 .where(graficoCaracteristica.grafico.id.eq(graficoId));
+            
+            if(descricao != null){
+                query.innerJoin(classificacao)
+                    .on(caracteristica.classificacao.id.eq(classificacao.id))
+                    .where(classificacao.descricao.like(descricao+"%"));
+            }
 
             query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
 
@@ -57,7 +65,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
     }
 
     @Override
-    public List<?> buscarCaracteristicasFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario) {
+    public List<?> buscarCaracteristicasFaltantesPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario) {
         try {
             JPAQuery<CaracteristicaShort> query = new JPAQuery(em);
             query.from(caracteristica)
@@ -66,6 +74,12 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
                     .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                 .where(caracteristica.contabilidade.id.eq(usuario.getContabilidade().getId()))
                 .where(graficoCaracteristica.grafico.id.isNull());
+            
+            if(descricao != null){
+                query.innerJoin(classificacao)
+                    .on(caracteristica.classificacao.id.eq(classificacao.id))
+                    .where(classificacao.descricao.like(descricao+"%"));
+            }
             
             query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
 

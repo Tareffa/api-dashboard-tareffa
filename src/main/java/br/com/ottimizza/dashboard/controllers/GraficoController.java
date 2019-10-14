@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -162,11 +163,14 @@ public class GraficoController {
     
     @GetMapping("{id}/caracteristica")
     //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaCaracteristicasRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+    public ResponseEntity<String> buscaCaracteristicasRelacionadosGraficoId(
+            @PathVariable("id") BigInteger graficoId, 
+            @RequestParam(value = "description", required = false) String descricao,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-            return ResponseEntity.ok(graficoService.buscaCaracteristicasRelacionadosGraficoId(graficoId, autenticado).toString());
+            return ResponseEntity.ok(graficoService.buscaCaracteristicasRelacionadosGraficoId(graficoId, descricao, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -175,11 +179,14 @@ public class GraficoController {
     
     @GetMapping("{id}/caracteristica/faltantes")
     //<editor-fold defaultstate="collapsed" desc="Buscar características relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaCaracteristicasFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+    public ResponseEntity<String> buscaCaracteristicasFaltantesGraficoId(
+            @PathVariable("id") BigInteger graficoId,
+            @RequestParam(value = "description", required = false) String descricao,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-            return ResponseEntity.ok(graficoService.buscaCaracteristicasFaltantesGraficoId(graficoId, autenticado).toString());
+            return ResponseEntity.ok(graficoService.buscaCaracteristicasFaltantesGraficoId(graficoId, descricao, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

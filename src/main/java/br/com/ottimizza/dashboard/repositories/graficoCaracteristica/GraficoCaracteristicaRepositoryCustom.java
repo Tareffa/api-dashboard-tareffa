@@ -10,8 +10,8 @@ public interface GraficoCaracteristicaRepositoryCustom {
 
     GraficoCaracteristica buscarGraficoCaracteristicaPorId(GraficoCaracteristicaID graficoCaracteristicaId, Usuario usuario);
 
-    List<?> buscarCaracteristicasRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario);
+    List<?> buscarCaracteristicasRelacionadosPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario);
     
-    List<?> buscarCaracteristicasFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario);
+    List<?> buscarCaracteristicasFaltantesPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario);
     
 }
