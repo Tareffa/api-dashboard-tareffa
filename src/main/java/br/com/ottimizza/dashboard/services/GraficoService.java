@@ -208,6 +208,7 @@ public class GraficoService {
                 if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) == null){
                      graficoServicoRepository.save(graficoServico);
                      message.put("record", new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado)));
+                     message.put("message","Inserido com sucesso");
                 }else{
                     message.put("message","Gráfico/Serviço existente!");
                 }
@@ -306,6 +307,7 @@ public class GraficoService {
                 if(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) == null){
                     graficoCaracteristicaRepository.save(graficoCaracteristica);
                     message.put("record", new JSONObject(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado)));
+                    message.put("message","Inserido com sucesso!");
                 }else{
                     message.put("message","Gráfico da característica já cadastrado!");
                 }
