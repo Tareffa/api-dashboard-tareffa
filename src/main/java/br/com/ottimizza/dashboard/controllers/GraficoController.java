@@ -2,7 +2,9 @@ package br.com.ottimizza.dashboard.controllers;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
+import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristicaID;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
+import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServicoID;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.GraficoService;
@@ -131,12 +133,23 @@ public class GraficoController {
     }
     //</editor-fold>
 
-    @PostMapping("servico")
+    @PostMapping("{graficoId}/servico/{servicoId}")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/serviço">
-    public ResponseEntity<String> saveGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<String> saveGraficoServico(
+            @PathVariable("graficoId") Long graficoId,
+            @PathVariable("servicoId") Long servicoId,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            
+            //GRAFICO/SERVICO ID
+            GraficoServico graficoServico = new GraficoServico();
+            GraficoServicoID graficoServicoId = new GraficoServicoID();
+            graficoServicoId.setGraficoId(graficoId);
+            graficoServicoId.setServicoId(servicoId);
+            graficoServico.setId(graficoServicoId);
+            
             return ResponseEntity.ok(graficoService.saveGraficoServico(graficoServico, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -144,12 +157,23 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    @DeleteMapping("servico")
+    @DeleteMapping("{graficoId}/servico/{servicoId}")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/serviço">
-    public ResponseEntity<String> deleteGraficoServico(@RequestBody GraficoServico graficoServico, Principal principal) throws Exception{
+    public ResponseEntity<String> deleteGraficoServico(
+            @PathVariable("graficoId") Long graficoId,
+            @PathVariable("servicoId") Long servicoId,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            
+            //GRAFICO/SERVICO ID
+            GraficoServico graficoServico = new GraficoServico();
+            GraficoServicoID graficoServicoId = new GraficoServicoID();
+            graficoServicoId.setGraficoId(graficoId);
+            graficoServicoId.setServicoId(servicoId);
+            graficoServico.setId(graficoServicoId);
+            
             return ResponseEntity.ok(graficoService.deleteGraficoServico(graficoServico, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -193,12 +217,23 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    @PostMapping("caracteristica")
+    @PostMapping("{graficoId}/caracteristica/{caracteristicaId}")
     //<editor-fold defaultstate="collapsed" desc="Criar relacionamento grafico/caracteristica">
-    public ResponseEntity<String> saveGraficoCaracteristica(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
+    public ResponseEntity<String> saveGraficoCaracteristica(
+            @PathVariable("graficoId") Long graficoId,
+            @PathVariable("caracteristicaId") Long caracteristicaId,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            
+            //GRAFICO/CARACTERISTICA ID
+            GraficoCaracteristica graficoCaracteristica = new GraficoCaracteristica();
+            GraficoCaracteristicaID graficoCaracteristicaId = new GraficoCaracteristicaID();
+            graficoCaracteristicaId.setGraficoId(graficoId);
+            graficoCaracteristicaId.setCaracteristicaId(caracteristicaId);
+            graficoCaracteristica.setId(graficoCaracteristicaId);
+            
             return ResponseEntity.ok(graficoService.saveGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -206,12 +241,23 @@ public class GraficoController {
     }
     //</editor-fold>
     
-    @DeleteMapping("caracteristica")
+    @DeleteMapping("{graficoId}/caracteristica/{caracteristicaId}")
     //<editor-fold defaultstate="collapsed" desc="Excluir relacionamento grafico/caracteristica">
-    public ResponseEntity<String> deleteGraficoServico(@RequestBody GraficoCaracteristica graficoCaracteristica, Principal principal) throws Exception{
+    public ResponseEntity<String> deleteGraficoCaracteristica(
+            @PathVariable("graficoId") Long graficoId,
+            @PathVariable("caracteristicaId") Long caracteristicaId,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            
+            //GRAFICO/CARACTERISTICA ID
+            GraficoCaracteristica graficoCaracteristica = new GraficoCaracteristica();
+            GraficoCaracteristicaID graficoCaracteristicaId = new GraficoCaracteristicaID();
+            graficoCaracteristicaId.setGraficoId(graficoId);
+            graficoCaracteristicaId.setCaracteristicaId(caracteristicaId);
+            graficoCaracteristica.setId(graficoCaracteristicaId);
+            
             return ResponseEntity.ok(graficoService.deleteGraficoCaracteristica(graficoCaracteristica, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
