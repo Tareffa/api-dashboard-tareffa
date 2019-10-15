@@ -45,7 +45,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())); //CONTABILIDADE
             query.select(Projections.constructor(GraficoShort.class, grafico.id, grafico.nomeGrafico));
             
-            return query.fetch();
+            return query.orderBy(grafico.nomeGrafico.asc()).fetch();
         } catch (Exception e) {
             return null;
         }
@@ -75,7 +75,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                 .where(indicador.id.eq(indicadorId));
             query.select(Projections.constructor(GraficoShort.class, grafico.id, grafico.nomeGrafico));
             
-            return query.fetch();
+            return query.orderBy(grafico.nomeGrafico.asc()).fetch();
         } catch (Exception e) {
             return null;
         }

@@ -58,7 +58,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
 
             query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
 
-            return query.fetch();
+            return query.orderBy(caracteristica.descricao.asc()).fetch();
         } catch (Exception e) {
             return null;
         }
@@ -83,7 +83,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
             
             query.select(Projections.constructor(CaracteristicaShort.class, caracteristica.id, caracteristica.descricao));
 
-            return query.distinct().fetch();
+            return query.orderBy(caracteristica.descricao.asc()).distinct().fetch();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

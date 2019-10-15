@@ -91,7 +91,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
-            return query.fetch();
+            return query.orderBy(servico.nome.asc()).fetch();
         } catch (Exception e) {
             return null;
         }
@@ -117,7 +117,7 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             
             query.select(Projections.constructor(ServicoShort.class, servico.id, servico.nome, servico.contabilidade, servico.permiteBaixaManual));
 
-            return query.distinct().fetch();
+            return query.orderBy(servico.nome.asc()).distinct().fetch();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
