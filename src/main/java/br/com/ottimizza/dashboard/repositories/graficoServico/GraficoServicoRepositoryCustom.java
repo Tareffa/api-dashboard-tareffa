@@ -12,8 +12,8 @@ public interface GraficoServicoRepositoryCustom {
     
     Boolean verificarPermissaoGraficoServicoPorId(GraficoServicoID graficoServicoId, Usuario usuario);
     
-    List<?> buscarServicosRelacionadosPorGraficoId(BigInteger graficoId, Usuario usuario);
+    List<?> buscarServicosRelacionadosPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario);
     
-    List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, Usuario usuario);
+    List<?> buscarServicosFaltantesPorGraficoId(BigInteger graficoId, String descricao, Usuario usuario);
     
 }

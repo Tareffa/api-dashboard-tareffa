@@ -153,13 +153,13 @@ public class GraficoService {
     //*************************
     
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public JSONObject buscaServicosRelacionadosGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+    public JSONObject buscaServicosRelacionadosGraficoId(BigInteger graficoId, String descricao, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-                message.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, autenticado)));
+                message.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, descricao, autenticado)));
             }else{
                 message.put("message","Gráfico inválido!");
             }
@@ -175,13 +175,13 @@ public class GraficoService {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços faltantes ao gráfico Id">
-    public JSONObject buscaServicosFaltantesGraficoId(BigInteger graficoId, Usuario autenticado)throws Exception{
+    public JSONObject buscaServicosFaltantesGraficoId(BigInteger graficoId, String descricao, Usuario autenticado)throws Exception{
         JSONObject message = new JSONObject();
         try {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
-                message.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, autenticado)));
+                message.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, descricao, autenticado)));
             }else{
                 message.put("message","Gráfico inválido!");
             }

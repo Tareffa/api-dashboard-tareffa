@@ -109,11 +109,14 @@ public class GraficoController {
 
     @GetMapping("{id}/servico")
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaServicosRelacionadosGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+    public ResponseEntity<String> buscaServicosRelacionadosGraficoId(
+            @PathVariable("id") BigInteger graficoId,
+            @RequestParam(value="description", required = false) String descricao,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-            return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, autenticado).toString());
+            return ResponseEntity.ok(graficoService.buscaServicosRelacionadosGraficoId(graficoId, descricao, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -122,11 +125,14 @@ public class GraficoController {
 
     @GetMapping("{id}/servico/faltantes")
     //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
-    public ResponseEntity<String> buscaServicosFaltantesGraficoId(@PathVariable("id") BigInteger graficoId, Principal principal) throws Exception{
+    public ResponseEntity<String> buscaServicosFaltantesGraficoId(
+            @PathVariable("id") BigInteger graficoId,
+            @RequestParam(value="description", required = false) String descricao,
+            Principal principal) throws Exception{
         try{
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
-            return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, autenticado).toString());
+            return ResponseEntity.ok(graficoService.buscaServicosFaltantesGraficoId(graficoId, descricao, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
