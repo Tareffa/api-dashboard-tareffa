@@ -82,11 +82,12 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public boolean verificaExistenciaNomeDeGraficos(String nomeGrafico, Usuario usuario) throws Exception {
+    public boolean verificaExistenciaNomeDeGraficos(String nomeGrafico, BigInteger indicadorId, Usuario usuario) throws Exception {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.id.eq(indicadorId)) //CONTABILIDADE
                 .where(grafico.nomeGrafico.eq(nomeGrafico));
             
             return query.fetchCount() > 0;

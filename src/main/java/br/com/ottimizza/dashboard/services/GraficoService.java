@@ -74,7 +74,7 @@ public class GraficoService {
         try {
             if(grafico.getIndicador().getId() == null) throw new Exception();
             
-            if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), autenticado)){
+            if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), grafico.getIndicador().getId(), autenticado)){
                 Indicador indicador = indicadorRepository.buscarIndicadorPorId(grafico.getIndicador().getId(), autenticado);
                 grafico.setIndicador(indicador);
                 message.put("status", "success");
@@ -123,21 +123,21 @@ public class GraficoService {
         JSONObject message = new JSONObject();
         try {
             
-            if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), autenticado)){
-                Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
+            Grafico graficoReferencia = graficoRepository.buscarGraficoPorId(id, autenticado);
+            if(graficoReferencia != null){
+                if(!graficoRepository.verificaExistenciaNomeDeGraficos(grafico.getNomeGrafico(), graficoReferencia.getIndicador().getId(), autenticado)){
 
-                if(graficoReferencia != null){
                     graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
                     graficoRepository.save(graficoReferencia);
                     message.put("message", "Atualizado o gráfico com sucesso!");
                 }else{
-                    message.put("message", "Não é permitido alterar este gráfico!");
+                    message.put("status", "error");
+                    message.put("message", "Nome de gráfico já cadastrado!");
                 }
-                message.put("status", "success");
             }else{
-                message.put("status", "error");
-                message.put("message", "Nome de gráfico já cadastrado!");
+                message.put("message", "Não é permitido alterar este gráfico!");
             }
+            message.put("status", "success");
             
             return message;
         } catch (Exception e) {
