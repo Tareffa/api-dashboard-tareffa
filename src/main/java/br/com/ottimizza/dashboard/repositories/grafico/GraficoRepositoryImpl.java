@@ -119,13 +119,15 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
         
         JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
-                .innerJoin(graficoServico).on(servicoProgramado.servico.id.eq(graficoServico.servico.id)) //JOIN GRAFICO/SERVICO
+                .innerJoin(graficoServico).on(
+                    servicoProgramado.servico.id.eq(graficoServico.servico.id)
+                    .and(graficoServico.grafico.id.eq(graficoId))
+                    ) //JOIN GRAFICO/SERVICO
                 .innerJoin(caracteristicaEmpresa).on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id)) //JOIN CARACTERISTICA/EMPRESA
-                .innerJoin(graficoCaracteristica).on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)) //JOIN GRÁFICO/CARACTERÍSTICA
-                .where(
-                    graficoServico.grafico.id.eq(graficoId)
+                .innerJoin(graficoCaracteristica).on(
+                    caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                     .and(graficoCaracteristica.grafico.id.eq(graficoId))
-                ); //JOIN GRÁFICO(CARACTERÍSTICA/SERVIÇO)
+                ); //JOIN GRÁFICO/CARACTERÍSTICA
             
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
