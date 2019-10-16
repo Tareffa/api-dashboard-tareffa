@@ -1,9 +1,12 @@
 package br.com.ottimizza.dashboard.services;
 
+import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
+import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.caracteristica.CaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
@@ -15,6 +18,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
 import br.com.ottimizza.dashboard.repositories.servico.ServicoRepository;
+import java.util.Arrays;
 import org.json.JSONArray;
 
 @Service
@@ -37,6 +41,10 @@ public class GraficoService {
     
     @Inject
     IndicadorRepository indicadorRepository;
+    
+    //*************************
+    //*         CRUD          *
+    //*************************
     
     //<editor-fold defaultstate="collapsed" desc="Get Grafico By Id">
     public JSONObject getGraficoById(BigInteger graficoId, Usuario autenticado)throws Exception{
@@ -145,6 +153,37 @@ public class GraficoService {
             message.put("message", "Erro ao atualizar o gráfico");
             throw new Exception(message.toString());
         }
+    }
+    //</editor-fold>
+    
+    //*************************
+    //*  GRAFICO - CONTAGENS  *
+    //*************************
+    
+    //<editor-fold defaultstate="collapsed" desc="Count scheduled service">
+    public JSONObject countServicoProgramado(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+        JSONObject resultado = new JSONObject();
+        JSONObject contagemServicoProgramado = new JSONObject();
+        
+        //ABERTO
+        filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
+        filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+        contagemServicoProgramado.put("abertoNoPrazo", graficoRepository.contadorServicoProgramadoPorGraficoId(graficoId, filtro, autenticado));
+        
+        filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+        contagemServicoProgramado.put("abertoAtrasado", graficoRepository.contadorServicoProgramadoPorGraficoId(graficoId, filtro, autenticado));
+        
+        //ENCERRADO
+        filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
+        filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+        contagemServicoProgramado.put("encerradoNoPrazo", graficoRepository.contadorServicoProgramadoPorGraficoId(graficoId, filtro, autenticado));
+        filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+        contagemServicoProgramado.put("encerradoAtrasado", graficoRepository.contadorServicoProgramadoPorGraficoId(graficoId, filtro, autenticado));
+        
+        resultado.put("status", "success");
+        resultado.put("records", contagemServicoProgramado);
+        
+        return resultado;
     }
     //</editor-fold>
     

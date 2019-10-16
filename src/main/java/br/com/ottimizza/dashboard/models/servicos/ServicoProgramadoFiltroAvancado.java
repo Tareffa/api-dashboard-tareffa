@@ -13,67 +13,34 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 public class ServicoProgramadoFiltroAvancado implements Serializable {
-
-    @Getter
-    @Setter
+    
     private Date dataProgramadaInicio;
-    @Getter
-    @Setter
     private Date dataProgramadaTermino;
-
-    @Getter
-    @Setter
+    
     private Date dataVencimentoInicio;
-    @Getter
-    @Setter
     private Date dataVencimentoTermino;
-
-    @Getter
-    @Setter
+    
     private List<DepartamentoShort> departamento;
-    @Getter
-    @Setter
     private List<EmpresaShort> empresa;
-    @Getter
-    @Setter
     private List<ServicoShort> servico;
-    @Getter
-    @Setter
     private List<Usuario> usuario;
-
-    @Getter
-    @Setter
+    
     private String competencia;
-
-    @Getter
-    @Setter
+    
     private Short status;
     
-    @Getter
-    @Setter
     private Short situacao;
     
-    @Getter
-    @Setter
     private List<Short> prazo;
     
-    @Getter
-    @Setter
     private Short tipoBaixa;
-
-    @Getter
-    @Setter
+    
     private Boolean servicosAtivos;
     
-    @Getter
-    @Setter
     private CategoriaShort categoria;
     
-    @Getter
-    @Setter
     private CaracteristicaShort caracteristica;
-    
 }

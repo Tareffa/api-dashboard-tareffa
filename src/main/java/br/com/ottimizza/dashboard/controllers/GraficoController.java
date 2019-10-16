@@ -5,6 +5,7 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.Grafico
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.GraficoCaracteristicaID;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServicoID;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.GraficoService;
@@ -37,6 +38,10 @@ public class GraficoController {
 
     @Inject
     GraficoService graficoService;
+    
+    //*************************
+    //*         CRUD          *
+    //*************************
     
     @GetMapping("{id}")
     //<editor-fold defaultstate="collapsed" desc="Buscar grafico por id">
@@ -97,6 +102,26 @@ public class GraficoController {
             // Get User by Email.
             Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
             return ResponseEntity.ok(graficoService.update(graficoId, grafico, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    //</editor-fold>
+    
+    //*************************
+    //*   GRAFICO - SERVICO   *
+    //*************************
+    
+    @PostMapping("{id}/servico/programado/count")
+    //<editor-fold defaultstate="collapsed" desc="Buscar serviços relacionados ao gráfico Id">
+    public ResponseEntity<String> countServicoProgramado(
+            @PathVariable("id") BigInteger graficoId,
+            @RequestBody ServicoProgramadoFiltroAvancado filtro,
+            Principal principal) throws Exception{
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.countServicoProgramado(graficoId, filtro, autenticado).toString());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
