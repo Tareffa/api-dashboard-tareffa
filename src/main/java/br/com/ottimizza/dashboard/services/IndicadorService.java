@@ -155,8 +155,28 @@ public class IndicadorService {
         JSONObject resultado = new JSONObject();
         List<GraficoShort> graficos = graficoRepository.buscarListaDeGraficosPorIndicadorId(indicadorId, autenticado);
         
+        //CONTAGEM DE SERVIÇOS PROGRAMADOS DE CADA GRÁFICO
         for (GraficoShort grafico : graficos) {
-            lista.put(graficoService.countServicoProgramado(grafico.getId(), filtro, autenticado));
+            JSONObject contagemServicoProgramado = new JSONObject();
+        
+            contagemServicoProgramado.put("id", grafico.getId());
+            contagemServicoProgramado.put("nomeGrafico", grafico.getNomeGrafico());
+            
+            //ABERTO
+            filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("abertoNoPrazo", graficoRepository.contadorServicoProgramadoPorGraficoId(grafico.getId(), filtro, autenticado));
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("abertoAtrasado", graficoRepository.contadorServicoProgramadoPorGraficoId(grafico.getId(), filtro, autenticado));
+
+            //ENCERRADO
+            filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("encerradoNoPrazo", graficoRepository.contadorServicoProgramadoPorGraficoId(grafico.getId(), filtro, autenticado));
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("encerradoAtrasado", graficoRepository.contadorServicoProgramadoPorGraficoId(grafico.getId(), filtro, autenticado));
+            
+            lista.put(contagemServicoProgramado);
         }
         
         resultado.put("status", "success");
