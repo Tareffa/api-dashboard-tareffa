@@ -83,9 +83,9 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public List<?> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario) {
+    public List<GraficoShort> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario) {
         try {
-            JPAQuery<Grafico> query = new JPAQuery(em);
+            JPAQuery<GraficoShort> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
                 .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
                 .where(indicador.id.eq(indicadorId));

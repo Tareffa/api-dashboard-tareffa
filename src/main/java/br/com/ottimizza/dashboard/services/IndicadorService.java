@@ -1,12 +1,18 @@
 package br.com.ottimizza.dashboard.services;
 
+import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
+import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
+import br.com.ottimizza.dashboard.models.graficos.GraficoShort;
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
 import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
 import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,6 +32,9 @@ public class IndicadorService {
     
     @Inject
     GraficoServicoRepository graficoServicoRepository;
+    
+    @Inject
+    GraficoService graficoService;
     
     /************
     *   CRUD    *
@@ -136,6 +145,27 @@ public class IndicadorService {
     }
     //</editor-fold>
 
+    //*************************
+    //*  GRAFICO - CONTAGENS  *
+    //*************************
+    
+    //<editor-fold defaultstate="collapsed" desc="Count scheduled service">
+    public JSONObject countServicoProgramado(BigInteger indicadorId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+        JSONArray lista = new JSONArray();
+        JSONObject resultado = new JSONObject();
+        List<GraficoShort> graficos = graficoRepository.buscarListaDeGraficosPorIndicadorId(indicadorId, autenticado);
+        
+        for (GraficoShort grafico : graficos) {
+            lista.put(graficoService.countServicoProgramado(grafico.getId(), filtro, autenticado));
+        }
+        
+        resultado.put("status", "success");
+        resultado.put("records", lista);
+        
+        return resultado;
+    }
+    //</editor-fold>
+    
     /*GRÁFICO*/
 
     //<editor-fold defaultstate="collapsed" desc="Get List of Graphic - Indicadores">

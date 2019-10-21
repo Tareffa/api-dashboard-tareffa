@@ -1,6 +1,7 @@
 package br.com.ottimizza.dashboard.repositories.grafico;
 
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
+import br.com.ottimizza.dashboard.models.graficos.GraficoShort;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import java.math.BigInteger;
@@ -16,7 +17,7 @@ public interface GraficoRepositoryCustom {
     
     List<?> buscarListaDeGraficos(Usuario usuario);
     
-    List<?> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario);
+    List<GraficoShort> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario);
     
     Long contadorServicoProgramadoPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado);
     
