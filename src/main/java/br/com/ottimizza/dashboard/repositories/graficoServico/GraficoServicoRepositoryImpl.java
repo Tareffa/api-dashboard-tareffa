@@ -83,7 +83,8 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
             JPAQuery<ServicoShort> query = new JPAQuery(em);
             query.from(servico)
                 .innerJoin(graficoServico).on(graficoServico.servico.id.eq(servico.id))
-                .where(graficoServico.grafico.id.eq(graficoId));
+                .where(graficoServico.grafico.id.eq(graficoId))
+                .where(servico.ativo.isTrue());
 
             if(descricao != null && descricao != ""){
                 query.where(servico.nome.likeIgnoreCase("%"+descricao+"%"));
@@ -109,7 +110,8 @@ public class GraficoServicoRepositoryImpl implements GraficoServicoRepositoryCus
                     graficoServico.servico.id.eq(servico.id)
                     .and(graficoServico.grafico.id.eq(graficoId)))
                 .where(servico.contabilidade.id.eq(usuario.getContabilidade().getId()))
-                .where(graficoServico.grafico.id.isNull());
+                .where(graficoServico.grafico.id.isNull())
+                .where(servico.ativo.isTrue());
             
             if(descricao != null && descricao != ""){
                 query.where(servico.nome.likeIgnoreCase("%"+descricao+"%"));
