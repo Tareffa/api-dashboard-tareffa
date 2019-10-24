@@ -264,7 +264,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                 }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
-            query.select(Projections.constructor(UsuarioShort.class, usuario.id, usuario.nome, usuario.email, usuario.contabilidade));
+            query.select(Projections.constructor(UsuarioShort.class, usuario.id, usuario.nome, usuario.email, usuario.contabilidade, usuario.urlFoto));
             
             return query.fetch();
         } catch (Exception e) {
