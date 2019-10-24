@@ -397,45 +397,39 @@ public class GraficoService {
     
     //<editor-fold defaultstate="collapsed" desc="Buscar usuários com total de serviços programados relacionados ao gráfico Id">
     public JSONObject buscaUsuariosComTotalServicosProgramadosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
-        try {    
-        
-            JSONArray lista = new JSONArray();
-            JSONObject resultado = new JSONObject();
-            List<UsuarioShort> usuarios = graficoRepository.buscarListaDeUsuariosPorGraficoId(graficoId, filtro, autenticado);
+        JSONArray lista = new JSONArray();
+        JSONObject resultado = new JSONObject();
+        List<UsuarioShort> usuarios = graficoRepository.buscarListaDeUsuariosPorGraficoId(graficoId, filtro, autenticado);
 
-            for (UsuarioShort usuario : usuarios) {
-                JSONObject contagemServicoProgramado = new JSONObject();
+        for (UsuarioShort usuario : usuarios) {
+            JSONObject contagemServicoProgramado = new JSONObject();
 
-                //USUARIO
-                contagemServicoProgramado.put("nome",usuario.getNome());
-                contagemServicoProgramado.put("urlFoto",usuario.getUrlFoto());
+            //USUARIO
+            contagemServicoProgramado.put("nome",usuario.getNome());
+            contagemServicoProgramado.put("urlFoto",usuario.getUrlFoto());
 
-                //ABERTO
-                filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
-                filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
-                contagemServicoProgramado.put("abertoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            //ABERTO
+            filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("abertoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
 
-                filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
-                contagemServicoProgramado.put("abertoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("abertoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
 
-                //ENCERRADO
-                filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
-                filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
-                contagemServicoProgramado.put("encerradoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
-                filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
-                contagemServicoProgramado.put("encerradoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            //ENCERRADO
+            filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("encerradoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("encerradoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
 
-                lista.put(contagemServicoProgramado);
-            }
-
-            resultado.put("status", "success");
-            resultado.put("records", lista);
-
-            return resultado;
-        } catch (Exception e) {
-            e.printStackTrace();
+            lista.put(contagemServicoProgramado);
         }
-        return new JSONObject("ERROU!");
+
+        resultado.put("status", "success");
+        resultado.put("records", lista);
+
+        return resultado;
     }
     //</editor-fold>
 }
