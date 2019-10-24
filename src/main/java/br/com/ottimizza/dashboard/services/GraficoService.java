@@ -8,6 +8,7 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.GraficoServico
 import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioShort;
 import br.com.ottimizza.dashboard.repositories.caracteristica.CaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
@@ -18,7 +19,9 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
 import br.com.ottimizza.dashboard.repositories.servico.ServicoRepository;
+import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import java.util.Arrays;
+import java.util.List;
 import org.json.JSONArray;
 
 @Service
@@ -41,6 +44,9 @@ public class GraficoService {
     
     @Inject
     IndicadorRepository indicadorRepository;
+    
+    @Inject
+    UsuarioRepository usuarioRepository;
     
     //*************************
     //*         CRUD          *
@@ -382,6 +388,47 @@ public class GraficoService {
             message.put("message", "Erro ao salvar o gráfico/característica");
             throw new Exception(message.toString());
         }
+    }
+    //</editor-fold>
+    
+    //*************************
+    //*   GRAFICO - USUÁRIOS  *
+    //*************************
+    
+    //<editor-fold defaultstate="collapsed" desc="Buscar usuários com total de serviços programados relacionados ao gráfico Id">
+    public JSONObject buscaUsuariosComTotalServicosProgramadosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
+        JSONArray lista = new JSONArray();
+        JSONObject resultado = new JSONObject();
+        List<UsuarioShort> usuarios = graficoRepository.buscarListaDeUsuariosPorGraficoId(graficoId, filtro, autenticado);
+        
+        for (UsuarioShort usuario : usuarios) {
+            JSONObject contagemServicoProgramado = new JSONObject();
+            
+            //USUARIO
+            contagemServicoProgramado.put("nome",usuario.getNome());
+            
+            //ABERTO
+            filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("abertoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("abertoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+
+            //ENCERRADO
+            filtro.setSituacao(ServicoProgramadoSituacao.ENCERRADO);
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.NO_PRAZO));
+            contagemServicoProgramado.put("encerradoNoPrazo", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            filtro.setPrazo(Arrays.asList(ServicoProgramadoPrazo.ATRASADO,ServicoProgramadoPrazo.VENCIDO));
+            contagemServicoProgramado.put("encerradoAtrasado", usuarioRepository.contadorServicoProgramadoPorUsuarioGraficoId(usuario.getId(), graficoId, filtro, autenticado));
+            
+            lista.put(contagemServicoProgramado);
+        }
+        
+        resultado.put("status", "success");
+        resultado.put("records", lista);
+        
+        return resultado;
     }
     //</editor-fold>
 }

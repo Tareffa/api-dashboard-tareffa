@@ -295,4 +295,23 @@ public class GraficoController {
         }
     }
     //</editor-fold>
+    
+    //*************************
+    //*   GRAFICO - USUÁRIOS  *
+    //*************************
+     @GetMapping("{id}/usuarios")
+    //<editor-fold defaultstate="collapsed" desc="Buscar de usuários com indicadores (serviços programado) relacionado ao gráfico Id">
+    public ResponseEntity<String> buscaUsuariosComTotalServicosProgramadosPorGraficoId(
+            @PathVariable("id") BigInteger graficoId,
+            @RequestBody ServicoProgramadoFiltroAvancado filtro,
+            Principal principal) throws Exception{
+        try{
+            // Get User by Email.
+            Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+            return ResponseEntity.ok(graficoService.buscaUsuariosComTotalServicosProgramadosPorGraficoId(graficoId, filtro, autenticado).toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    //</editor-fold>
 }

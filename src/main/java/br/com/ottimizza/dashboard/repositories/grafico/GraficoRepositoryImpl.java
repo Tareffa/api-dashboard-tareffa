@@ -12,7 +12,9 @@ import br.com.ottimizza.dashboard.models.graficos.grafico_servico.QGraficoServic
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioShort;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -29,6 +31,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     @PersistenceContext
     EntityManager em;
     
+    private QUsuario usuario = QUsuario.usuario;
+    
     private QGrafico grafico = QGrafico.grafico;
     private QIndicador indicador = QIndicador.indicador;
     
@@ -39,12 +43,12 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     private QCaracteristicaEmpresa caracteristicaEmpresa = QCaracteristicaEmpresa.caracteristicaEmpresa;
 
     @Override
-    public Grafico buscarGraficoPorId(BigInteger graficoId, Usuario usuario) {
+    public Grafico buscarGraficoPorId(BigInteger graficoId, Usuario autenticado) {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico)
                 .innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.contabilidade.id.eq(autenticado.getContabilidade().getId())) //CONTABILIDADE
                 .where(grafico.id.eq(graficoId)); //INDICADOR ID
 
             return query.fetchOne();
@@ -54,11 +58,11 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public List<?> buscarListaDeGraficos(Usuario usuario) {
+    public List<?> buscarListaDeGraficos(Usuario autenticado) {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())); //CONTABILIDADE
+                .where(indicador.contabilidade.id.eq(autenticado.getContabilidade().getId())); //CONTABILIDADE
             query.select(Projections.constructor(GraficoShort.class, grafico.id, grafico.nomeGrafico));
             
             return query.orderBy(grafico.nomeGrafico.asc()).fetch();
@@ -68,12 +72,12 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }    
 
     @Override
-    public Boolean verificarExistenciaGraficoPorId(BigInteger graficoId, Usuario usuario) {
+    public Boolean verificarExistenciaGraficoPorId(BigInteger graficoId, Usuario autenticado) {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico)
                 .innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.contabilidade.id.eq(autenticado.getContabilidade().getId())) //CONTABILIDADE
                 .where(grafico.id.eq(graficoId)); //INDICADOR ID
 
             return query.fetchCount() > 0;
@@ -83,11 +87,11 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public List<GraficoShort> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario usuario) {
+    public List<GraficoShort> buscarListaDeGraficosPorIndicadorId(BigInteger indicadorId, Usuario autenticado) {
         try {
             JPAQuery<GraficoShort> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.contabilidade.id.eq(autenticado.getContabilidade().getId())) //CONTABILIDADE
                 .where(indicador.id.eq(indicadorId));
             query.select(Projections.constructor(GraficoShort.class, grafico.id, grafico.nomeGrafico));
             
@@ -98,11 +102,11 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public boolean verificaExistenciaNomeDeGraficos(String nomeGrafico, BigInteger indicadorId, Usuario usuario) throws Exception {
+    public boolean verificaExistenciaNomeDeGraficos(String nomeGrafico, BigInteger indicadorId, Usuario autenticado) throws Exception {
         try {
             JPAQuery<Grafico> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.contabilidade.id.eq(autenticado.getContabilidade().getId())) //CONTABILIDADE
                 .where(indicador.id.eq(indicadorId)) //CONTABILIDADE
                 .where(grafico.nomeGrafico.eq(nomeGrafico));
             
@@ -189,6 +193,83 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
         } catch (Exception e) {
             e.printStackTrace();
             return new Long(-1);
+        }
+    }
+
+    @Override
+    public List<UsuarioShort> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        try {
+            if(autenticado == null) return null;
+
+            JPAQuery query = new JPAQuery(em);
+                query.from(servicoProgramado)
+                    .innerJoin(graficoServico).on(
+                        servicoProgramado.servico.id.eq(graficoServico.servico.id)
+                        .and(graficoServico.grafico.id.eq(graficoId))
+                        ) //JOIN GRAFICO/SERVICO
+                    .innerJoin(caracteristicaEmpresa).on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id)) //JOIN CARACTERISTICA/EMPRESA
+                    .innerJoin(graficoCaracteristica).on(                                                                   //JOIN GRÁFICO/CARACTERÍSTICA
+                        caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
+                        .and(graficoCaracteristica.grafico.id.eq(graficoId)))
+                    .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
+                //--STATUS
+                if(filtro.getSituacao() != null){
+
+                    //---ABERTO
+                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
+                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO));
+                        
+                        if(filtro.getPrazo() != null){
+                            Date dataAtual = new Date();
+                            BooleanBuilder prazos = new BooleanBuilder();
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual)));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                                prazos.or(servicoProgramado.dataVencimento.lt(dataAtual));
+                            
+                            query.where(prazos);
+                        }
+                    }
+
+                    //---ENCERRADO
+                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ENCERRADO){
+                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
+
+                        if(filtro.getPrazo() != null){
+                            BooleanBuilder prazos = new BooleanBuilder();
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
+                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino)));
+                            
+                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
+                                prazos.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
+                            
+                            query.where(prazos);
+                        } 
+                    }
+                }
+                
+                //DATA PROGRAMADA
+                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+                }
+            /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
+
+            query.select(Projections.constructor(UsuarioShort.class, usuario.id, usuario.nome, usuario.email, usuario.contabilidade));
+            
+            return query.fetch();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
