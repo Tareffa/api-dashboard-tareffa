@@ -117,11 +117,12 @@ public class GraficoService {
                 graficoCaracteristicaRepository.deleteGraficoCaracteristicaByGraficoId(graficoId);
                 graficoServicoRepository.deleteGraficoServicoByGraficoId(graficoId);
                 graficoRepository.deleteById(grafico.getId());
+                message.put("status", "success");
                 message.put("message", "Removido o gráfico com sucesso!");
             }else{
+                message.put("status", "error");
                 message.put("message", "Não é permitido excluir este gráfico!");
             }
-            message.put("status", "success");
             
             return message;
         } catch (Exception e) {
@@ -143,15 +144,16 @@ public class GraficoService {
 
                     graficoReferencia.setNomeGrafico(grafico.getNomeGrafico());
                     graficoRepository.save(graficoReferencia);
+                    message.put("status", "success");
                     message.put("message", "Atualizado o gráfico com sucesso!");
+                    return message;
                 }else{
-                    message.put("status", "error");
                     message.put("message", "Nome de gráfico já cadastrado!");
                 }
             }else{
                 message.put("message", "Não é permitido alterar este gráfico!");
             }
-            message.put("status", "success");
+            message.put("status", "error");
             
             return message;
         } catch (Exception e) {
@@ -204,12 +206,13 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+                message.put("status", "success");
                 message.put("records", new JSONArray(graficoServicoRepository.buscarServicosRelacionadosPorGraficoId(graficoId, descricao, autenticado)));
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico inválido!");
             }
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -226,12 +229,13 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+                message.put("status", "success");
                 message.put("records", new JSONArray(graficoServicoRepository.buscarServicosFaltantesPorGraficoId(graficoId, descricao, autenticado)));
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico inválido!");
             }
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -252,8 +256,10 @@ public class GraficoService {
                 //VERIFICA A EXISTÊNCIA DO GRÁFICO/SERVIÇO
                 if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) == null){
                      graficoServicoRepository.save(graficoServico);
-                     message.put("record", new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado)));
-                     message.put("message","Inserido com sucesso");
+                    message.put("status", "success");
+                    message.put("record", new JSONObject(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado)));
+                    message.put("message","Inserido com sucesso");
+                    return message;
                 }else{
                     message.put("message","Gráfico/Serviço existente!");
                 }
@@ -261,7 +267,7 @@ public class GraficoService {
                 message.put("message","Gráfico ou Serviço Inválido!");
             }
             
-            message.put("status", "success");
+            message.put("status", "error");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -278,12 +284,13 @@ public class GraficoService {
             
             if(graficoServicoRepository.buscarGraficoServicoPorId(graficoServico.getId(), autenticado) != null){    
                 graficoServicoRepository.deleteById(graficoServico.getId());
+                message.put("status", "success");
                 message.put("message","Excluído com sucesso");
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico ou Serviço Inválido!");
             }
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -304,12 +311,13 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+                message.put("status", "success");
                 message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasRelacionadosPorGraficoId(graficoId, descricao, autenticado)));
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico inválido!");
             }
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -326,12 +334,13 @@ public class GraficoService {
             
             //VALIDAÇÃO (GRÁFICO PERTENCE A CONTABILIDADE DO USUÁRIO LOGADO)
             if(graficoRepository.verificarExistenciaGraficoPorId(graficoId, autenticado)){
+                message.put("status", "success");
                 message.put("records", new JSONArray(graficoCaracteristicaRepository.buscarCaracteristicasFaltantesPorGraficoId(graficoId, descricao, autenticado)));
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico inválido!");
             }
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -351,16 +360,18 @@ public class GraficoService {
                 //VERIFICA A EXISTÊNCIA DO GRÁFICO/CARACTERÍSTICA
                 if(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) == null){
                     graficoCaracteristicaRepository.save(graficoCaracteristica);
+                    message.put("status", "success");
                     message.put("record", new JSONObject(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado)));
                     message.put("message","Inserido com sucesso!");
+                    return message;
                 }else{
                     message.put("message","Gráfico da característica já cadastrado!");
                 }
             }else{
                 message.put("message","Gráfico ou característica inválido!");
             }
+            message.put("status", "error");
             
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
@@ -377,11 +388,12 @@ public class GraficoService {
             
             if(graficoCaracteristicaRepository.buscarGraficoCaracteristicaPorId(graficoCaracteristica.getId(), autenticado) != null){
                 graficoCaracteristicaRepository.deleteById(graficoCaracteristica.getId());
+                message.put("status", "success");
                 message.put("message","Excluído com sucesso!");
             }else{
+                message.put("status", "error");
                 message.put("message","Gráfico ou característica inválido!");
             }
-            message.put("status", "success");
             return message;
         } catch (Exception e) {
             message.put("status", "error");

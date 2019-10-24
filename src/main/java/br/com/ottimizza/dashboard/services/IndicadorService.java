@@ -129,13 +129,14 @@ public class IndicadorService {
                     indicadorReferencia.setDescricao(indicador.getDescricao());
                     indicadorRepository.save(indicadorReferencia);
                     message.put("message", "Atualizado o indicador com sucesso!");
+                    message.put("status", "success");
                     return message;
                 }
                 message.put("message", "Não é permitido alterar este indicador!");
             }else{
                 message.put("message", "Descrição de indicador já cadastrado!");
             }
-            message.put("status", "success");
+            message.put("status", "error");
             return message;
         } catch (Exception e) {
             message.put("status", "error");
