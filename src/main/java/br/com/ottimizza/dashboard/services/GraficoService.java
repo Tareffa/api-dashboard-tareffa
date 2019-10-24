@@ -406,6 +406,7 @@ public class GraficoService {
             
             //USUARIO
             contagemServicoProgramado.put("nome",usuario.getNome());
+            contagemServicoProgramado.put("urlFoto",usuario.getUrlFoto());
             
             //ABERTO
             filtro.setSituacao(ServicoProgramadoSituacao.ABERTO);

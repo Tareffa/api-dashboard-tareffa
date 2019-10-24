@@ -299,7 +299,7 @@ public class GraficoController {
     //*************************
     //*   GRAFICO - USUÁRIOS  *
     //*************************
-     @GetMapping("{id}/usuarios")
+     @PostMapping("{id}/usuarios")
     //<editor-fold defaultstate="collapsed" desc="Buscar de usuários com indicadores (serviços programado) relacionado ao gráfico Id">
     public ResponseEntity<String> buscaUsuariosComTotalServicosProgramadosPorGraficoId(
             @PathVariable("id") BigInteger graficoId,

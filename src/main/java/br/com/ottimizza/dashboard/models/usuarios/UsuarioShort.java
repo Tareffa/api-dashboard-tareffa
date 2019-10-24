@@ -16,31 +16,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter 
 @Table(name = "ot_usuarios")
+@NoArgsConstructor @AllArgsConstructor
 public class UsuarioShort implements Serializable {
 
     @Id
-    @Getter
-    @Setter
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Getter
-    @Setter
     @Column(name = "nome", nullable = false)
     private String nome;
 
-    @Getter
-    @Setter
     @Column(name = "email", nullable = false)
     private String email;
-
-    @Getter
-    @Setter
+    
     @ManyToOne
     @JoinColumn(name = "fk_contabilidades_id", referencedColumnName = "id", nullable = false)
     private ContabilidadeShort contabilidade;
+    
+    @Column(name = "url_foto", nullable = true, columnDefinition = "text")
+    private String urlFoto;
 }
