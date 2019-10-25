@@ -34,7 +34,7 @@ public class UsuarioShort implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "fk_contabilidades_id", referencedColumnName = "id", nullable = false)
-    private ContabilidadeShort contabilidade;
+    private Long contabilidade;
     
     @Column(name = "url_foto", nullable = true, columnDefinition = "text")
     private String urlFoto;
