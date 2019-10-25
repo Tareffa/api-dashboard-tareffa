@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter @Setter 
 @Table(name = "ot_usuarios")
 @NoArgsConstructor @AllArgsConstructor
-public class UsuarioShort implements Serializable {
+public class UsuarioShortSemContabilidade implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,10 +31,6 @@ public class UsuarioShort implements Serializable {
 
     @Column(name = "email", nullable = false)
     private String email;
-    
-    @ManyToOne
-    @JoinColumn(name = "fk_contabilidades_id", referencedColumnName = "id", nullable = false)
-    private ContabilidadeShort contabilidade;
     
     @Column(name = "url_foto", nullable = true, columnDefinition = "text")
     private String urlFoto;

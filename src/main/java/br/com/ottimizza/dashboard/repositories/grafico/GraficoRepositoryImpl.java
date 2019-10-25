@@ -14,7 +14,7 @@ import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import br.com.ottimizza.dashboard.models.usuarios.UsuarioShort;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioShortSemContabilidade;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -197,7 +197,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public List<UsuarioShort> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+    public List<UsuarioShortSemContabilidade> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         try {
             if(autenticado == null) return null;
 
@@ -266,7 +266,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
 
             query.groupBy(usuario.id);
             
-            query.select(Projections.constructor(UsuarioShort.class, usuario.id, usuario.nome, usuario.email, usuario.contabilidade.id, usuario.urlFoto));
+            query.select(Projections.constructor(UsuarioShortSemContabilidade.class, usuario.id, usuario.nome, usuario.email, usuario.urlFoto));
             
             return query.fetch();
         } catch (Exception e) {

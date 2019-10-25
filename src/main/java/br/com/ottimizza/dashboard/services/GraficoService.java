@@ -9,6 +9,7 @@ import br.com.ottimizza.dashboard.models.indicadores.Indicador;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioShort;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioShortSemContabilidade;
 import br.com.ottimizza.dashboard.repositories.caracteristica.CaracteristicaRepository;
 import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
 import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
@@ -411,9 +412,9 @@ public class GraficoService {
     public JSONObject buscaUsuariosComTotalServicosProgramadosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado)throws Exception{
         JSONArray lista = new JSONArray();
         JSONObject resultado = new JSONObject();
-        List<UsuarioShort> usuarios = graficoRepository.buscarListaDeUsuariosPorGraficoId(graficoId, filtro, autenticado);
+        List<UsuarioShortSemContabilidade> usuarios = graficoRepository.buscarListaDeUsuariosPorGraficoId(graficoId, filtro, autenticado);
 
-        for (UsuarioShort usuario : usuarios) {
+        for (UsuarioShortSemContabilidade usuario : usuarios) {
             JSONObject contagemServicoProgramado = new JSONObject();
 
             //USUARIO
