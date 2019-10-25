@@ -15,14 +15,14 @@ public interface GraficoRepository extends JpaRepository<Grafico, BigInteger>, G
     @Modifying
     @Transactional
     @Query( value =
-            "   DELETE FROM ot_grafico grafico                                      \n" +
-            "       WHERE grafico.id IN (                                           \n" +
-            "       	SELECT grafico.id FROM ot_grafico                           \n" +
-            "               INNER JOIN ot_indicador indicador                       \n" +
-            "                   ON ot_grafico.fk_indicador_id = indicador.id        \n" +
-            "               WHERE indicador.fk_contabilidade_id = :contabilidadeId  \n" +
-            "               AND indicador.id = :indicadorId                         \n" +
-            "       )                                                               \n" ,
+            "   DELETE FROM ot_grafico grafico                                          \n" +
+            "       WHERE grafico.id IN (                                               \n" +
+            "       	SELECT graficoReferencia.id FROM ot_grafico graficoReferencia   \n" +
+            "               INNER JOIN ot_indicador indicador                           \n" +
+            "                   ON graficoReferencia.fk_indicador_id = indicador.id     \n" +
+            "               WHERE indicador.fk_contabilidade_id = :contabilidadeId      \n" +
+            "               AND indicador.id = :indicadorId                             \n" +
+            "       )                                                                   \n" ,
             nativeQuery = true)
     public void deleteGraficoByIndicadorId(@Param("indicadorId") BigInteger indicadorId, @Param("contabilidadeId") Long usuarioContabilidadeId);
     
