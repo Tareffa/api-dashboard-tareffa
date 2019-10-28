@@ -53,6 +53,10 @@ public class OAuthClientController {
             HttpResponse httpResponse = httpClient.execute(httpPost);
             HttpEntity responseEntity = httpResponse.getEntity();
             
+            String resposta = EntityUtils.toString(responseEntity, "UTF-8");
+            System.out.println("RESPOSTA: " + resposta);
+            System.out.println("STATUS: " + httpResponse.getStatusLine().getStatusCode());
+            
             return ResponseEntity.ok(EntityUtils.toString(responseEntity, "UTF-8"));
         } catch (Exception ex) {
             ex.printStackTrace();
