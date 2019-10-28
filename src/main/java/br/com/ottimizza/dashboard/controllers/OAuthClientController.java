@@ -45,8 +45,6 @@ public class OAuthClientController {
                     OAUTH2_SERVER_URL, "authorization_code", code, redirectUri
             );
             
-            System.out.println("URI: " + uri);
-            
             HttpPost httpPost = new HttpPost(uri);
             httpPost.setHeader("Authorization", "Basic " + encodedCredentials);
 
@@ -54,10 +52,8 @@ public class OAuthClientController {
             HttpEntity responseEntity = httpResponse.getEntity();
             
             String resposta = EntityUtils.toString(responseEntity, "UTF-8");
-            System.out.println("RESPOSTA: " + resposta);
-            System.out.println("STATUS: " + httpResponse.getStatusLine().getStatusCode());
             
-            return ResponseEntity.ok(EntityUtils.toString(responseEntity, "UTF-8"));
+            return ResponseEntity.ok(resposta);
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.status(401).body("{}");
