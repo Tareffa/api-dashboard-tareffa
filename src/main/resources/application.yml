@@ -5,9 +5,9 @@ server:
         
 # OAuth2 Environment Variables
 oauth2-config:
-    oauth2-server-url: ${SERVER_URL:https://development-oauth-server.herokuapp.com}
-    oauth2-client-id: ${CLIENT_ID:1defe81df9442d2b74c2}
-    oauth2-client-secret: ${CLIENT_SECRET:72e9208c85fed78cb43fec9f953662664ab5f649}
+    oauth2-server-url: ${OAUTH2_SERVER_URL:https://development-oauth-server.herokuapp.com}
+    oauth2-client-id: ${OAUTH2_CLIENT_ID:1defe81df9442d2b74c2}
+    oauth2-client-secret: ${OAUTH2_CLIENT_SECRET:72e9208c85fed78cb43fec9f953662664ab5f649}
 
 # Sentry Environment Variables
 sentry-config:
