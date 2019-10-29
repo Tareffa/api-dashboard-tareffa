@@ -228,32 +228,32 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             Date dataAtual = new Date();
             
             //ABERTO NO PRAZO
-            NumberExpression<Integer> abertoNoPrazo = new CaseBuilder().when(
+            NumberExpression<Long> abertoNoPrazo = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
                     .and(servicoProgramado.dataProgramadaEntrega.goe(dataAtual))
-            ).then(new Integer(1)).otherwise(new Integer(0));
+            ).then(new Long(1)).otherwise(new Long(0));
             
             //ABERTO ATRASADO
-            NumberExpression<Integer> abertoAtrasado = new CaseBuilder().when(
+            NumberExpression<Long> abertoAtrasado = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
                     servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual))
                         .or(servicoProgramado.dataVencimento.lt(dataAtual))
                 )
-            ).then(new Integer(1)).otherwise(new Integer(0));
+            ).then(new Long(1)).otherwise(new Long(0));
             
             //ENCERRADO NO PRAZO
-            NumberExpression<Integer> encerradoNoPrazo = new CaseBuilder().when(
+            NumberExpression<Long> encerradoNoPrazo = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
                     .and(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino))
-            ).then(new Integer(1)).otherwise(new Integer(0));
+            ).then(new Long(1)).otherwise(new Long(0));
             
             //ENCERRADO ATRASADO
-            NumberExpression<Integer> encerradoAtrasado = new CaseBuilder().when(
+            NumberExpression<Long> encerradoAtrasado = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
                     servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino))
                         .or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
                 )
-            ).then(new Integer(1)).otherwise(new Integer(0));
+            ).then(new Long(1)).otherwise(new Long(0));
 
             query.groupBy(usuario.nome, usuario.id);
             query.orderBy(usuario.nome.asc());
