@@ -212,6 +212,12 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
+                
+            //DATA PROGRAMADA
+            if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                    .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+            }
                 //--STATUS
                 if(filtro.getSituacao() != null){
 
@@ -255,12 +261,6 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                             query.where(prazos);
                         } 
                     }
-                }
-                
-                //DATA PROGRAMADA
-                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
-                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
-                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
                 }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
