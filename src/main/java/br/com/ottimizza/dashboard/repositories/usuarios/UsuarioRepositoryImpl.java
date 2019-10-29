@@ -71,6 +71,12 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
                     .and(graficoCaracteristica.grafico.id.eq(graficoId))
                 ); //JOIN GRÁFICO/CARACTERÍSTICA
             
+            //DATA PROGRAMADA
+            if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
+                query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
+                    .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
+            }
+            
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
@@ -118,12 +124,6 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
                             query.where(prazos);
                         } 
                     }
-                }
-                
-                //DATA PROGRAMADA
-                if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
-                    query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
-                        .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
                 }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
 
