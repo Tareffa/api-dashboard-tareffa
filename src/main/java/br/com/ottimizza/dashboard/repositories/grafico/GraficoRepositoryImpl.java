@@ -18,6 +18,7 @@ import br.com.ottimizza.dashboard.models.usuarios.UsuarioDashboard;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioShortSemContabilidade;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -234,24 +235,24 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             ).then(new Long(1)).otherwise(new Long(0));
             
             //ABERTO ATRASADO
+            BooleanExpression atrasadoAberto = servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual));
             NumberExpression<Long> abertoAtrasado = new CaseBuilder().when(
-                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
-                    servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual))
-                        .or(servicoProgramado.dataVencimento.lt(dataAtual))
-                )
+                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
+                    .and(atrasadoAberto.or(servicoProgramado.dataVencimento.lt(dataAtual))
+                    )
             ).then(new Long(1)).otherwise(new Long(0));
             
             //ENCERRADO NO PRAZO
             NumberExpression<Long> encerradoNoPrazo = new CaseBuilder().when(
-                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
+                servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO)
                     .and(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino))
             ).then(new Long(1)).otherwise(new Long(0));
             
             //ENCERRADO ATRASADO
+            BooleanExpression atrasadoEncerrado = servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino));
             NumberExpression<Long> encerradoAtrasado = new CaseBuilder().when(
-                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
-                    servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino))
-                        .or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
+                servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO)
+                    .and(atrasadoEncerrado.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
                 )
             ).then(new Long(1)).otherwise(new Long(0));
 
