@@ -14,9 +14,12 @@ import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioDashboard;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioShortSemContabilidade;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.Date;
@@ -197,7 +200,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     }
 
     @Override
-    public List<UsuarioShortSemContabilidade> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+    public List<UsuarioDashboard> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
         try {
             if(autenticado == null) return null;
 
@@ -212,61 +215,60 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
-                
+            
             //DATA PROGRAMADA
             if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
                 query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
                     .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
             }
-                //--STATUS
-                if(filtro.getSituacao() != null){
-
-                    //---ABERTO
-                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ABERTO) {
-                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO));
-                        
-                        if(filtro.getPrazo() != null){
-                            Date dataAtual = new Date();
-                            BooleanBuilder prazos = new BooleanBuilder();
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
-                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(dataAtual));
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
-                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual)));
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
-                                prazos.or(servicoProgramado.dataVencimento.lt(dataAtual));
-                            
-                            query.where(prazos);
-                        }
-                    }
-
-                    //---ENCERRADO
-                    if(filtro.getSituacao() == ServicoProgramadoSituacao.ENCERRADO){
-                        query.where(servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO));
-
-                        if(filtro.getPrazo() != null){
-                            BooleanBuilder prazos = new BooleanBuilder();
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.NO_PRAZO))
-                                prazos.or(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino));
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.ATRASADO))
-                                prazos.or(servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino)));
-                            
-                            if(filtro.getPrazo().contains(ServicoProgramadoPrazo.VENCIDO))
-                                prazos.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino));
-                            
-                            query.where(prazos);
-                        } 
-                    }
-                }
+                
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
-
-            query.groupBy(usuario.id);
             
-            query.select(Projections.constructor(UsuarioShortSemContabilidade.class, usuario.id, usuario.nome, usuario.email, usuario.urlFoto));
+            //DATA ATUAL
+            Date dataAtual = new Date();
+            
+            //ABERTO NO PRAZO
+            NumberExpression<Integer> abertoNoPrazo = new CaseBuilder().when(
+                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
+                    .and(servicoProgramado.dataProgramadaEntrega.goe(dataAtual))
+            ).then(new Integer(1)).otherwise(new Integer(0));
+            
+            //ABERTO ATRASADO
+            NumberExpression<Integer> abertoAtrasado = new CaseBuilder().when(
+                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
+                    servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual))
+                        .or(servicoProgramado.dataVencimento.lt(dataAtual))
+                )
+            ).then(new Integer(1)).otherwise(new Integer(0));
+            
+            //ENCERRADO NO PRAZO
+            NumberExpression<Integer> encerradoNoPrazo = new CaseBuilder().when(
+                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
+                    .and(servicoProgramado.dataProgramadaEntrega.goe(servicoProgramado.dataTermino))
+            ).then(new Integer(1)).otherwise(new Integer(0));
+            
+            //ENCERRADO ATRASADO
+            NumberExpression<Integer> encerradoAtrasado = new CaseBuilder().when(
+                servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO).and(
+                    servicoProgramado.dataProgramadaEntrega.lt(servicoProgramado.dataTermino).and(servicoProgramado.dataVencimento.goe(servicoProgramado.dataTermino))
+                        .or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
+                )
+            ).then(new Integer(1)).otherwise(new Integer(0));
+
+            query.groupBy(usuario.nome, usuario.id);
+            query.orderBy(usuario.nome.asc());
+            
+            query.select(
+                Projections.constructor(UsuarioDashboard.class, 
+                    usuario.id, 
+                    usuario.nome, 
+                    usuario.urlFoto,
+                    abertoNoPrazo.sum(),
+                    abertoAtrasado.sum(),
+                    encerradoNoPrazo.sum(),
+                    encerradoAtrasado.sum()
+                )
+            );
             
             return query.fetch();
         } catch (Exception e) {
