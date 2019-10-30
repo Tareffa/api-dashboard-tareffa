@@ -12,7 +12,7 @@ import lombok.Setter;
 public class GraficoDashboard implements Serializable {
     
     private BigInteger id;
-    private String nome;
+    private String nomeGrafico;
     private Long abertoNoPrazo;
     private Long abertoAtrasado;
     private Long encerradoNoPrazo;
