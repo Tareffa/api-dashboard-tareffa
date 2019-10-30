@@ -168,7 +168,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             query.orderBy(grafico.nomeGrafico.asc());
 
             query.select(
-                Projections.constructor(UsuarioDashboard.class, 
+                Projections.constructor(GraficoDashboard.class, 
                     grafico.id, 
                     grafico.nomeGrafico,
                     abertoNoPrazo.sum(),
