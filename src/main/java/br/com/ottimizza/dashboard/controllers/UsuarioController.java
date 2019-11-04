@@ -20,6 +20,13 @@ public class UsuarioController {
     @Inject
     UsuarioRepository usuarioRepository;
     
+    @GetMapping(path = "imagens")
+    public ResponseEntity<String> findImagesFromUser(Principal principal) throws Exception {
+        
+        Usuario autenticado = usuarioRepository.findByEmail(principal.getName());
+        return ResponseEntity.ok(usuarioService.findImagesFromUser(autenticado.getId()).toString());
+    }
+    
     @GetMapping(path = "logo/contabilidade")
     public ResponseEntity<String> findLogoAccountingFromUser(Principal principal) throws Exception {
         
@@ -27,5 +34,4 @@ public class UsuarioController {
         
         return ResponseEntity.ok(usuarioService.findLogoAccountingFromUser(autenticado.getContabilidade().getId()).toString());
     }
-
 }

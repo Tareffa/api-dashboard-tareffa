@@ -12,7 +12,9 @@ import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.models.usuarios.UsuarioImagens;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.Date;
@@ -131,6 +133,20 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
         } catch (Exception e) {
             e.printStackTrace();
             return new Long(-1);
+        }
+    }
+
+    @Override
+    public UsuarioImagens findImagesFromUser(Long usuarioId) {
+        try {
+            JPAQuery<UsuarioImagens> query = new JPAQuery<UsuarioImagens>(em).from(usuario).
+                    innerJoin(contabilidade).on(usuario.contabilidade.id.eq(contabilidade.id).and(usuario.id.eq(usuarioId)));
+            
+            query.select(Projections.constructor(UsuarioImagens.class, usuario.urlFoto, contabilidade.urlLogotipo));
+            
+            return query.fetchFirst();
+        } catch (Exception e) {
+            return null;
         }
     }
 }
