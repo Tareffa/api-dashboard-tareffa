@@ -62,10 +62,10 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
         
         JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
-                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id)) //JOIN SERVIÇO
-                .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id)) //JOIN EMPRESA
+                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))     //JOIN SERVIÇO
+                .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))     //JOIN EMPRESA
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
-                .innerJoin(departamento).on(departamento.id.eq( //JOIN DEPARTAMENTO
+                .innerJoin(departamento).on(departamento.id.eq(                         //JOIN DEPARTAMENTO
                     new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
                         .otherwise(usuario.departamento.id))
                 );

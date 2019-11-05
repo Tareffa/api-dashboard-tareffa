@@ -4,6 +4,8 @@ import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
 import br.com.ottimizza.dashboard.models.caracteristica.caracteristica_empresas.QCaracteristicaEmpresa;
+import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
+import br.com.ottimizza.dashboard.models.departamentos.QDepartamento;
 import br.com.ottimizza.dashboard.models.graficos.Grafico;
 import br.com.ottimizza.dashboard.models.graficos.GraficoDashboard;
 import br.com.ottimizza.dashboard.models.graficos.GraficoShort;
@@ -11,6 +13,7 @@ import br.com.ottimizza.dashboard.models.graficos.QGrafico;
 import br.com.ottimizza.dashboard.models.graficos.grafico_caracteristica.QGraficoCaracteristica;
 import br.com.ottimizza.dashboard.models.graficos.grafico_servico.QGraficoServico;
 import br.com.ottimizza.dashboard.models.indicadores.QIndicador;
+import br.com.ottimizza.dashboard.models.servicos.QServico;
 import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
@@ -23,6 +26,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,6 +40,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     EntityManager em;
     
     private QUsuario usuario = QUsuario.usuario;
+    private QDepartamento departamento = QDepartamento.departamento;
+    private QServico servico = QServico.servico;
     
     private QGrafico grafico = QGrafico.grafico;
     private QIndicador indicador = QIndicador.indicador;
@@ -107,41 +113,64 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     
     @Override
     public List<GraficoDashboard> buscarListaDeGraficosDashboardPorIndicadorId(BigInteger indicadorId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
         try {
             if(autenticado == null) return null;
 
             JPAQuery query = new JPAQuery(em);
-                query.from(servicoProgramado)
-                    .innerJoin(graficoServico)//JOIN GRAFICO/SERVICO
-                        .on(servicoProgramado.servico.id.eq(graficoServico.servico.id))
-                    .innerJoin(caracteristicaEmpresa)//JOIN CARACTERISTICA/EMPRESA
-                        .on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))
-                    .innerJoin(graficoCaracteristica)//JOIN GRÁFICO/CARACTERÍSTICA
-                        .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id))
-                    .innerJoin(grafico)//JOIN GRAFICO
-                        .on(
-                            graficoServico.grafico.id.eq(grafico.id)
-                            .and(graficoCaracteristica.grafico.id.eq(grafico.id))
-                            .and(grafico.indicador.id.eq(indicadorId))
-                        );
+            query.from(servicoProgramado)
+                .innerJoin(graficoServico)                                                                  //JOIN GRAFICO/SERVICO
+                    .on(servicoProgramado.servico.id.eq(graficoServico.servico.id))
+                .innerJoin(caracteristicaEmpresa)                                                           //JOIN CARACTERISTICA/EMPRESA
+                    .on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))
+                .innerJoin(graficoCaracteristica)                                                           //JOIN GRÁFICO/CARACTERÍSTICA
+                    .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id))
+                .innerJoin(grafico)                                                                         //JOIN GRAFICO
+                    .on(
+                        graficoServico.grafico.id.eq(grafico.id)
+                        .and(graficoCaracteristica.grafico.id.eq(grafico.id))
+                        .and(grafico.indicador.id.eq(indicadorId))
+                    );
 
+
+            /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
             if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
                 query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
                     .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
             }
-                
+
+            //--DEPARTAMENTO
+            if(filtro.getDepartamento() != null){
+
+                query.innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id)) //JOIN SERVIÇO
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
+                .innerJoin(departamento).on(departamento.id.eq( //JOIN DEPARTAMENTO
+                    new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
+                        .otherwise(usuario.departamento.id))
+                );
+
+                if(!filtro.getDepartamento().isEmpty()){
+                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        departamentosId.add(departamentoShort.getId());
+                    }
+
+                    query.where(departamento.id.in(departamentosId));
+                }
+            }   
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
-            
+
+
+            /*** SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
             //DATA ATUAL
             Date dataAtual = new Date();
-            
+
             //ABERTO NO PRAZO
             NumberExpression<Long> abertoNoPrazo = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.NAO_INICIADO,ServicoProgramadoStatus.INICIADO)
                     .and(servicoProgramado.dataProgramadaEntrega.goe(dataAtual))
             ).then(new Long(1)).otherwise(new Long(0));
-            
+
             //ABERTO ATRASADO
             BooleanExpression atrasadoAberto = servicoProgramado.dataProgramadaEntrega.lt(dataAtual).and(servicoProgramado.dataVencimento.goe(dataAtual));
             NumberExpression<Long> abertoAtrasado = new CaseBuilder().when(
@@ -149,7 +178,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                     .and(atrasadoAberto.or(servicoProgramado.dataVencimento.lt(dataAtual))
                     )
             ).then(new Long(1)).otherwise(new Long(0));
-            
+
             //ENCERRADO NO PRAZO
             NumberExpression<Long> encerradoNoPrazo = new CaseBuilder().when(
                 servicoProgramado.status.in(ServicoProgramadoStatus.CONCLUIDO,ServicoProgramadoStatus.ENVIADO)
@@ -163,11 +192,12 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                     .and(atrasadoEncerrado.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
                 )
             ).then(new Long(1)).otherwise(new Long(0));
+            /*** FIM SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
 
-            query.groupBy(grafico.nomeGrafico, grafico.id);
-            query.orderBy(grafico.nomeGrafico.asc());
+            query.groupBy(grafico.nomeGrafico, grafico.id); //AGRUPAMENTO
+            query.orderBy(grafico.nomeGrafico.asc());       //ORDENAÇÃO
 
-            query.select(
+            query.select(   //SELECT
                 Projections.constructor(GraficoDashboard.class, 
                     grafico.id, 
                     grafico.nomeGrafico,
@@ -177,7 +207,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                     encerradoAtrasado.sum()
                 )
             );
-            
+
             return query.fetch();
         } catch (Exception e){
             e.printStackTrace();
@@ -282,29 +312,50 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
 
     @Override
     public List<UsuarioDashboard> buscarListaDeUsuariosPorGraficoId(BigInteger graficoId, ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
+        List<Long> departamentosId = new ArrayList<>();
         try {
             if(autenticado == null) return null;
 
             JPAQuery query = new JPAQuery(em);
                 query.from(servicoProgramado)
-                    .innerJoin(graficoServico).on(
+                    .innerJoin(graficoServico).on(                                                                          //JOIN GRAFICO/SERVICO
                         servicoProgramado.servico.id.eq(graficoServico.servico.id)
-                        .and(graficoServico.grafico.id.eq(graficoId))
-                        ) //JOIN GRAFICO/SERVICO
+                        .and(graficoServico.grafico.id.eq(graficoId)))
                     .innerJoin(caracteristicaEmpresa).on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id)) //JOIN CARACTERISTICA/EMPRESA
                     .innerJoin(graficoCaracteristica).on(                                                                   //JOIN GRÁFICO/CARACTERÍSTICA
                         caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
-            
+
+
+            /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
             if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
                 query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
                     .and(servicoProgramado.dataProgramadaEntrega.loe(filtro.getDataProgramadaTermino())));
             }
+
+            //--DEPARTAMENTO
+            if(filtro.getDepartamento() != null){
                 
+                query.innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id)) //JOIN SERVIÇO
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
+                .innerJoin(departamento).on(departamento.id.eq( //JOIN DEPARTAMENTO
+                    new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
+                        .otherwise(usuario.departamento.id))
+                );
+                
+                if(!filtro.getDepartamento().isEmpty()){
+                    for (DepartamentoShort departamentoShort : filtro.getDepartamento()) {
+                        departamentosId.add(departamentoShort.getId());
+                    }
+
+                    query.where(departamento.id.in(departamentosId));
+                }
+            }
             /*** FIM FILTRO SERVIÇOS PROGRAMADOS ***/
-            
+
+            /*** SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
             //DATA ATUAL
             Date dataAtual = new Date();
             
@@ -335,11 +386,13 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                     .and(atrasadoEncerrado.or(servicoProgramado.dataVencimento.lt(servicoProgramado.dataTermino))
                 )
             ).then(new Long(1)).otherwise(new Long(0));
+            /*** FIM SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
 
-            query.groupBy(usuario.nome, usuario.id);
-            query.orderBy(usuario.nome.asc());
+
+            query.groupBy(usuario.nome, usuario.id); //AGRUPAMENTO
+            query.orderBy(usuario.nome.asc());       //ORDENAÇÃO
             
-            query.select(
+            query.select(   //SELECT
                 Projections.constructor(UsuarioDashboard.class, 
                     usuario.id, 
                     usuario.nome, 
