@@ -16,9 +16,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ServicoProgramadoService {
-    
-    private QServicoProgramado servicoProgramado = QServicoProgramado.servicoProgramado;
-    private QServico servico = QServico.servico;
 
     @Inject
     private ServicoProgramadoRepository repository;

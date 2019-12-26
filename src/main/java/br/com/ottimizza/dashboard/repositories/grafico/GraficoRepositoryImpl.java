@@ -101,8 +101,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
         try {
             JPAQuery<GraficoShort> query = new JPAQuery(em);
             query.from(grafico).innerJoin(indicador).on(grafico.indicador.id.eq(indicador.id))
-                    .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
-                    .where(indicador.id.eq(indicadorId));
+                .where(indicador.contabilidade.id.eq(usuario.getContabilidade().getId())) //CONTABILIDADE
+                .where(indicador.id.eq(indicadorId));
             query.select(Projections.constructor(GraficoShort.class, grafico.id, grafico.nomeGrafico));
 
             return query.orderBy(grafico.nomeGrafico.asc()).fetch();
@@ -131,7 +131,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(graficoCaracteristica.grafico.id.eq(grafico.id))
                         .and(grafico.indicador.id.eq(indicadorId))
                     );
-
+            
+            query.where(servicoProgramado.ativo.isTrue());
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
@@ -250,6 +251,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -327,6 +329,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
 
+            query.where(servicoProgramado.ativo.isTrue());
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA

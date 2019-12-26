@@ -82,6 +82,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -139,8 +140,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
     @Override
     public UsuarioImagens findImagesFromUser(Long usuarioId) {
         try {
-            JPAQuery<UsuarioImagens> query = new JPAQuery<UsuarioImagens>(em).from(usuario).
-                    innerJoin(contabilidade).on(usuario.contabilidade.id.eq(contabilidade.id).and(usuario.id.eq(usuarioId)));
+            JPAQuery<UsuarioImagens> query = new JPAQuery<UsuarioImagens>(em).from(usuario)
+                .innerJoin(contabilidade).on(usuario.contabilidade.id.eq(contabilidade.id).and(usuario.id.eq(usuarioId)));
             
             query.select(Projections.constructor(UsuarioImagens.class, usuario.urlFoto, contabilidade.urlLogotipo));
             

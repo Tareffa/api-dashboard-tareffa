@@ -5,7 +5,6 @@ import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoStatus;
 import br.com.ottimizza.dashboard.models.caracteristica.caracteristica_empresas.QCaracteristicaEmpresa;
-import br.com.ottimizza.dashboard.models.categoria.QCategoria;
 import br.com.ottimizza.dashboard.models.categoria.QCategoriaServico;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoAgrupado;
 import br.com.ottimizza.dashboard.models.departamentos.DepartamentoShort;
@@ -74,6 +73,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
                 //CONTABILIDADE
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+                
+                //SERVIÇO PROGRAMADO ATIVO
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -339,6 +341,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
 
                 //CONTABILIDADE
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+                
+                //SERVIÇO PROGRAMADO ATIVO
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //DATA PROGRAMADA
                 if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
@@ -436,6 +441,9 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
             //CONTABILIDADE
             query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
+            
+            //SERVIÇO PROGRAMADO ATIVO
+            query.where(servicoProgramado.ativo.isTrue());
             
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
