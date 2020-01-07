@@ -132,7 +132,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(grafico.indicador.id.eq(indicadorId))
                     );
             
-            query.where(servicoProgramado.ativo.ne(false));
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
@@ -251,7 +251,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
-                query.where(servicoProgramado.ativo.ne(false));
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -329,7 +329,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
 
-            query.where(servicoProgramado.ativo.ne(false));
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA

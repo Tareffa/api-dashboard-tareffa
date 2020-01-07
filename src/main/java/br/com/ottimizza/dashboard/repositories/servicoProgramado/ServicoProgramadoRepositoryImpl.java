@@ -75,7 +75,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.ne(false));
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -343,7 +343,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.ne(false));
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //DATA PROGRAMADA
                 if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
@@ -443,7 +443,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
             
             //SERVIÇO PROGRAMADO ATIVO
-            query.where(servicoProgramado.ativo.ne(false));
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
             
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());

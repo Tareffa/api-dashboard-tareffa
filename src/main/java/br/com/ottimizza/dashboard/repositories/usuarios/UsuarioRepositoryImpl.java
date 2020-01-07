@@ -82,7 +82,7 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
-                query.where(servicoProgramado.ativo.ne(false));
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
