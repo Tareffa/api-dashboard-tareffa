@@ -73,6 +73,7 @@ public class IndicadorService {
             if(!indicadorRepository.verificaExistenciaDescricaoDeIndicadores(indicador.getDescricao(), autenticado)){
                 message.put("status", "success");
                 message.put("record", new JSONObject(indicadorRepository.save(indicador)));
+                message.put("message", "Indicador criado com sucesso!");
             }else{
                 message.put("status", "error");
                 message.put("message", "Descrição de indicador já cadastrado!");
