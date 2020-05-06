@@ -85,6 +85,10 @@ public class Usuario implements Serializable {
     private Boolean notificaUsuario = true;
 
     @Getter @Setter
+    @Column(name = "restringir_unidade_negocio", nullable = true)
+    private Boolean restringirUnidadeNegocio = false;
+
+    @Getter @Setter
     @Column(name = "comunicacao_contact_id", nullable = true)
     private String comunicacaoContactId;
 

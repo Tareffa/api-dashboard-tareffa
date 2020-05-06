@@ -13,6 +13,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioImagens;
+import br.com.ottimizza.dashboard.models.usuarios.usuarios_unidade_negocio.QUsuarioUnidadeNegocio;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -36,7 +37,9 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
     
     private QGraficoCaracteristica graficoCaracteristica = QGraficoCaracteristica.graficoCaracteristica;
     private QCaracteristicaEmpresa caracteristicaEmpresa = QCaracteristicaEmpresa.caracteristicaEmpresa;
-    
+
+    private QUsuarioUnidadeNegocio usuarioUnidadeNegocio = QUsuarioUnidadeNegocio.usuarioUnidadeNegocio;
+
     @Override
     public Usuario findByEmail(String email) {
         JPAQuery<Usuario> query = new JPAQuery<Usuario>(em).from(usuario).where(usuario.email.eq(email));
@@ -72,7 +75,15 @@ public class UsuarioRepositoryImpl implements UsuarioRepositoryCustom {
                     caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                     .and(graficoCaracteristica.grafico.id.eq(graficoId))
                 ); //JOIN GRÁFICO/CARACTERÍSTICA
-            
+
+            //RESTRINGIR UNIDADE DE NEGÓCIO
+            boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+            if(restringirUnidadeNegocio){
+                query.innerJoin(usuarioUnidadeNegocio)
+                    .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                        .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+            }
+
             //DATA PROGRAMADA
             if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
                 query.where(servicoProgramado.dataProgramadaEntrega.goe(filtro.getDataProgramadaInicio())
