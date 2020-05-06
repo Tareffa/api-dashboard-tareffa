@@ -217,6 +217,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
+                .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
                 .innerJoin(departamento).on(departamento.id.eq(
                     new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
@@ -345,15 +346,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 if((filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null) || (restringirUnidadeNegocio)){
                     query.innerJoin(caracteristicaEmpresa)
                         .on(empresa.id.eq(caracteristicaEmpresa.empresa.id));
-//
-//                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
-//                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
-//
-//                    if(restringirUnidadeNegocio){
-//                        query.innerJoin(usuarioUnidadeNegocio)
-//                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
-//                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
-//                    }
+
+                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
+                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
+
+                    if(restringirUnidadeNegocio){
+                        query.innerJoin(usuarioUnidadeNegocio)
+                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+                    }
                 }
 
                 //CONTABILIDADE
