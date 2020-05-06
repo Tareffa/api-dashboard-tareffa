@@ -93,6 +93,7 @@ public class GraficoService {
                 grafico.setIndicador(indicador);
                 message.put("status", "success");
                 message.put("record", new JSONObject(graficoRepository.save(grafico)));
+                message.put("message", "Gráfico criado com sucesso!");
             }else{
                 message.put("status", "error");
                 message.put("message", "Nome de gráfico já cadastrado!");
