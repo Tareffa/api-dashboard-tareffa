@@ -19,6 +19,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioDashboard;
+import br.com.ottimizza.dashboard.models.usuarios.usuarios_unidade_negocio.QUsuarioUnidadeNegocio;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -51,6 +52,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
     
     private QGraficoCaracteristica graficoCaracteristica = QGraficoCaracteristica.graficoCaracteristica;
     private QCaracteristicaEmpresa caracteristicaEmpresa = QCaracteristicaEmpresa.caracteristicaEmpresa;
+
+    private QUsuarioUnidadeNegocio usuarioUnidadeNegocio = QUsuarioUnidadeNegocio.usuarioUnidadeNegocio;
 
     @Override
     public Grafico buscarGraficoPorId(BigInteger graficoId, Usuario autenticado) {
@@ -132,7 +135,15 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(grafico.indicador.id.eq(indicadorId))
                     );
             
-            query.where(servicoProgramado.ativo.isTrue());
+            //RESTRINGIR UNIDADE DE NEGÓCIO
+            boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+            if(restringirUnidadeNegocio){
+                query.innerJoin(usuarioUnidadeNegocio)
+                    .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                        .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+            }
+            
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
@@ -247,11 +258,19 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                     caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
                     .and(graficoCaracteristica.grafico.id.eq(graficoId))
                 ); //JOIN GRÁFICO/CARACTERÍSTICA
+
+            //RESTRINGIR UNIDADE DE NEGÓCIO
+            boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+            if(restringirUnidadeNegocio){
+                query.innerJoin(usuarioUnidadeNegocio)
+                    .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                        .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+            }
             
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
                 //CONTABILIDADE
                 //query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
-                query.where(servicoProgramado.ativo.isTrue());
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -329,7 +348,15 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         .and(graficoCaracteristica.grafico.id.eq(graficoId)))
                     .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));                                //JOIN USUÁRIO (RESPONSÁVEL)
 
-            query.where(servicoProgramado.ativo.isTrue());
+            //RESTRINGIR UNIDADE DE NEGÓCIO
+            boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+            if(restringirUnidadeNegocio){
+                query.innerJoin(usuarioUnidadeNegocio)
+                    .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                        .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+            }
+
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA

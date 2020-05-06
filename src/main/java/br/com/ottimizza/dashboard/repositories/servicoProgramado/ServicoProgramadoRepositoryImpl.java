@@ -21,6 +21,7 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancad
 import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.models.usuarios.usuarios_unidade_negocio.QUsuarioUnidadeNegocio;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -48,6 +49,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
     private QServico servico = QServico.servico;
     private QCategoriaServico categoriaServico = QCategoriaServico.categoriaServico;
     private QCaracteristicaEmpresa caracteristicaEmpresa = QCaracteristicaEmpresa.caracteristicaEmpresa;
+    private QUsuarioUnidadeNegocio usuarioUnidadeNegocio = QUsuarioUnidadeNegocio.usuarioUnidadeNegocio;
     
     @Override
     public Long contadorServicoProgramado(ServicoProgramadoFiltroAvancado filtro, Usuario autenticado) {
@@ -75,7 +77,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.isTrue());
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
@@ -178,11 +180,19 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
                 
                 //CARACTERISTICA
-                if(filtro.getCaracteristica()!= null){
-                    if(filtro.getCaracteristica().getId() != null){
-                        query.innerJoin(caracteristicaEmpresa)
-                            .on(empresa.id.eq(caracteristicaEmpresa.empresa.id)
-                                .and(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId())));
+                boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+
+                if((filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null) || (restringirUnidadeNegocio)){
+                    query.innerJoin(caracteristicaEmpresa)
+                        .on(empresa.id.eq(caracteristicaEmpresa.empresa.id));
+
+                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
+                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
+
+                    if(autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio()){
+                        query.innerJoin(usuarioUnidadeNegocio)
+                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
                     }
                 }
                 
@@ -206,6 +216,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             JPAQuery query = new JPAQuery(em);
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
+                .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
                 .innerJoin(departamento).on(departamento.id.eq(
                     new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
@@ -328,14 +339,20 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                                 .and(categoriaServico.categoria.id.eq(filtro.getCategoria().getId())));
                     }
                 }
-                
+
                 //CARACTERISTICA
-                if(filtro.getCaracteristica()!= null){
-                    if(filtro.getCaracteristica().getId() != null){
-                        query
-                            .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id)) //EMPRESA
-                            .innerJoin(caracteristicaEmpresa).on(empresa.id.eq(caracteristicaEmpresa.empresa.id)//EMPRESA-CARACTERISTICA
-                                .and(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId())));
+                boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+                if((filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null) || (restringirUnidadeNegocio)){
+                    query.innerJoin(caracteristicaEmpresa)
+                        .on(empresa.id.eq(caracteristicaEmpresa.empresa.id));
+
+                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
+                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
+
+                    if(restringirUnidadeNegocio){
+                        query.innerJoin(usuarioUnidadeNegocio)
+                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
                     }
                 }
 
@@ -343,7 +360,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.isTrue());
+                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
                 //DATA PROGRAMADA
                 if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
@@ -438,12 +455,23 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     query.where(departamento.id.in(departamentosId));
                 }
             }
-            
+
+            //CARACTERISTICA
+            boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
+
+            if(restringirUnidadeNegocio){
+                query.innerJoin(caracteristicaEmpresa)
+                        .on(empresa.id.eq(caracteristicaEmpresa.empresa.id))
+                    .innerJoin(usuarioUnidadeNegocio)
+                        .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                            .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+            }
+
             //CONTABILIDADE
             query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
             
             //SERVIÇO PROGRAMADO ATIVO
-            query.where(servicoProgramado.ativo.isTrue());
+            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
             
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
