@@ -350,11 +350,11 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                     if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
                         query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
 
-                    if(autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio()){
-                        query.innerJoin(usuarioUnidadeNegocio)
-                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
-                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
-                    }
+//                    if(restringirUnidadeNegocio){
+//                        query.innerJoin(usuarioUnidadeNegocio)
+//                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+//                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
+//                    }
                 }
 
                 //CONTABILIDADE

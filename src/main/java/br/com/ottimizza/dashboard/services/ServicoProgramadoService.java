@@ -2,8 +2,6 @@ package br.com.ottimizza.dashboard.services;
 
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoPrazo;
 import br.com.ottimizza.dashboard.constraints.ServicoProgramadoSituacao;
-import br.com.ottimizza.dashboard.models.servicos.QServico;
-import br.com.ottimizza.dashboard.models.servicos.QServicoProgramado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
 import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancadoDataProgramado;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
