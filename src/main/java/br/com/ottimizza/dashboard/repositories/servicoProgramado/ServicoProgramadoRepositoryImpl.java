@@ -343,19 +343,19 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 //CARACTERISTICA
                 boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
 
-                if((filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null) || (restringirUnidadeNegocio)){
-                    query.innerJoin(caracteristicaEmpresa)
-                        .on(empresa.id.eq(caracteristicaEmpresa.empresa.id));
-
-                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
-                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
-
+//                if((filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null) || (restringirUnidadeNegocio)){
+//                    query.innerJoin(caracteristicaEmpresa)
+//                        .on(empresa.id.eq(caracteristicaEmpresa.empresa.id));
+//
+//                    if(filtro.getCaracteristica()!= null && filtro.getCaracteristica().getId() != null)
+//                        query.where(caracteristicaEmpresa.caracteristica.id.eq(filtro.getCaracteristica().getId()));
+//
 //                    if(restringirUnidadeNegocio){
 //                        query.innerJoin(usuarioUnidadeNegocio)
 //                            .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
 //                                .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
 //                    }
-                }
+//                }
 
                 //CONTABILIDADE
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
