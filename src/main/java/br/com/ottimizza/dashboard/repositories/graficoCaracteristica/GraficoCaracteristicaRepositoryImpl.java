@@ -55,7 +55,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
             boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
             if(restringirUnidadeNegocio){
                 query.innerJoin(usuarioUnidadeNegocio)
-                    .on(graficoCaracteristica.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                    .on(caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
                         .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
             }
 
@@ -87,7 +87,7 @@ public class GraficoCaracteristicaRepositoryImpl implements GraficoCaracteristic
             boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
             if(restringirUnidadeNegocio){
                 query.innerJoin(usuarioUnidadeNegocio)
-                    .on(graficoCaracteristica.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
+                    .on(caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
                         .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
             }
 
