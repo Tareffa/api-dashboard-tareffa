@@ -22,7 +22,6 @@ import br.com.ottimizza.dashboard.models.servicos.ServicoShort;
 import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.models.usuarios.usuarios_unidade_negocio.QUsuarioUnidadeNegocio;
-import br.com.ottimizza.dashboard.models.usuarios.usuarios_unidade_negocio.QUsuarioUnidadeNegocioID;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
