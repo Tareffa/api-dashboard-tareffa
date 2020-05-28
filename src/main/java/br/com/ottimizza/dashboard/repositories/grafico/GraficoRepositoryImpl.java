@@ -24,6 +24,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -121,18 +122,22 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             query.from(servicoProgramado)
                 .innerJoin(graficoServico)                                                                  //JOIN GRAFICO/SERVICO
                     .on(servicoProgramado.servico.id.eq(graficoServico.servico.id))
-                .innerJoin(caracteristicaEmpresa)                                                           //JOIN CARACTERISTICA/EMPRESA
-                    .on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))
-                .innerJoin(graficoCaracteristica)                                                           //JOIN GRÁFICO/CARACTERÍSTICA
-                    .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id))
                 .innerJoin(grafico)                                                                         //JOIN GRAFICO
                     .on(
                         graficoServico.grafico.id.eq(grafico.id)
-                        .and(graficoCaracteristica.grafico.id.eq(grafico.id))
                         .and(grafico.indicador.id.eq(indicadorId))
-                    );
+                    )
+                .innerJoin(indicador)
+                    .on(indicador.id.eq(indicadorId));
             
             query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
+            
+            query.where(
+                (JPAExpressions.select(caracteristicaEmpresa.count()).from(caracteristicaEmpresa)
+                    .innerJoin(graficoCaracteristica)
+                        .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id))
+                    .where(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))).gt(0l)
+            );
 
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             //DATA PROGRAMADA
@@ -195,12 +200,13 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             ).then(new Long(1)).otherwise(new Long(0));
             /*** FIM SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
 
-            query.groupBy(grafico.nomeGrafico, grafico.id); //AGRUPAMENTO
+            query.groupBy(grafico.nomeGrafico, grafico.id, indicador.descricao); //AGRUPAMENTO
             query.orderBy(grafico.nomeGrafico.asc());       //ORDENAÇÃO
 
             query.select(   //SELECT
                 Projections.constructor(GraficoDashboard.class, 
                     grafico.id, 
+                    indicador.descricao,
                     grafico.nomeGrafico,
                     abertoNoPrazo.sum(),
                     abertoAtrasado.sum(),
