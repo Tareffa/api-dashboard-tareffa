@@ -20,7 +20,6 @@ import br.com.ottimizza.dashboard.models.usuarios.QUsuario;
 import br.com.ottimizza.dashboard.models.usuarios.Usuario;
 import br.com.ottimizza.dashboard.models.usuarios.UsuarioDashboard;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
