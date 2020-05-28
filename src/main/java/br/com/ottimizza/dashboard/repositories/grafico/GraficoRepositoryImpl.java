@@ -130,7 +130,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
                         graficoServico.grafico.id.eq(grafico.id)
                         .and(graficoCaracteristica.grafico.id.eq(grafico.id))
                         .and(grafico.indicador.id.eq(indicadorId))
-                    );
+                    )
+                .select(servicoProgramado).distinct();
             
             query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
 
