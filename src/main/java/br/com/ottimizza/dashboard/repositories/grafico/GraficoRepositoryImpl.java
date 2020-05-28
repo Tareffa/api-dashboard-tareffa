@@ -201,7 +201,7 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             ).then(new Long(1)).otherwise(new Long(0));
             /*** FIM SELECT DOS TIPOS DE SERVIÇO PROGRAMADO PARA CONTAGEM ***/
 
-            query.groupBy(grafico.nomeGrafico, grafico.id); //AGRUPAMENTO
+            query.groupBy(grafico.nomeGrafico, grafico.id, indicador.descricao); //AGRUPAMENTO
             query.orderBy(grafico.nomeGrafico.asc());       //ORDENAÇÃO
 
             query.select(   //SELECT
