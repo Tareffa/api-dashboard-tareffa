@@ -7,7 +7,6 @@ import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
 import br.com.ottimizza.dashboard.services.ServicoProgramadoService;
 import br.com.ottimizza.dashboard.services.UserService;
 import java.security.Principal;
-import java.util.Date;
 import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 import org.springframework.http.MediaType;
