@@ -1,17 +1,22 @@
 package br.com.ottimizza.dashboard.services;
 
-import br.com.ottimizza.dashboard.models.indicadores.Indicador;
-import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
-import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
-import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
-import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
-import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 import java.math.BigInteger;
+import java.util.List;
+
 import javax.inject.Inject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+
+import br.com.ottimizza.dashboard.models.indicadores.Indicador;
+import br.com.ottimizza.dashboard.models.indicadores.IndicadorTareffa;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.repositories.grafico.GraficoRepository;
+import br.com.ottimizza.dashboard.repositories.graficoCaracteristica.GraficoCaracteristicaRepository;
+import br.com.ottimizza.dashboard.repositories.graficoServico.GraficoServicoRepository;
+import br.com.ottimizza.dashboard.repositories.indicador.IndicadorRepository;
 
 @Service
 public class IndicadorService {
@@ -174,4 +179,7 @@ public class IndicadorService {
     }
     //</editor-fold>
     
+    public List<IndicadorTareffa> getIndicadoresTareffa(){
+    	return indicadorRepository.buscaIndicadoresTareffa();
+    }
 }
