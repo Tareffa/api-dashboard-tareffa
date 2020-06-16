@@ -14,6 +14,6 @@ import br.com.ottimizza.dashboard.models.indicadores.IndicadorTareffa;
 public interface IndicadorRepository extends JpaRepository<Indicador, BigInteger>, IndicadorRepositoryCustom{
  
 	
-	@Query(value = "SELECT new br.com.ottimizza.dashboard.models.indicadores.IndicadorTareffa(v.usuarios_clientes , v.contadores , v.empresas , v.servicos_programados , v.contabilidades ,v.documentos ) FROM IndicadorTareffa v")
+	@Query(value = "SELECT new br.com.ottimizza.dashboard.models.indicadores.IndicadorTareffa(v.usuarioCliente , v.contador , v.empresa , v.servicoProgramado , v.contabilidade ,v.documento ) FROM IndicadorTareffa v")
 	List<IndicadorTareffa> buscaIndicadoresTareffa();
 }

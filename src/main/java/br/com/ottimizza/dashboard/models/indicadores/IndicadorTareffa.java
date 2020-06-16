@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "view_tareffa_indicadores_site")
 @Data
-@NoArgsConstructor @AllArgsConstructor
 public class IndicadorTareffa implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -40,5 +39,15 @@ public class IndicadorTareffa implements Serializable {
 	@Column(name = "documentos")
 	private Long documento;
 	
+	public IndicadorTareffa(Long usuarioCliente, Long contador, Long empresa, Long servicoProgramado,
+			Long contabilidade, Long documento) {
+		super();
+		this.usuarioCliente = usuarioCliente;
+		this.contador = contador;
+		this.empresa = empresa;
+		this.servicoProgramado = servicoProgramado;
+		this.contabilidade = contabilidade;
+		this.documento = documento;
+	}
 	
 }
