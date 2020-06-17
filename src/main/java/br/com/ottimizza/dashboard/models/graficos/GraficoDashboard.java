@@ -3,15 +3,15 @@ package br.com.ottimizza.dashboard.models.graficos;
 import java.io.Serializable;
 import java.math.BigInteger;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter 
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class GraficoDashboard implements Serializable {
     
     private BigInteger id;
+    private String nomeIndicador;
     private String nomeGrafico;
     private Long abertoNoPrazo;
     private Long abertoAtrasado;
