@@ -1,15 +1,12 @@
 package br.com.ottimizza.dashboard.controllers;
 
-import br.com.ottimizza.dashboard.models.indicadores.Indicador;
-import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
-import br.com.ottimizza.dashboard.models.usuarios.Usuario;
-import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
-import br.com.ottimizza.dashboard.services.IndicadorService;
 import java.math.BigInteger;
 import java.security.Principal;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +17,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.com.ottimizza.dashboard.models.indicadores.Indicador;
+import br.com.ottimizza.dashboard.models.servicos.ServicoProgramadoFiltroAvancado;
+import br.com.ottimizza.dashboard.models.usuarios.Usuario;
+import br.com.ottimizza.dashboard.repositories.usuarios.UsuarioRepository;
+import br.com.ottimizza.dashboard.services.IndicadorService;
 
 @RestController
 @RequestMapping("/indicador")
@@ -139,4 +142,9 @@ public class IndicadorController {
         }
     }
     //</editor-fold>
+    
+    @GetMapping("/tareffa")
+    public ResponseEntity<?> getIndicadoresTareffa() {
+    	return ResponseEntity.ok(indicadorService.getIndicadoresTareffa());
+    }
 }
