@@ -146,7 +146,8 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             query.where(
                 (JPAExpressions.select(caracteristicaEmpresa.count()).from(caracteristicaEmpresa)
                     .innerJoin(graficoCaracteristica)
-                        .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id))
+                        .on(caracteristicaEmpresa.caracteristica.id.eq(graficoCaracteristica.caracteristica.id)
+                            .and(graficoCaracteristica.grafico.id.eq(grafico.id)))
                     .where(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))).gt(0l)
             );
 
