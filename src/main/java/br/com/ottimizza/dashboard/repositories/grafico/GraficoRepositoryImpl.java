@@ -136,7 +136,9 @@ public class GraficoRepositoryImpl implements GraficoRepositoryCustom{
             //RESTRINGIR UNIDADE DE NEGÓCIO
             boolean restringirUnidadeNegocio = (autenticado.getRestringirUnidadeNegocio() != null && autenticado.getRestringirUnidadeNegocio());
             if(restringirUnidadeNegocio){
-                query.innerJoin(usuarioUnidadeNegocio)
+                query.innerJoin(caracteristicaEmpresa)
+                    .on(servicoProgramado.cliente.id.eq(caracteristicaEmpresa.empresa.id))
+                .innerJoin(usuarioUnidadeNegocio)
                     .on(caracteristicaEmpresa.caracteristica.id.eq(usuarioUnidadeNegocio.id.unidadeNegocioId)
                         .and(usuarioUnidadeNegocio.id.usuarioId.eq(autenticado.getId())));
             }
