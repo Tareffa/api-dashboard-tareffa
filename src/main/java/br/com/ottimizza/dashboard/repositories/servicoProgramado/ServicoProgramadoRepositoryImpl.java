@@ -62,14 +62,18 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
         if(autenticado == null) return 0L;
         
         JPAQuery query = new JPAQuery(em);
-            query.from(servicoProgramado)
-                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))     //JOIN SERVIÇO
+            query.from(servico)
+                .innerJoin(servicoProgramado).on(servico.id.eq(servicoProgramado.servico.id))     //JOIN SERVIÇO
                 .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))     //JOIN EMPRESA
-                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)) //JOIN USUÁRIO
-                .innerJoin(departamento).on(departamento.id.eq(                         //JOIN DEPARTAMENTO
-                    new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
-                        .otherwise(usuario.departamento.id))
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)); //JOIN USUÁRIO
+                
+			if(filtro.getDepartamento() != null) {
+                
+                query.innerJoin(departamento).on(departamento.id.eq(                         //JOIN DEPARTAMENTO
+                        new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
+                            .otherwise(usuario.departamento.id))
                 );
+            }
             
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             
@@ -77,7 +81,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //--STATUS
                 if(filtro.getSituacao() != null){
