@@ -67,13 +67,15 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))     //JOIN EMPRESA
                 .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id)); //JOIN USUÁRIO
                 
-			if(filtro.getDepartamento() != null) {
+		
+		
+             if (filtro.getDepartamento() != null) {
                 
                 query.innerJoin(departamento).on(departamento.id.eq(                         //JOIN DEPARTAMENTO
                         new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
                             .otherwise(usuario.departamento.id))
-                );
-            }
+                  );
+             }
             
             /*** FILTRO SERVIÇOS PROGRAMADOS ***/
             
@@ -218,15 +220,19 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             
             NumberPath<Long> aliasContagem = Expressions.numberPath(Long.class, "contagem");
             JPAQuery query = new JPAQuery(em);
-            query.from(servicoProgramado)
-                .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
+            query.from(servico)
+                .innerJoin(servicoProgramado).on(servico.id.eq(servicoProgramado.servico.id))     //JOIN SERVIÇO
                 .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))
-                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(departamento.id.eq(
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));
+		
+                
+	     if (filtro.getDepartamento() != null || agrupamento == Agrupamento.DEPARTAMENTO) {
+		
+                 query.innerJoin(departamento).on(departamento.id.eq(
                     new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
                         .otherwise(usuario.departamento.id))
                 );
-
+	     }
                 //###SERVIÇO COM VENCIMENTO###
                 if(agrupamento == Agrupamento.SERVICOVENCIMENTO){
                     
@@ -330,7 +336,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 }
 
                 //###DEPARTAMENTO###
-                if(agrupamento == Agrupamento.DEPARTAMENTO){
+                if(agrupamento == Agrupamento.DEPARTAMENTO) {
                     query.select(Projections.constructor(DepartamentoAgrupado.class, departamento.id, departamento.descricao, servicoProgramado.count().as(aliasContagem)));
                     query.groupBy(departamento.id).orderBy(aliasContagem.desc());
                 }
@@ -364,7 +370,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
                 query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
                 
                 //SERVIÇO PROGRAMADO ATIVO
-                query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
+                query.where(servicoProgramado.ativo.isTrue());
 
                 //DATA PROGRAMADA
                 if(filtro.getDataProgramadaInicio() != null && filtro.getDataProgramadaTermino() != null){
@@ -389,11 +395,14 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.from(servicoProgramado)
                 .innerJoin(servico).on(servicoProgramado.servico.id.eq(servico.id))
                 .innerJoin(empresa).on(servicoProgramado.cliente.id.eq(empresa.id))
-                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id))
-                .innerJoin(departamento).on(departamento.id.eq(
+                .innerJoin(usuario).on(servicoProgramado.alocadoPara.id.eq(usuario.id));
+				
+	     if(filtro.getDepartamento() != null){
+                query.innerJoin(departamento).on(departamento.id.eq(
                     new CaseBuilder.Initial(usuario.departamento.id.isNull()).then(servico.grupoServico.id)
                         .otherwise(usuario.departamento.id))
                 );
+	    }
             
             //SELECT
             query.select(Projections.constructor(EmpresaResponsavelDataVencimento.class, usuario.nome, usuario.urlFoto, empresa.codigoErp, empresa.razaoSocial, servicoProgramado.id, servicoProgramado.dataTermino));
@@ -475,7 +484,7 @@ public class ServicoProgramadoRepositoryImpl implements ServicoProgramadoReposit
             query.where(servico.contabilidade.id.eq(autenticado.getContabilidade().getId()));
             
             //SERVIÇO PROGRAMADO ATIVO
-            query.where(servicoProgramado.ativo.isTrue().or(servicoProgramado.ativo.isNull()));
+            query.where(servicoProgramado.ativo.isTrue());
             
             //ORDER BY
             query.orderBy(empresa.codigoErp.asc(),servicoProgramado.id.asc());
